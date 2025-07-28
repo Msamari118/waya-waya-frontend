@@ -357,7 +357,7 @@ const apiClient = {
       return response;
     },
 
-    blockClient: async (clientId, reason, token) => {
+    blockClient: async (clientId: string, reason: string, token: string) => {
       const response = await fetch(`${API_BASE_URL}/admin/clients/${clientId}/block`, {
         method: 'POST',
         headers: {
@@ -369,7 +369,7 @@ const apiClient = {
       return response;
     },
 
-    unblockClient: async (clientId, token) => {
+    unblockClient: async (clientId: string, token: string) => {
       const response = await fetch(`${API_BASE_URL}/admin/clients/${clientId}/unblock`, {
         method: 'POST',
         headers: {
@@ -446,7 +446,7 @@ const internationalCountryCodes = [
 ];
 
 // Password validation function
-const validatePassword = (password) => {
+const validatePassword = (password: string) => {
   const minLength = password.length >= 8;
   const hasDigit = /\d/.test(password);
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
