@@ -1,4 +1,25 @@
 import React, { useState, useEffect } from 'react';
+
+interface Provider {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  service: string;
+  hourlyRate: number;
+  rating: number;
+  location: string;
+  available: boolean;
+  isVerified: boolean;
+  services: string[];
+  reviews: number;
+  distance: string;
+  currency: string;
+  image: string | null;
+  trialDaysLeft: number;
+  commissionDue: number;
+  responseTime: string;
+}
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
@@ -13,48 +34,69 @@ interface MatchingEngineProps {
 }
 
 export default function MatchingEngine({ onNavigate, serviceRequest, onStartBooking, onStartChat }: MatchingEngineProps) {
-  const [matchedProviders, setMatchedProviders] = useState([]);
+  const [matchedProviders, setMatchedProviders] = useState<Provider[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const mockProviders = [
+  const mockProviders: Provider[] = [
     {
       id: 1,
       name: 'Ahmed Hassan',
+      email: 'ahmed@example.com',
+      phone: '+27123456789',
       service: 'Electrician',
       rating: 4.9,
       reviews: 127,
       distance: '2.3 km',
       available: true,
+      location: 'Johannesburg, South Africa',
+      isVerified: true,
+      services: ['Electrical', 'Installation', 'Repair'],
       hourlyRate: 250,
       currency: 'R',
       responseTime: '5 mins',
-      image: null
+      image: null,
+      trialDaysLeft: 0,
+      commissionDue: 0
     },
     {
       id: 2,
       name: 'Maria Santos',
+      email: 'maria@example.com',
+      phone: '+27123456790',
       service: 'House Cleaning',
       rating: 4.8,
       reviews: 89,
       distance: '1.8 km',
       available: true,
+      location: 'Cape Town, South Africa',
+      isVerified: true,
+      services: ['Cleaning', 'Deep Cleaning', 'Regular Maintenance'],
       hourlyRate: 180,
       currency: 'R',
       responseTime: '3 mins',
-      image: null
+      image: null,
+      trialDaysLeft: 0,
+      commissionDue: 0
     },
     {
       id: 3,
       name: 'James Wilson',
+      email: 'james@example.com',
+      phone: '+27123456791',
       service: 'Plumber',
       rating: 4.7,
       reviews: 156,
       distance: '3.1 km',
       available: true,
+      location: 'Durban, South Africa',
+      isVerified: true,
+      services: ['Plumbing', 'Installation', 'Repair'],
       hourlyRate: 300,
       currency: 'R',
       responseTime: '8 mins',
-      image: null
+      image: null,
+      trialDaysLeft: 0,
+      commissionDue: 0
     },
   ];
 
@@ -126,7 +168,7 @@ export default function MatchingEngine({ onNavigate, serviceRequest, onStartBook
                 <div className="flex items-start gap-3 mb-4">
                   <Avatar className="h-12 w-12">
                     <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white">
-                      {provider.name.split(' ').map(n => n[0]).join('')}
+                      {provider.name.split(' ').map((n: string) => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">

@@ -1,3 +1,5 @@
+import { getEnvironmentConfig } from './environment';
+
 export const ADMIN_CONFIG = {
     environments: {
       development: {
@@ -26,6 +28,6 @@ export const ADMIN_CONFIG = {
       '127.0.0.1:5173'
     ],
     
-    passwordHash: import.meta.env.VITE_ADMIN_PASSWORD_HASH || '',
+    passwordHash: getEnvironmentConfig().admin.passwordHash,
     allowedIPs: ['127.0.0.1', '::1', 'localhost']
   };

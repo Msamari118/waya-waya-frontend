@@ -13,9 +13,9 @@ declare global {
 // API Base URL
 const getApiBaseUrl = () => {
   if (import.meta.env.DEV) {
-    return 'http://localhost:5000/api';
+    return 'https://waya-waya-backend-production.up.railway.app';
   }
-  return import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+  return import.meta.env.VITE_API_BASE_URL || 'https://waya-waya-backend-production.up.railway.app';
 };
 
 const API_BASE_URL = getApiBaseUrl();
@@ -308,6 +308,63 @@ export const apiClient = {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
+      });
+      
+      return response;
+    },
+
+    // Book service with provider
+    bookService: async (bookingData: any, token: string): Promise<Response> => {
+      const response = await fetch(`${API_BASE_URL}/providers/book-service`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(bookingData)
+      });
+      
+      return response;
+    }
+  },
+
+  chat: {
+    // Get provider messages
+    getProviderMessages: async (providerId: string, token: string): Promise<Response> => {
+      const response = await fetch(`${API_BASE_URL}/chat/provider/${providerId}/messages`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      return response;
+    },
+
+    // Send message
+    sendMessage: async (message: any, token: string): Promise<Response> => {
+      const response = await fetch(`${API_BASE_URL}/chat/send`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(message)
+      });
+      
+      return response;
+    }
+  },
+
+  requests: {
+    // Submit service request
+    submit: async (requestData: any, token: string): Promise<Response> => {
+      const response = await fetch(`${API_BASE_URL}/requests/submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestData)
       });
       
       return response;

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './styles/globals.css';
 import LandingScreen from './components/LandingScreen';
 import AuthScreen from './components/AuthScreen';
-//import apiClient, { parseApiResponse, testBackendConnection } from './types/api';
 import ServiceRequestModule from './components/ServiceRequestModule';
 import MatchingEngine from './components/MatchingEngine';
 import RatingsReviews from './components/RatingsReviews';
@@ -22,367 +21,122 @@ import { Alert, AlertDescription } from './components/ui/alert';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './components/ui/dialog';
 import { Separator } from './components/ui/separator';
 import { checkEnvironmentAccess, checkAdminPassword } from './utils/adminAccess';
+import apiClient from './types/apiClient';
 
-// --- DEVELOPMENT/TESTING API CLIENT (localhost:5000) ---
+// TypeScript Interfaces
+interface User {
+  id: string;
+  email: string;
+  userType: 'client' | 'provider' | 'admin';
+  role?: string;
+  name: string;
+  phone?: string;
+  location?: string;
+  services?: string[];
+  hourlyRate?: number;
+  rating?: number;
+  isVerified?: boolean;
+}
+
+interface ServiceRequest {
+  id: string;
+  serviceType: string;
+  description: string;
+  location: {
+    lat: number | null;
+    lng: number | null;
+    address: string;
+  };
+  preferredTime: string;
+  urgency: 'low' | 'normal' | 'high' | 'emergency';
+  clientId: string;
+  status: 'pending' | 'matched' | 'in-progress' | 'completed' | 'cancelled';
+  createdAt: string;
+}
+
+interface ChatMessage {
+  id: number;
+  text: string;
+  files: File[];
+  sender: string;
+  timestamp: string;
+  type: 'user' | 'provider' | 'system';
+  providerId?: string;
+}
+
+interface Provider {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  service: string;
+  hourlyRate: number;
+  rating: number;
+  location: string;
+  available: boolean;
+  isVerified: boolean;
+  services: string[];
+  reviews: number;
+  distance: string;
+  currency: string;
+  image: string | null;
+  trialDaysLeft: number;
+  commissionDue: number;
+  responseTime: string;
+}
+
+interface CustomService {
+  id: number;
+  name: string;
+  description: string;
+  rate: string;
+  category: string;
+}
+
+interface BookingDetails {
+  date: string;
+  time: string;
+  description: string;
+  urgency: 'low' | 'normal' | 'high' | 'emergency';
+  location: string;
+  estimatedHours: number;
+}
+
+interface BookingData {
+  serviceType: string;
+  description: string;
+  preferredTime: string;
+  location: {
+    lat: number | null;
+    lng: number | null;
+    address: string;
+  };
+}
+
+interface CustomServiceForm {
+  name: string;
+  description: string;
+  rate: string;
+  category: string;
+}
+
+// --- PRODUCTION API CLIENT ---
 const getApiBaseUrl = () => {
   if (import.meta.env.DEV) {
-    return 'http://localhost:5000/api';
+    return 'https://waya-waya-backend-production.up.railway.app';
   }
-  return import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+  return import.meta.env.VITE_API_BASE_URL || 'https://waya-waya-backend-production.up.railway.app';
 };
 
 const API_BASE_URL = getApiBaseUrl();
 
-const apiClient = {
-  auth: {
-    login: async (credentials) => {
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
-      return response;
-    },
-
-    sendPhoneOtp: async (userData) => {
-      const response = await fetch(`${API_BASE_URL}/auth/send-phone-otp`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-      return response;
-    },
-
-    verifyPhoneOtp: async (data) => {
-      const response = await fetch(`${API_BASE_URL}/auth/verify-phone-otp`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      return response;
-    },
-
-    resendPhoneOtp: async (data) => {
-      const response = await fetch(`${API_BASE_URL}/auth/resend-phone-otp`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      return response;
-    },
-
-    verifyEmail: async (data) => {
-      const response = await fetch(`${API_BASE_URL}/auth/verify-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      return response;
-    },
-
-    resendEmailVerification: async (data) => {
-      const response = await fetch(`${API_BASE_URL}/auth/resend-email-verification`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      return response;
-    },
-
-    forgotPassword: async (data) => {
-      const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      return response;
-    },
-
-    forgotUsername: async (data) => {
-      const response = await fetch(`${API_BASE_URL}/auth/forgot-username`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      return response;
-    },
-
-    resetPassword: async (data) => {
-      const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      return response;
-    },
-
-    verifyToken: async (token) => {
-      const response = await fetch(`${API_BASE_URL}/auth/verify-token`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      return response;
-    },
-
-    signup: async (userData) => {
-      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-      return response;
-    }
-  },
-
-  requests: {
-    submit: async (requestData, token) => {
-      const response = await fetch(`${API_BASE_URL}/requests`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(requestData),
-      });
-      return response;
-    },
-
-    getMatches: async (requestId, token) => {
-      const response = await fetch(`${API_BASE_URL}/requests/${requestId}/matches`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      return response;
-    }
-  },
-
-  providers: {
-    register: async (registrationData, token) => {
-      const response = await fetch(`${API_BASE_URL}/providers/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(registrationData),
-      });
-      return response;
-    },
-
-    getProfile: async (token) => {
-      const response = await fetch(`${API_BASE_URL}/providers/profile`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      return response;
-    },
-
-    updateAvailability: async (availability, token) => {
-      const response = await fetch(`${API_BASE_URL}/providers/availability`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ available: availability }),
-      });
-      return response;
-    },
-
-    processPayment: async (paymentData, token) => {
-      const response = await fetch(`${API_BASE_URL}/providers/payment`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(paymentData),
-      });
-      return response;
-    },
-
-    bookService: async (bookingData, token) => {
-      const response = await fetch(`${API_BASE_URL}/providers/book`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(bookingData),
-      });
-      return response;
-    }
-  },
-
-  payments: {
-    processEFT: async (paymentData, token) => {
-      const response = await fetch(`${API_BASE_URL}/payments/eft`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(paymentData),
-      });
-      return response;
-    },
-
-    getCommissions: async (token) => {
-      const response = await fetch(`${API_BASE_URL}/payments/commissions`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      return response;
-    },
-
-    collectCommission: async (providerId, token) => {
-      const response = await fetch(`${API_BASE_URL}/payments/collect-commission`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ providerId }),
-      });
-      return response;
-    }
-  },
-
-  chat: {
-    sendMessage: async (messageData, token) => {
-      const response = await fetch(`${API_BASE_URL}/chat/send`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(messageData),
-      });
-      return response;
-    },
-
-    uploadFile: async (fileData, token) => {
-      const response = await fetch(`${API_BASE_URL}/chat/upload`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: fileData,
-      });
-      return response;
-    },
-
-    authorizeFileUpload: async (chatId, token) => {
-      const response = await fetch(`${API_BASE_URL}/chat/authorize-upload`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ chatId }),
-      });
-      return response;
-    },
-
-    getProviderMessages: async (providerId, token) => {
-      const response = await fetch(`${API_BASE_URL}/chat/provider/${providerId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      return response;
-    }
-  },
-
-  admin: {
-    getStats: async (token) => {
-      const response = await fetch(`${API_BASE_URL}/admin/stats`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      return response;
-    },
-
-    getPendingProviders: async (token) => {
-      const response = await fetch(`${API_BASE_URL}/admin/providers/pending`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      return response;
-    },
-
-    approveProvider: async (providerId, token) => {
-      const response = await fetch(`${API_BASE_URL}/admin/providers/${providerId}/approve`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      return response;
-    },
-
-    rejectProvider: async (providerId, token) => {
-      const response = await fetch(`${API_BASE_URL}/admin/providers/${providerId}/reject`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      return response;
-    },
-
-    blockClient: async (clientId: string, reason: string, token: string) => {
-      const response = await fetch(`${API_BASE_URL}/admin/clients/${clientId}/block`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ reason }),
-      });
-      return response;
-    },
-
-    unblockClient: async (clientId: string, token: string) => {
-      const response = await fetch(`${API_BASE_URL}/admin/clients/${clientId}/unblock`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      return response;
-    }
-  }
-};
-
 // WAYA WAYA Logo Component
-const WayaWayaLogo = ({ size = 'sm', showText = true }) => {
+interface WayaWayaLogoProps {
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  showText?: boolean;
+}
+
+const WayaWayaLogo = ({ size = 'sm', showText = true }: WayaWayaLogoProps) => {
   const logoSizes = {
     xs: 'w-6 h-6',
     sm: 'w-8 h-8',
@@ -533,34 +287,34 @@ const checkAdminAccess = () => {
   return checkEnvironmentAccess();
 };
 
-const setAdminAccess = (access) => {
+const setAdminAccess = (access: boolean) => {
   localStorage.setItem('adminAccess', access.toString());
 };
 
 export default function App() {
-  const [currentView, setCurrentView] = useState('landing');
-  const [userType, setUserType] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentView, setCurrentView] = useState<string>('landing');
+  const [userType, setUserType] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isAdminMode, setIsAdminMode] = useState(false);
-  const [serviceRequest, setServiceRequest] = useState(null);
-  const [authToken, setAuthToken] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [serviceRequest, setServiceRequest] = useState<ServiceRequest | null>(null);
+  const [authToken, setAuthToken] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [adminKey, setAdminKey] = useState('');
 
   // Chat system state
   const [showChat, setShowChat] = useState(false);
-  const [chatMessages, setChatMessages] = useState([]);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [chatFilesAllowed, setChatFilesAllowed] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [currentChatProvider, setCurrentChatProvider] = useState(null);
-  const [providerChats, setProviderChats] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [currentChatProvider, setCurrentChatProvider] = useState<Provider | null>(null);
+  const [providerChats, setProviderChats] = useState<Record<number, ChatMessage[]>>({});
 
   // Booking system state
   const [showBookingDialog, setShowBookingDialog] = useState(false);
-  const [selectedProvider, setSelectedProvider] = useState(null);
-  const [bookingDetails, setBookingDetails] = useState({
+  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null);
+  const [bookingDetails, setBookingDetails] = useState<BookingDetails>({
     date: '',
     time: '',
     description: '',
@@ -571,12 +325,12 @@ export default function App() {
 
   // Original state for the main app
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedService, setSelectedService] = useState(null);
+  const [selectedService, setSelectedService] = useState<string | null>(null);
   const [registrationStep, setRegistrationStep] = useState(1);
-  const [selectedServices, setSelectedServices] = useState([]);
-  const [customServices, setCustomServices] = useState([]);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [customServices, setCustomServices] = useState<CustomService[]>([]);
   const [showCustomServiceForm, setShowCustomServiceForm] = useState(false);
-  const [newCustomService, setNewCustomService] = useState({
+  const [newCustomService, setNewCustomService] = useState<CustomServiceForm>({
     name: '',
     description: '',
     rate: '',
@@ -642,7 +396,7 @@ export default function App() {
   }, []);
 
   // Handle auth success from AuthScreen
-  const handleAuthSuccess = (token, user) => {
+  const handleAuthSuccess = (token: string, user: User) => {
     setAuthToken(token);
     setCurrentUser(user);
     setUserType(user.userType);
@@ -688,23 +442,23 @@ export default function App() {
     }
   };
 
-  const handleNavigation = (view) => {
+  const handleNavigation = (view: string) => {
     setCurrentView(view);
   };
 
-  const handleServiceRequest = (request) => {
+  const handleServiceRequest = (request: ServiceRequest) => {
     setServiceRequest(request);
   };
 
   // Provider Chat Functions
-  const startProviderChat = async (provider) => {
+  const startProviderChat = async (provider: Provider) => {
     setCurrentChatProvider(provider);
     setShowChat(true);
     
     // Load existing messages for this provider
     if (!providerChats[provider.id]) {
       try {
-        const response = await apiClient.chat.getProviderMessages(provider.id, authToken);
+        const response = await apiClient.chat.getProviderMessages(provider.id.toString(), authToken || '');
         if (response.ok) {
           const messages = await response.json();
           setProviderChats(prev => ({
@@ -729,14 +483,18 @@ export default function App() {
       id: Date.now(),
       text: newMessage,
       files: selectedFiles,
-      sender: currentUser.name,
+      sender: currentUser?.name || 'Unknown',
       timestamp: new Date().toISOString(),
-      type: 'user',
+      type: 'user' as const,
       providerId: currentChatProvider.id
     };
 
     // Update local state
-    const updatedMessages = [...chatMessages, message];
+    const chatMessage: ChatMessage = {
+      ...message,
+      providerId: String(currentChatProvider.id)
+    };
+    const updatedMessages = [...chatMessages, chatMessage];
     setChatMessages(updatedMessages);
     setProviderChats(prev => ({
       ...prev,
@@ -749,15 +507,15 @@ export default function App() {
     try {
       await apiClient.chat.sendMessage({
         ...message,
-        providerId: currentChatProvider.id
-      }, authToken);
+        providerId: currentChatProvider.id.toString()
+      }, authToken || '');
     } catch (error) {
       console.error('Failed to send message:', error);
     }
   };
 
   // Booking Functions
-  const startBooking = (provider) => {
+  const startBooking = (provider: Provider) => {
     setSelectedProvider(provider);
     setShowBookingDialog(true);
     setBookingDetails({
@@ -776,6 +534,11 @@ export default function App() {
       return;
     }
 
+    if (!selectedProvider) {
+      alert('No provider selected');
+      return;
+    }
+
     const bookingData = {
       providerId: selectedProvider.id,
       providerName: selectedProvider.name,
@@ -786,7 +549,7 @@ export default function App() {
     };
 
     try {
-      const response = await apiClient.providers.bookService(bookingData, authToken);
+      const response = await apiClient.providers.bookService(bookingData, authToken || '');
       if (response.ok) {
         const result = await response.json();
         alert(`Booking confirmed! Reference: ${result.bookingId}`);
@@ -794,7 +557,9 @@ export default function App() {
         setSelectedProvider(null);
         
         // Optionally start a chat with the provider
-        startProviderChat(selectedProvider);
+        if (selectedProvider) {
+          startProviderChat(selectedProvider);
+        }
       } else {
         const error = await response.json();
         alert(`Booking failed: ${error.message}`);
@@ -813,9 +578,9 @@ export default function App() {
       id: Date.now(),
       text: newMessage,
       files: selectedFiles,
-      sender: currentUser.name,
+      sender: currentUser?.name || 'Unknown',
       timestamp: new Date().toISOString(),
-      type: 'user'
+      type: 'user' as const
     };
 
     setChatMessages(prev => [...prev, message]);
@@ -823,18 +588,21 @@ export default function App() {
     setSelectedFiles([]);
 
     try {
-      await apiClient.chat.sendMessage(message, authToken);
+      await apiClient.chat.sendMessage(message, authToken || '');
     } catch (error) {
       console.error('Failed to send message:', error);
     }
   };
 
-  const handleFileSelect = (event) => {
-    const files = Array.from(event.target.files);
-    setSelectedFiles(prev => [...prev, ...files]);
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const fileArray = Array.from(files);
+      setSelectedFiles(prev => [...prev, ...fileArray]);
+    }
   };
 
-  const removeFile = (index) => {
+  const removeFile = (index: number) => {
     setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
@@ -1070,7 +838,7 @@ export default function App() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">Urgency</label>
-              <Select value={bookingDetails.urgency} onValueChange={(value) => setBookingDetails(prev => ({ ...prev, urgency: value }))}>
+              <Select value={bookingDetails.urgency} onValueChange={(value) => setBookingDetails(prev => ({ ...prev, urgency: value as 'low' | 'normal' | 'high' | 'emergency' }))}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -1078,7 +846,7 @@ export default function App() {
                   <SelectItem value="low">Low Priority</SelectItem>
                   <SelectItem value="normal">Normal</SelectItem>
                   <SelectItem value="high">High Priority</SelectItem>
-                  <SelectItem value="urgent">Urgent</SelectItem>
+                  <SelectItem value="emergency">Emergency</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1502,7 +1270,7 @@ export default function App() {
       <Alert>
         <Database className="h-4 w-4" />
         <AlertDescription>
-          <strong>Development Mode Active:</strong> Connected to localhost:5000/api for backend testing.
+                      <strong>Development Mode Active:</strong> Connected to production backend for testing.
         </AlertDescription>
       </Alert>
 
@@ -1613,7 +1381,7 @@ export default function App() {
             <p>• Backend URL: <code className="bg-blue-100 px-1 rounded">{API_BASE_URL}</code></p>
             <p>• Admin Mode: Active (bypass authentication)</p>
             <p>• Currency: South African Rand (ZAR) only</p>
-            <p>• All API calls will be made to your localhost backend</p>
+            <p>• All API calls will be made to your production backend</p>
             <p>• Check browser network tab to monitor requests</p>
           </div>
         </CardContent>
@@ -1824,7 +1592,7 @@ export default function App() {
         <AdminInterface
           onNavigate={handleNavigation}
           apiClient={apiClient}
-          authToken={authToken}
+          authToken={authToken || ''}
         />
         <ChatSystem />
         <BookingDialog />
@@ -1835,10 +1603,9 @@ export default function App() {
   // Helper functions
   const addCustomService = () => {
     if (newCustomService.name && newCustomService.rate) {
-      const service = {
+      const service: CustomService = {
         id: Date.now(),
-        ...newCustomService,
-        isCustom: true
+        ...newCustomService
       };
       setCustomServices([...customServices, service]);
       setNewCustomService({
@@ -1851,11 +1618,11 @@ export default function App() {
     }
   };
 
-  const removeCustomService = (id) => {
+  const removeCustomService = (id: number) => {
     setCustomServices(customServices.filter(service => service.id !== id));
   };
 
-  const togglePredefinedService = (serviceName) => {
+  const togglePredefinedService = (serviceName: string) => {
     setSelectedServices(prev =>
       prev.includes(serviceName)
         ? prev.filter(s => s !== serviceName)
@@ -1863,11 +1630,11 @@ export default function App() {
     );
   };
 
-  const handleBookingChange = (field, value) => {
+  const handleBookingChange = (field: string, value: string | number) => {
     setBookingData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleLocationChange = (field, value) => {
+  const handleLocationChange = (field: string, value: string | number | null) => {
     setBookingData(prev => ({
       ...prev,
       location: { ...prev.location, [field]: value }
@@ -1882,7 +1649,7 @@ export default function App() {
     }
     
     try {
-      const response = await apiClient.requests.submit(bookingData, authToken);
+      const response = await apiClient.requests.submit(bookingData, authToken || '');
       const data = await response.json();
       
       if (response.ok) {
@@ -2026,7 +1793,13 @@ export default function App() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => startProviderChat(provider)}
+                      onClick={() => startProviderChat({
+                        ...provider,
+                        email: provider.email ?? "",
+                        location: provider.location ?? "",
+                        isVerified: provider.isVerified ?? false,
+                        services: provider.services ?? [],
+                      })}
                       className="flex-1"
                     >
                       <MessageCircle className="h-4 w-4 mr-2" />

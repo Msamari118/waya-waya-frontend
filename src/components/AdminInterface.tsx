@@ -60,8 +60,8 @@ export default function AdminInterface({ onNavigate, apiClient, authToken }: Adm
     monthlyRevenue: 0
   });
   
-  const [pendingProviders, setPendingProviders] = useState([]);
-  const [recentJobs, setRecentJobs] = useState([]);
+  const [pendingProviders, setPendingProviders] = useState<any[]>([]);
+  const [recentJobs, setRecentJobs] = useState<any[]>([]);
 
   // Load admin data
   useEffect(() => {
