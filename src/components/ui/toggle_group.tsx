@@ -2,26 +2,12 @@
 
 import * as React from "react";
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
-import { type VariantProps } from "class-variance-authority";
 import { cn } from "./utils";
-
-const toggleVariants = {
-  variant: {
-    default: "bg-background text-foreground",
-    outline: "border bg-background text-foreground hover:bg-accent hover:text-accent-foreground",
-  },
-  size: {
-    default: "h-9 px-3",
-    sm: "h-8 px-2",
-    lg: "h-10 px-4",
-  },
-};
 
 const ToggleGroup = React.forwardRef<
   React.ElementRef<typeof ToggleGroupPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> &
-    VariantProps<typeof toggleVariants>
->(({ className, variant, size, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root>
+>(({ className, ...props }, ref) => (
   <ToggleGroupPrimitive.Root
     ref={ref}
     className={cn(
@@ -30,14 +16,14 @@ const ToggleGroup = React.forwardRef<
     )}
     {...props}
   />
-));
+))
+
 ToggleGroup.displayName = ToggleGroupPrimitive.Root.displayName;
 
 const ToggleGroupItem = React.forwardRef<
   React.ElementRef<typeof ToggleGroupPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> &
-    VariantProps<typeof toggleVariants>
->(({ className, variant, size, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item>
+>(({ className, ...props }, ref) => (
   <ToggleGroupPrimitive.Item
     ref={ref}
     className={cn(
@@ -46,7 +32,8 @@ const ToggleGroupItem = React.forwardRef<
     )}
     {...props}
   />
-));
+))
+
 ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName;
 
 export { ToggleGroup, ToggleGroupItem };

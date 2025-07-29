@@ -1,40 +1,69 @@
-import { ADMIN_CONFIG } from '../config/admin';
+import { verifyAdminPassword } from './passwordHash';
+import { getEnvironmentConfig } from '../config/environment';
 
-export const checkEnvironmentAccess = () => {
-  const currentHost = window.location.hostname;
-  const currentPort = window.location.port;
-  const currentEnv = import.meta.env.VITE_ENVIRONMENT || 'development';
-  
-  if (currentEnv === 'development') {
-    return true;
+/**
+ * Check if admin access is granted based on environment configuration
+ * @returns Promise<boolean> - True if admin access is available
+ */
+export async function checkEnvironmentAccess(): Promise<boolean> {
+  try {
+    const config = getEnvironmentConfig();
+    return config.environment === 'development' || config.environment === 'staging';
+  } catch (error) {
+    console.error('Error checking environment access:', error);
+    return false;
   }
-  
-  const isAllowedHost = ADMIN_CONFIG.allowedHosts.some(host => {
-    if (host.includes(':')) {
-      return `${currentHost}:${currentPort}` === host;
+}
+
+/**
+ * Verify admin password against the hashed password from environment
+ * @param inputPassword - The password entered by the user
+ * @returns Promise<boolean> - True if password is correct
+ */
+export async function checkAdminPassword(inputPassword: string): Promise<boolean> {
+  try {
+    const config = getEnvironmentConfig();
+    const envHash = config.admin.passwordHash;
+    
+    if (!envHash) {
+      console.warn('No admin password hash found in environment');
+      return false;
     }
-    return currentHost === host;
-  });
-  
-  return isAllowedHost;
-};
-
-export const checkAdminPassword = async (password: string) => {
-  if (import.meta.env.DEV) {
-    return true;
+    
+    return await verifyAdminPassword(inputPassword, envHash);
+  } catch (error) {
+    console.error('Error verifying admin password:', error);
+    return false;
   }
-  
-  const storedHash = ADMIN_CONFIG.passwordHash;
-  if (!storedHash) return false;
-  
-  const hashedPassword = await hashPassword(password);
-  return hashedPassword === storedHash;
-};
+}
 
-const hashPassword = async (password: string) => {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-};
+/**
+ * Combined admin access check
+ * @param inputPassword - Optional password to verify
+ * @returns Promise<boolean> - True if admin access is granted
+ */
+export async function checkAdminAccess(inputPassword?: string): Promise<boolean> {
+  try {
+    // First check environment access
+    const hasEnvironmentAccess = await checkEnvironmentAccess();
+    
+    if (hasEnvironmentAccess) {
+      // If we have environment access, check password if provided
+      if (inputPassword) {
+        return await checkAdminPassword(inputPassword);
+      }
+      // If no password provided but we have environment access, grant access
+      return true;
+    }
+    
+    // If no environment access, require password verification
+    if (inputPassword) {
+      return await checkAdminPassword(inputPassword);
+    }
+    
+    return false;
+  } catch (error) {
+    console.error('Error checking admin access:', error);
+    return false;
+  }
+}

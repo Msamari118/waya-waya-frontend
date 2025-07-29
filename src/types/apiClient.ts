@@ -1,15 +1,5 @@
 // src/types/api.ts
 
-// TypeScript declaration for import.meta.env
-declare global {
-  interface ImportMeta {
-    env: {
-      DEV?: boolean;
-      VITE_API_BASE_URL?: string;
-    };
-  }
-}
-
 // API Base URL
 const getApiBaseUrl = () => {
   if (import.meta.env.DEV) {

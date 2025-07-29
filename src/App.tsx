@@ -6,7 +6,7 @@ import ServiceRequestModule from './components/ServiceRequestModule';
 import MatchingEngine from './components/MatchingEngine';
 import RatingsReviews from './components/RatingsReviews';
 import AdminInterface from './components/AdminInterface';
-import { Search, MapPin, Star, Clock, Shield, Zap, Phone, Menu, User, Bell, Upload, CheckCircle, Plus, Briefcase, X, Edit3, MessageCircle, Navigation, CreditCard, Copy, Settings, Eye, Database, FileText, DollarSign, AlertTriangle, Ban, Lock, Unlock, Calendar, TrendingUp, Users, Receipt, Wallet, Send, Paperclip, Image, Video, FileIcon, Download, BookOpen, ArrowRight } from 'lucide-react';
+import { Search, MapPin, Star, Clock, Shield, Zap, Phone, Menu, User, Bell, Upload, CheckCircle, Plus, Briefcase, X, Edit3, MessageCircle, Navigation, CreditCard, Copy, Settings, Eye, Database, FileText, DollarSign, AlertTriangle, Ban, Lock, Unlock, Calendar, TrendingUp, Users, Receipt, Wallet, Send, Paperclip, Image, Video, FileIcon, Download, BookOpen, ArrowRight, ArrowLeft, LogOut } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { Input } from './components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
@@ -225,53 +225,65 @@ const serviceCategories = [
   { name: 'Garden', icon: '🌱', color: 'bg-emerald-500' },
 ];
 
-const featuredProviders = [
+const featuredProviders: Provider[] = [
   {
     id: 1,
     name: 'Ahmed Hassan',
+    email: 'ahmed.hassan@example.com',
+    phone: '+27 82 123 4567',
     service: 'Electrician',
+    hourlyRate: 250,
     rating: 4.9,
+    location: 'Johannesburg, Gauteng',
+    available: true,
+    isVerified: true,
+    services: ['Electrical', 'Installation', 'Repairs'],
     reviews: 127,
     distance: '2.3 km',
-    available: true,
-    hourlyRate: 250,
     currency: 'R',
     image: null,
     trialDaysLeft: 3,
     commissionDue: 145.50,
-    phone: '+27 82 123 4567',
     responseTime: '~15 min'
   },
   {
     id: 2,
     name: 'Maria Santos',
+    email: 'maria.santos@example.com',
+    phone: '+27 83 456 7890',
     service: 'House Cleaning',
+    hourlyRate: 180,
     rating: 4.8,
+    location: 'Cape Town, Western Cape',
+    available: true,
+    isVerified: true,
+    services: ['Cleaning', 'Deep Cleaning', 'Organizing'],
     reviews: 89,
     distance: '1.8 km',
-    available: true,
-    hourlyRate: 180,
     currency: 'R',
     image: null,
     trialDaysLeft: 0,
     commissionDue: 89.25,
-    phone: '+27 83 456 7890',
     responseTime: '~5 min'
   },
   {
     id: 3,
     name: 'James Wilson',
+    email: 'james.wilson@example.com',
+    phone: '+27 84 789 0123',
     service: 'Plumber',
+    hourlyRate: 300,
     rating: 4.7,
+    location: 'Durban, KwaZulu-Natal',
+    available: false,
+    isVerified: true,
+    services: ['Plumbing', 'Emergency Repairs', 'Installation'],
     reviews: 156,
     distance: '3.1 km',
-    available: false,
-    hourlyRate: 300,
     currency: 'R',
     image: null,
     trialDaysLeft: 7,
     commissionDue: 230.75,
-    phone: '+27 84 789 0123',
     responseTime: '~30 min'
   },
 ];
@@ -347,52 +359,120 @@ export default function App() {
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [bookingError, setBookingError] = useState('');
 
+  // Mock data with proper Provider interface
+  const mockProviders: Provider[] = [
+    {
+      id: 1,
+      name: 'John Smith',
+      email: 'john.smith@example.com',
+      phone: '+27 82 123 4567',
+      service: 'Plumbing',
+      hourlyRate: 150,
+      rating: 4.8,
+      location: 'Johannesburg, Gauteng',
+      available: true,
+      isVerified: true,
+      services: ['Plumbing', 'Emergency Repairs'],
+      reviews: 127,
+      distance: '2.3 km',
+      currency: 'R',
+      image: null,
+      trialDaysLeft: 0,
+      commissionDue: 0,
+      responseTime: '15 min'
+    },
+    {
+      id: 2,
+      name: 'Sarah Johnson',
+      email: 'sarah.johnson@example.com',
+      phone: '+27 83 456 7890',
+      service: 'Electrical',
+      hourlyRate: 180,
+      rating: 4.9,
+      location: 'Cape Town, Western Cape',
+      available: true,
+      isVerified: true,
+      services: ['Electrical', 'Installation'],
+      reviews: 89,
+      distance: '1.8 km',
+      currency: 'R',
+      image: null,
+      trialDaysLeft: 0,
+      commissionDue: 0,
+      responseTime: '20 min'
+    },
+    {
+      id: 3,
+      name: 'Mike Wilson',
+      email: 'mike.wilson@example.com',
+      phone: '+27 84 789 0123',
+      service: 'Cleaning',
+      hourlyRate: 120,
+      rating: 4.7,
+      location: 'Durban, KwaZulu-Natal',
+      available: false,
+      isVerified: true,
+      services: ['Cleaning', 'Deep Cleaning'],
+      reviews: 203,
+      distance: '3.1 km',
+      currency: 'R',
+      image: null,
+      trialDaysLeft: 0,
+      commissionDue: 0,
+      responseTime: '25 min'
+    }
+  ];
+
   // Check for admin access on app load
   useEffect(() => {
-    const hasAdminAccess = checkEnvironmentAccess();
-    if (hasAdminAccess && import.meta.env.DEV) {
-      // Auto-enable admin in localhost development
-      setIsAdminMode(true);
-      setIsAuthenticated(true);
-      setCurrentUser({ 
-        id: 'admin_user', 
-        email: 'admin@wayawaya.co.za', 
-        userType: 'admin',
-        role: 'admin',
-        name: 'Admin User'
-      });
-      setUserType('admin');
-      setCurrentView('admin-overview');
-    } else {
-      // Check for regular user authentication
-      const storedToken = localStorage.getItem('authToken');
-      const storedUser = localStorage.getItem('currentUser');
-      
-      if (storedToken && storedUser) {
-        try {
-          apiClient.auth.verifyToken(storedToken)
-            .then(response => {
-              if (response.ok) {
-                const user = JSON.parse(storedUser);
-                setAuthToken(storedToken);
-                setCurrentUser(user);
-                setUserType(user.userType);
-                setIsAuthenticated(true);
-                setCurrentView('home');
-              } else {
+    const checkAccess = async () => {
+      const hasAdminAccess = await checkEnvironmentAccess();
+      if (hasAdminAccess === true && import.meta.env.DEV) {
+        // Auto-enable admin in localhost development
+        setIsAdminMode(true);
+        setIsAuthenticated(true);
+        setCurrentUser({ 
+          id: 'admin_user', 
+          email: 'admin@wayawaya.co.za', 
+          userType: 'admin',
+          role: 'admin',
+          name: 'Admin User'
+        });
+        setUserType('admin');
+        setCurrentView('admin-overview');
+      } else {
+        // Check for regular user authentication
+        const storedToken = localStorage.getItem('authToken');
+        const storedUser = localStorage.getItem('currentUser');
+        
+        if (storedToken && storedUser) {
+          try {
+            apiClient.auth.verifyToken(storedToken)
+              .then(response => {
+                if (response.ok) {
+                  const user = JSON.parse(storedUser);
+                  setAuthToken(storedToken);
+                  setCurrentUser(user);
+                  setUserType(user.userType);
+                  setIsAuthenticated(true);
+                  setCurrentView('home');
+                } else {
+                  handleLogout();
+                }
+              })
+              .catch(error => {
+                console.error('Token verification failed:', error);
                 handleLogout();
-              }
-            })
-            .catch(error => {
-              console.error('Token verification failed:', error);
-              handleLogout();
-            });
-        } catch (error) {
-          console.error('Error during token verification:', error);
-          handleLogout();
+              });
+          } catch (error) {
+            console.error('Error during token verification:', error);
+            handleLogout();
+          }
         }
       }
-    }
+    };
+    
+    checkAccess();
   }, []);
 
   // Handle auth success from AuthScreen
@@ -796,93 +876,70 @@ export default function App() {
         </DialogHeader>
         
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Date</label>
-              <Input
-                type="date"
-                value={bookingDetails.date}
-                onChange={(e) => setBookingDetails(prev => ({ ...prev, date: e.target.value }))}
-                min={new Date().toISOString().split('T')[0]}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Time</label>
-              <Input
-                type="time"
-                value={bookingDetails.time}
-                onChange={(e) => setBookingDetails(prev => ({ ...prev, time: e.target.value }))}
-              />
-            </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Service Type</label>
+            <Input
+              value={bookingData.serviceType}
+              onChange={(e) => handleBookingChange('serviceType', e.target.value)}
+              placeholder="e.g., Plumbing, Electrical"
+            />
           </div>
           
-          <div>
-            <label className="block text-sm font-medium mb-1">Service Description</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Description</label>
             <Textarea
-              placeholder="Describe what you need done..."
-              value={bookingDetails.description}
-              onChange={(e) => setBookingDetails(prev => ({ ...prev, description: e.target.value }))}
+              value={bookingData.description}
+              onChange={(e) => handleBookingChange('description', e.target.value)}
+              placeholder="Describe your service need..."
               rows={3}
             />
           </div>
           
-          <div>
-            <label className="block text-sm font-medium mb-1">Location</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Preferred Time</label>
             <Input
-              placeholder="Enter your address"
-              value={bookingDetails.location}
-              onChange={(e) => setBookingDetails(prev => ({ ...prev, location: e.target.value }))}
+              type="datetime-local"
+              value={bookingData.preferredTime}
+              onChange={(e) => handleBookingChange('preferredTime', e.target.value)}
             />
           </div>
           
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Urgency</label>
-              <Select value={bookingDetails.urgency} onValueChange={(value) => setBookingDetails(prev => ({ ...prev, urgency: value as 'low' | 'normal' | 'high' | 'emergency' }))}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="low">Low Priority</SelectItem>
-                  <SelectItem value="normal">Normal</SelectItem>
-                  <SelectItem value="high">High Priority</SelectItem>
-                  <SelectItem value="emergency">Emergency</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Estimated Hours</label>
-              <Select value={bookingDetails.estimatedHours.toString()} onValueChange={(value) => setBookingDetails(prev => ({ ...prev, estimatedHours: parseInt(value) }))}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1 hour</SelectItem>
-                  <SelectItem value="2">2 hours</SelectItem>
-                  <SelectItem value="3">3 hours</SelectItem>
-                  <SelectItem value="4">4 hours</SelectItem>
-                  <SelectItem value="8">Full day (8 hours)</SelectItem>
-                </SelectContent>
-              </Select>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Location</label>
+            <div className="space-y-2">
+              <Input
+                placeholder="Address"
+                value={bookingData.location.address}
+                onChange={(e) => handleLocationChange('address', e.target.value)}
+              />
+              <div className="flex gap-2">
+                <Input
+                  type="number"
+                  placeholder="Latitude"
+                  value={bookingData.location.lat || ''}
+                  onChange={(e) => handleLocationChange('lat', parseFloat(e.target.value) || null)}
+                />
+                <Input
+                  type="number"
+                  placeholder="Longitude"
+                  value={bookingData.location.lng || ''}
+                  onChange={(e) => handleLocationChange('lng', parseFloat(e.target.value) || null)}
+                />
+              </div>
             </div>
           </div>
           
-          <div className="bg-muted p-4 rounded-lg">
-            <div className="flex justify-between items-center">
-              <span className="font-medium">Estimated Total:</span>
-              <span className="text-lg font-bold">
-                R{(selectedProvider?.hourlyRate || 0) * bookingDetails.estimatedHours}
-              </span>
-            </div>
-            <p className="text-sm text-muted-foreground mt-1">
-              Final amount may vary based on actual work completed
-            </p>
-          </div>
+          {bookingError && (
+            <Alert>
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription>{bookingError}</AlertDescription>
+            </Alert>
+          )}
           
           <div className="flex gap-2">
-            <Button onClick={handleBookingSubmit} className="flex-1">
-              <CheckCircle className="h-4 w-4 mr-2" />
-              Confirm Booking
+            <Button onClick={handleSubmitBooking} className="flex-1">
+              <Send className="h-4 w-4 mr-2" />
+              Submit Booking
             </Button>
             <Button variant="outline" onClick={() => setShowBookingDialog(false)}>
               Cancel
@@ -1259,377 +1316,596 @@ export default function App() {
   // Enhanced Admin Overview Component
   const AdminOverview = () => (
     <div className="space-y-6">
-      <div className="flex items-center gap-4 mb-6">
-        <WayaWayaLogo size="lg" />
+      <div className="flex items-center justify-between">
         <div>
-          <h1>Admin Dashboard</h1>
-          <p className="text-sm text-muted-foreground">Testing Backend: {API_BASE_URL}</p>
+          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+          <p className="text-muted-foreground">Manage the Waya Waya platform</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={() => setCurrentView('home')}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to App
+          </Button>
+          <Button onClick={handleLogout}>
+            <LogOut className="h-4 w-4 mr-2" />
+            Logout
+          </Button>
         </div>
       </div>
 
-      <Alert>
-        <Database className="h-4 w-4" />
-        <AlertDescription>
-                      <strong>Development Mode Active:</strong> Connected to production backend for testing.
-        </AlertDescription>
-      </Alert>
-
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {/* App Views */}
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('home')}>
-          <CardContent className="p-6 text-center">
-            <Search className="h-12 w-12 mx-auto mb-4 text-blue-600" />
-            <h3 className="font-semibold">Client View</h3>
-            <p className="text-sm text-muted-foreground">Browse services & request</p>
+      {/* Admin Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Users className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Total Users</p>
+                <p className="text-2xl font-bold">1,234</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
-
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('provider')}>
-          <CardContent className="p-6 text-center">
-            <Shield className="h-12 w-12 mx-auto mb-4 text-green-600" />
-            <h3 className="font-semibold">Provider View</h3>
-            <p className="text-sm text-muted-foreground">Provider dashboard</p>
+        
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <Briefcase className="h-5 w-5 text-green-600" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Active Providers</p>
+                <p className="text-2xl font-bold">89</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
-
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('registration')}>
-          <CardContent className="p-6 text-center">
-            <User className="h-12 w-12 mx-auto mb-4 text-purple-600" />
-            <h3 className="font-semibold">Registration</h3>
-            <p className="text-sm text-muted-foreground">Provider signup flow</p>
+        
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-orange-100 rounded-lg">
+                <TrendingUp className="h-5 w-5 text-orange-600" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">This Month</p>
+                <p className="text-2xl font-bold">R45,678</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
-
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('service-request')}>
-          <CardContent className="p-6 text-center">
-            <Clock className="h-12 w-12 mx-auto mb-4 text-orange-600" />
-            <h3 className="font-semibold">Service Request</h3>
-            <p className="text-sm text-muted-foreground">Request a service</p>
+        
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-purple-100 rounded-lg">
+                <AlertTriangle className="h-5 w-5 text-purple-600" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Pending Issues</p>
+                <p className="text-2xl font-bold">12</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
+      </div>
 
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('matching')}>
-          <CardContent className="p-6 text-center">
-            <Zap className="h-12 w-12 mx-auto mb-4 text-yellow-600" />
-            <h3 className="font-semibold">Matching Engine</h3>
-            <p className="text-sm text-muted-foreground">Provider matching</p>
-          </CardContent>
-        </Card>
-
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('ratings-reviews')}>
-          <CardContent className="p-6 text-center">
-            <Star className="h-12 w-12 mx-auto mb-4 text-pink-600" />
-            <h3 className="font-semibold">Ratings & Reviews</h3>
-            <p className="text-sm text-muted-foreground">Review system</p>
-          </CardContent>
-        </Card>
-
-        {/* Management Views */}
+      {/* Admin Actions */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('payment-management')}>
-          <CardContent className="p-6 text-center">
-            <CreditCard className="h-12 w-12 mx-auto mb-4 text-blue-600" />
-            <h3 className="font-semibold">Payment Management</h3>
-            <p className="text-sm text-muted-foreground">EFT & Commission</p>
-          </CardContent>
-        </Card>
-
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('trial-management')}>
-          <CardContent className="p-6 text-center">
-            <Calendar className="h-12 w-12 mx-auto mb-4 text-green-600" />
-            <h3 className="font-semibold">Trial Management</h3>
-            <p className="text-sm text-muted-foreground">7-day trials & fees</p>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <CreditCard className="h-5 w-5 text-green-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold">Payment Management</h3>
+                <p className="text-sm text-muted-foreground">Manage payments & transactions</p>
+              </div>
+              <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
+            </div>
           </CardContent>
         </Card>
 
         <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('client-management')}>
-          <CardContent className="p-6 text-center">
-            <Users className="h-12 w-12 mx-auto mb-4 text-purple-600" />
-            <h3 className="font-semibold">Client Management</h3>
-            <p className="text-sm text-muted-foreground">Blocking & payments</p>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Users className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold">Client Management</h3>
+                <p className="text-sm text-muted-foreground">Manage clients & requests</p>
+              </div>
+              <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('admin')}>
-          <CardContent className="p-6 text-center">
-            <Settings className="h-12 w-12 mx-auto mb-4 text-red-600" />
-            <h3 className="font-semibold">Admin Interface</h3>
-            <p className="text-sm text-muted-foreground">Manage platform</p>
-          </CardContent>
-        </Card>
-
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('login')}>
-          <CardContent className="p-6 text-center">
-            <User className="h-12 w-12 mx-auto mb-4 text-indigo-600" />
-            <h3 className="font-semibold">Auth System</h3>
-            <p className="text-sm text-muted-foreground">Login/Signup flows</p>
-          </CardContent>
-        </Card>
-
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setShowChat(true)}>
-          <CardContent className="p-6 text-center">
-            <MessageCircle className="h-12 w-12 mx-auto mb-4 text-blue-600" />
-            <h3 className="font-semibold">Chat System</h3>
-            <p className="text-sm text-muted-foreground">File upload enabled</p>
+        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('provider-trial-management')}>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-orange-100 rounded-lg">
+                <Shield className="h-5 w-5 text-orange-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold">Provider Trials</h3>
+                <p className="text-sm text-muted-foreground">Manage trial providers</p>
+              </div>
+              <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
+            </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="bg-blue-50 border-blue-200">
-        <CardContent className="p-4">
-          <h4 className="font-bold mb-2 text-blue-800">📡 API Testing Info</h4>
-          <div className="text-sm text-blue-700 space-y-1">
-            <p>• Backend URL: <code className="bg-blue-100 px-1 rounded">{API_BASE_URL}</code></p>
-            <p>• Admin Mode: Active (bypass authentication)</p>
-            <p>• Currency: South African Rand (ZAR) only</p>
-            <p>• All API calls will be made to your production backend</p>
-            <p>• Check browser network tab to monitor requests</p>
+      {/* Admin Settings */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Settings className="h-5 w-5" />
+            Admin Settings
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="font-medium">File Upload Permissions</h4>
+              <p className="text-sm text-muted-foreground">Control file uploads in chat</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm">{chatFilesAllowed ? 'Enabled' : 'Disabled'}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={toggleFileUploadPermission}
+                className="flex items-center gap-2"
+              >
+                {chatFilesAllowed ? <Eye className="h-4 w-4" /> : <Ban className="h-4 w-4" />}
+                {chatFilesAllowed ? 'Disable' : 'Enable'}
+              </Button>
+            </div>
+          </div>
+          
+          <Separator />
+          
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="font-medium">Admin Access Control</h4>
+              <p className="text-sm text-muted-foreground">Manage admin privileges</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm">{isAdminMode ? 'Active' : 'Inactive'}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setAdminAccess(!isAdminMode)}
+                className="flex items-center gap-2"
+              >
+                <Edit3 className="h-4 w-4" />
+                Toggle
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  // Enhanced HomeView with proper provider cards
+  const HomeView = () => (
+    <div className="space-y-6">
+      {/* Admin Mode Indicator */}
+      {isAdminMode && (
+        <Alert className="bg-blue-50 border-blue-200">
+          <Settings className="h-4 w-4" />
+          <AlertDescription>
+            <strong>Admin Mode:</strong> You're viewing the app with admin privileges. 
+            <Button variant="link" className="p-0 ml-2 h-auto" onClick={() => setCurrentView('admin-overview')}>
+              Back to Admin Panel
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Hero Section */}
+      <div className="relative bg-gradient-to-br from-orange-500 via-red-500 to-pink-600 text-white p-6 rounded-2xl overflow-hidden">
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-4">
+            <WayaWayaLogo size="md" showText={false} />
+            <div>
+              <h1 className="text-3xl font-bold">WAYA WAYA!</h1>
+              <p className="text-lg opacity-90">Any service. Any time. Anywhere in South Africa.</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <Clock className="h-4 w-4" />
+            <span>24/7 Service Available</span>
+            <Shield className="h-4 w-4" />
+            <span>Verified Providers</span>
+          </div>
+        </div>
+        <div className="absolute -top-4 -right-4 text-8xl opacity-10">🚀</div>
+      </div>
+
+      {/* Service Request Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Zap className="h-5 w-5" />
+            Request a Service
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ServiceRequestModule 
+            onNavigate={handleNavigation} 
+            onRequestSubmit={handleServiceRequest} 
+          />
+        </CardContent>
+      </Card>
+
+      {/* Available Providers */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            Available Providers
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {featuredProviders.map((provider) => (
+              <Card key={provider.id} className="hover:shadow-md transition-shadow cursor-pointer">
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <Avatar>
+                        <AvatarFallback>{provider.name.charAt(0)}</AvatarFallback>
+                        {provider.image && <AvatarImage src={provider.image} alt={provider.name} />}
+                      </Avatar>
+                      <div>
+                        <h3 className="font-semibold">{provider.name}</h3>
+                        <p className="text-sm text-muted-foreground">{provider.service}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      <span className="text-sm font-medium">{provider.rating}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center gap-2 text-sm">
+                      <MapPin className="h-4 w-4 text-muted-foreground" />
+                      <span>{provider.location}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Phone className="h-4 w-4 text-muted-foreground" />
+                      <span>{provider.phone}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Clock className="h-4 w-4 text-muted-foreground" />
+                      <span>Response: {provider.responseTime}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <DollarSign className="h-4 w-4 text-muted-foreground" />
+                      <span>{provider.currency} {provider.hourlyRate}/hour</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <Badge variant={provider.available ? "default" : "secondary"}>
+                      {provider.available ? "Available" : "Busy"}
+                    </Badge>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => startProviderChat(provider)}
+                        className="flex items-center gap-1"
+                      >
+                        <MessageCircle className="h-4 w-4" />
+                        Chat
+                      </Button>
+                      <Button
+                        size="sm"
+                        onClick={() => startBooking(provider)}
+                        className="flex items-center gap-1"
+                      >
+                        <Navigation className="h-4 w-4" />
+                        Book
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </CardContent>
       </Card>
 
-      <div className="flex gap-4">
-        <Button 
-          onClick={handleLogout} 
-          variant="outline"
-          className="flex-1"
-        >
-          Exit Admin Mode
+      {/* Quick Actions */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Button variant="outline" className="flex flex-col items-center gap-2 h-auto py-4" onClick={() => setCurrentView('provider-registration')}>
+          <Briefcase className="h-6 w-6" />
+          <span className="text-sm">Become a Provider</span>
         </Button>
-        <Button 
-          onClick={() => window.location.reload()} 
-          variant="default"
-          className="flex-1"
-        >
-          🔄 Reload App
+        <Button variant="outline" className="flex flex-col items-center gap-2 h-auto py-4" onClick={() => setCurrentView('payment-management')}>
+          <CreditCard className="h-6 w-6" />
+          <span className="text-sm">Payment History</span>
+        </Button>
+        <Button variant="outline" className="flex flex-col items-center gap-2 h-auto py-4" onClick={() => setCurrentView('client-management')}>
+          <Users className="h-6 w-6" />
+          <span className="text-sm">My Requests</span>
+        </Button>
+        <Button variant="outline" className="flex flex-col items-center gap-2 h-auto py-4" onClick={() => setCurrentView('provider-dashboard')}>
+          <Settings className="h-6 w-6" />
+          <span className="text-sm">Dashboard</span>
         </Button>
       </div>
     </div>
   );
 
-  // Show admin login if not authenticated and no admin access
-  if (!isAuthenticated && !isAdminMode) {
-    if (showAdminLogin) {
-      return (
-        <div className="min-h-screen bg-background flex items-center justify-center p-4">
-          <div className="w-full max-w-md">
-            <Card>
-              <CardHeader>
-                <div className="text-center">
-                  <WayaWayaLogo size="md" />
-                  <CardTitle className="mt-4">🔧 Admin Access</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Enter admin key to access development panel
-                  </p>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Input
-                  type="password"
-                  placeholder="Enter admin key"
-                  value={adminKey}
-                  onChange={(e) => setAdminKey(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleAdminLogin()}
-                />
-                <div className="flex gap-2">
-                  <Button onClick={handleAdminLogin} className="flex-1">
-                    Access Admin Panel
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    onClick={() => setShowAdminLogin(false)}
-                    className="flex-1"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-                <div className="text-center">
-                  <Button 
-                    variant="link" 
-                    onClick={() => setCurrentView('landing')}
-                    className="text-sm"
-                  >
-                    Go to Regular App
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+  // Provider Registration (simplified for space)
+  const ProviderRegistration = () => {
+    const totalSteps = 5;
+    const progress = (registrationStep / totalSteps) * 100;
+
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-4 mb-6">
+          <Button variant="ghost" onClick={() => setCurrentView(isAdminMode ? 'admin-overview' : 'home')}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back
+          </Button>
+          <WayaWayaLogo size="sm" />
+          <div className="flex-1">
+            <h1>Become a Provider</h1>
+            <p className="text-sm text-muted-foreground">Step {registrationStep} of {totalSteps}</p>
           </div>
         </div>
-      );
-    }
-
-    if (currentView === 'landing') {
-      return (
-        <div className="min-h-screen bg-background">
-          <LandingScreen onNavigate={handleNavigation} />
-          {/* Admin Access Button - Only show in development */}
-          {import.meta.env.DEV && (
-            <div className="fixed bottom-4 right-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowAdminLogin(true)}
-                className="bg-white/90 backdrop-blur-sm shadow-lg"
-              >
-                <Settings className="h-4 w-4 mr-2" />
-                Admin
-              </Button>
+        <div className="mb-6">
+          <Progress value={progress} className="h-2" />
+        </div>
+        
+        {/* Service Selection */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Briefcase className="h-5 w-5" />
+              Select Your Services
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              {['Plumbing', 'Electrical', 'Cleaning', 'Gardening', 'Painting', 'Carpentry'].map((service) => (
+                <div key={service} className="flex items-center space-x-2">
+                  <Checkbox 
+                    id={service}
+                    checked={selectedServices.includes(service)}
+                    onCheckedChange={() => togglePredefinedService(service)}
+                  />
+                  <label htmlFor={service} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    {service}
+                  </label>
+                </div>
+              ))}
             </div>
-          )}
+            
+            <Separator />
+            
+            {/* Custom Service Form */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-medium">Custom Services</h4>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowCustomServiceForm(true)}
+                  className="flex items-center gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add Custom Service
+                </Button>
+              </div>
+              
+              {showCustomServiceForm && (
+                <Card className="p-4 border-dashed">
+                  <div className="space-y-3">
+                    <Input
+                      placeholder="Service name"
+                      value={newCustomService.name}
+                      onChange={(e) => setNewCustomService(prev => ({ ...prev, name: e.target.value }))}
+                    />
+                    <Textarea
+                      placeholder="Description"
+                      value={newCustomService.description}
+                      onChange={(e) => setNewCustomService(prev => ({ ...prev, description: e.target.value }))}
+                    />
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="Rate (e.g., R150/hour)"
+                        value={newCustomService.rate}
+                        onChange={(e) => setNewCustomService(prev => ({ ...prev, rate: e.target.value }))}
+                      />
+                      <Select 
+                        value={newCustomService.category} 
+                        onValueChange={(value) => setNewCustomService(prev => ({ ...prev, category: value }))}
+                      >
+                        <SelectTrigger className="w-32">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="home">Home</SelectItem>
+                          <SelectItem value="office">Office</SelectItem>
+                          <SelectItem value="outdoor">Outdoor</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button onClick={addCustomService} className="flex items-center gap-2">
+                        <Plus className="h-4 w-4" />
+                        Add Service
+                      </Button>
+                      <Button variant="outline" onClick={() => setShowCustomServiceForm(false)}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              )}
+              
+              {/* Display Custom Services */}
+              {customServices.length > 0 && (
+                <div className="space-y-2">
+                  <h5 className="text-sm font-medium">Your Custom Services:</h5>
+                  {customServices.map((service) => (
+                    <div key={service.id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                      <div>
+                        <p className="font-medium">{service.name}</p>
+                        <p className="text-sm text-muted-foreground">{service.description}</p>
+                        <p className="text-sm text-green-600">{service.rate}</p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeCustomService(service.id)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-center py-8">
+              <Briefcase className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="font-semibold mb-2">Provider Registration</h3>
+              <p className="text-sm text-muted-foreground">Complete registration flow would be here</p>
+              <p className="text-xs text-muted-foreground mt-2">Connected to: {API_BASE_URL}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
+
+  // Enhanced Provider Dashboard with navigation
+  const ProviderDashboard = () => (
+    <div className="space-y-6">
+      <div className="flex items-center gap-4 mb-6">
+        <Button variant="ghost" onClick={() => setCurrentView(isAdminMode ? 'admin-overview' : 'home')}>
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back
+        </Button>
+        <WayaWayaLogo size="sm" />
+        <h1>Provider Dashboard</h1>
+      </div>
+      
+      <div className="bg-gradient-to-r from-green-500 to-blue-600 text-white p-6 rounded-2xl relative overflow-hidden">
+        <div className="relative z-10">
+          <h2>Provider Dashboard</h2>
+          <p className="opacity-90">Welcome back!</p>
+          <div className="flex gap-4 mt-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold">R2,340</div>
+              <div className="text-sm opacity-80">This Week</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold">12</div>
+              <div className="text-sm opacity-80">Jobs Done</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold">4.9</div>
+              <div className="text-sm opacity-80">Rating</div>
+            </div>
+          </div>
         </div>
-      );
-    }
+        <div className="absolute -top-4 -right-4 text-8xl opacity-10">🛠️</div>
+      </div>
+
+      {/* Navigation Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('payment-management')}>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <CreditCard className="h-5 w-5 text-green-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold">Payment Management</h3>
+                <p className="text-sm text-muted-foreground">Manage earnings & payments</p>
+              </div>
+              <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('client-management')}>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Users className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold">Client Management</h3>
+                <p className="text-sm text-muted-foreground">View & manage clients</p>
+              </div>
+              <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-md transition-shadow">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-orange-100 rounded-lg">
+                <Settings className="h-5 w-5 text-orange-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold">Service Settings</h3>
+                <p className="text-sm text-muted-foreground">Configure your services</p>
+              </div>
+              <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Provider Features</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-4">
+            <p className="text-sm text-muted-foreground">Provider dashboard functionality would be here</p>
+            <p className="text-xs text-muted-foreground mt-2">API: {API_BASE_URL}</p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  // Add this component inside your App component, before the return statement
+  const DevelopmentStatus = () => {
+    if (!import.meta.env.DEV) return null;
     
-    if (['login', 'signup', 'signup-client', 'signup-provider', 'forgot-password', 'forgot-username'].includes(currentView)) {
-      return (
-        <AuthScreen
-          view={currentView}
-          onNavigate={handleNavigation}
-          onAuthSuccess={handleAuthSuccess}
-          apiClient={apiClient}
-          internationalCountryCodes={internationalCountryCodes}
-          validatePassword={validatePassword}
-          WayaWayaLogo={WayaWayaLogo}
-        />
-      );
-    }
-  }
-
-  // Show admin overview in admin mode
-  if (isAdminMode && currentView === 'admin-overview') {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="max-w-4xl mx-auto p-4">
-          <AdminOverview />
-        </div>
-        <ChatSystem />
-        <BookingDialog />
+      <div className="fixed top-4 right-4 bg-green-100 border border-green-400 text-green-800 px-3 py-1 rounded text-xs">
+        🚀 Dev Mode • API: {API_BASE_URL}
       </div>
-    );
-  }
-
-  // Show specialized admin components
-  if (currentView === 'payment-management') {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="max-w-4xl mx-auto p-4">
-          <PaymentManagement />
-        </div>
-        <ChatSystem />
-        <BookingDialog />
-      </div>
-    );
-  }
-
-  if (currentView === 'trial-management') {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="max-w-4xl mx-auto p-4">
-          <ProviderTrialManagement />
-        </div>
-        <ChatSystem />
-        <BookingDialog />
-      </div>
-    );
-  }
-
-  if (currentView === 'client-management') {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="max-w-4xl mx-auto p-4">
-          <ClientManagement />
-        </div>
-        <ChatSystem />
-        <BookingDialog />
-      </div>
-    );
-  }
-
-  // Show specialized components
-  if (currentView === 'service-request') {
-    return (
-      <div>
-        <ServiceRequestModule
-          onNavigate={handleNavigation}
-          onRequestSubmit={handleServiceRequest}
-        />
-        <ChatSystem />
-        <BookingDialog />
-      </div>
-    );
-  }
-
-  if (currentView === 'matching') {
-    return (
-      <div>
-        <MatchingEngine
-          onNavigate={handleNavigation}
-          serviceRequest={serviceRequest}
-          onStartBooking={startBooking}
-          onStartChat={startProviderChat}
-        />
-        <ChatSystem />
-        <BookingDialog />
-      </div>
-    );
-  }
-
-  if (currentView === 'ratings-reviews') {
-    return (
-      <div>
-        <RatingsReviews
-          onNavigate={handleNavigation}
-        />
-        <ChatSystem />
-        <BookingDialog />
-      </div>
-    );
-  }
-
-  if (currentView === 'admin') {
-    return (
-      <div>
-        <AdminInterface
-          onNavigate={handleNavigation}
-          apiClient={apiClient}
-          authToken={authToken || ''}
-        />
-        <ChatSystem />
-        <BookingDialog />
-      </div>
-    );
-  }
-
-  // Helper functions
-  const addCustomService = () => {
-    if (newCustomService.name && newCustomService.rate) {
-      const service: CustomService = {
-        id: Date.now(),
-        ...newCustomService
-      };
-      setCustomServices([...customServices, service]);
-      setNewCustomService({
-        name: '',
-        description: '',
-        rate: '',
-        category: 'other'
-      });
-      setShowCustomServiceForm(false);
-    }
-  };
-
-  const removeCustomService = (id: number) => {
-    setCustomServices(customServices.filter(service => service.id !== id));
-  };
-
-  const togglePredefinedService = (serviceName: string) => {
-    setSelectedServices(prev =>
-      prev.includes(serviceName)
-        ? prev.filter(s => s !== serviceName)
-        : [...prev, serviceName]
     );
   };
 
+  // Add missing function definitions
   const handleBookingChange = (field: string, value: string | number) => {
     setBookingData(prev => ({ ...prev, [field]: value }));
   };
@@ -1671,255 +1947,38 @@ export default function App() {
     }
   };
 
-  const HomeView = () => (
-    <div className="space-y-6">
-      {/* Admin Mode Indicator */}
-      {isAdminMode && (
-        <Alert className="bg-blue-50 border-blue-200">
-          <Settings className="h-4 w-4" />
-          <AlertDescription>
-            <strong>Admin Mode:</strong> You're viewing the app with admin privileges. 
-            <Button variant="link" className="p-0 ml-2 h-auto" onClick={() => setCurrentView('admin-overview')}>
-              Back to Admin Panel
-            </Button>
-          </AlertDescription>
-        </Alert>
-      )}
+  const addCustomService = () => {
+    if (newCustomService.name && newCustomService.rate) {
+      const service: CustomService = {
+        id: Date.now(),
+        ...newCustomService
+      };
+      setCustomServices([...customServices, service]);
+      setNewCustomService({
+        name: '',
+        description: '',
+        rate: '',
+        category: 'other'
+      });
+      setShowCustomServiceForm(false);
+    }
+  };
 
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-orange-500 via-red-500 to-pink-600 text-white p-6 rounded-2xl overflow-hidden">
-        <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-4">
-            <WayaWayaLogo size="md" showText={false} />
-            <div>
-              <h1 className="text-3xl font-bold">WAYA WAYA!</h1>
-              <p className="text-lg opacity-90">Any service. Any time. Anywhere in South Africa.</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Clock className="h-4 w-4" />
-            <span>24/7 Available</span>
-          </div>
-        </div>
-        <div className="absolute top-4 right-4 text-6xl opacity-20">🇿🇦</div>
-      </div>
+  const removeCustomService = (id: number) => {
+    setCustomServices(customServices.filter(service => service.id !== id));
+  };
 
-      {/* Search Bar */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-        <Input
-          placeholder="What service do you need?"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 h-12 text-base"
-        />
-      </div>
-
-      {/* Emergency Button */}
-      <Button
-        className="w-full h-14 bg-red-600 hover:bg-red-700 text-white rounded-xl"
-        onClick={() => setCurrentView('service-request')}
-      >
-        <Zap className="mr-2 h-5 w-5" />
-        EMERGENCY SERVICE
-      </Button>
-
-      {/* Service Categories */}
-      <div>
-        <h2 className="mb-4">Service Categories</h2>
-        <div className="grid grid-cols-2 gap-3">
-          {serviceCategories.map((category, index) => (
-            <Card
-              key={index}
-              className="cursor-pointer hover:shadow-md transition-shadow border-0 bg-gradient-to-br from-gray-50 to-gray-100"
-              onClick={() => {
-                setSelectedService(category.name);
-                setCurrentView('service-request');
-              }}
-            >
-              <CardContent className="p-4 text-center">
-                <div className={`w-12 h-12 ${category.color} rounded-full flex items-center justify-center mx-auto mb-2 text-white text-xl`}>
-                  {category.icon}
-                </div>
-                <p className="font-medium">{category.name}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-
-      {/* Available Providers with Enhanced Actions */}
-      <div>
-        <h2 className="mb-4">Available Near You</h2>
-        <div className="space-y-3">
-          {featuredProviders.map((provider) => (
-            <Card key={provider.id} className="overflow-hidden">
-              <CardContent className="p-4">
-                <div className="flex flex-col space-y-4">
-                  {/* Provider Info */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-12 w-12">
-                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white">
-                          {provider.name.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <h3 className="font-semibold">{provider.name}</h3>
-                        <p className="text-sm text-muted-foreground">{provider.service}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <div className="flex items-center">
-                            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                            <span className="text-sm ml-1">{provider.rating}</span>
-                          </div>
-                          <span className="text-sm text-muted-foreground">({provider.reviews})</span>
-                          <div className="flex items-center text-sm text-muted-foreground">
-                            <MapPin className="h-3 w-3 mr-1" />
-                            {provider.distance}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <Badge variant={provider.available ? "default" : "secondary"} className="mb-2">
-                        {provider.available ? "Available" : "Busy"}
-                      </Badge>
-                      <p className="text-sm font-semibold">R{provider.hourlyRate}/hr</p>
-                    </div>
-                  </div>
-                  
-                  {/* Action Buttons */}
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => startProviderChat({
-                        ...provider,
-                        email: provider.email ?? "",
-                        location: provider.location ?? "",
-                        isVerified: provider.isVerified ?? false,
-                        services: provider.services ?? [],
-                      })}
-                      className="flex-1"
-                    >
-                      <MessageCircle className="h-4 w-4 mr-2" />
-                      Chat
-                    </Button>
-                    <Button
-                      onClick={() => startBooking(provider)}
-                      size="sm"
-                      className="flex-1"
-                      disabled={!provider.available}
-                    >
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      Book Now
-                    </Button>
-                  </div>
-                  
-                  {/* Quick Info */}
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <span>Response time: {provider.responseTime}</span>
-                    <span>Distance: {provider.distance}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-
-  // Provider Registration (simplified for space)
-  const ProviderRegistration = () => {
-    const totalSteps = 5;
-    const progress = (registrationStep / totalSteps) * 100;
-
-    return (
-      <div className="space-y-6">
-        <div className="flex items-center gap-4 mb-6">
-          <Button variant="ghost" onClick={() => setCurrentView(isAdminMode ? 'admin-overview' : 'home')}>
-            ← Back
-          </Button>
-          <WayaWayaLogo size="sm" />
-          <div className="flex-1">
-            <h1>Become a Provider</h1>
-            <p className="text-sm text-muted-foreground">Step {registrationStep} of {totalSteps}</p>
-          </div>
-        </div>
-        <div className="mb-6">
-          <Progress value={progress} className="h-2" />
-        </div>
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-center py-8">
-              <Briefcase className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="font-semibold mb-2">Provider Registration</h3>
-              <p className="text-sm text-muted-foreground">Complete registration flow would be here</p>
-              <p className="text-xs text-muted-foreground mt-2">Connected to: {API_BASE_URL}</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+  const togglePredefinedService = (serviceName: string) => {
+    setSelectedServices(prev =>
+      prev.includes(serviceName)
+        ? prev.filter(s => s !== serviceName)
+        : [...prev, serviceName]
     );
   };
 
-  // Provider Dashboard (simplified for space)
-  const ProviderDashboard = () => (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" onClick={() => setCurrentView(isAdminMode ? 'admin-overview' : 'home')}>
-          ← Back
-        </Button>
-        <WayaWayaLogo size="sm" />
-        <h1>Provider Dashboard</h1>
-      </div>
-      
-      <div className="bg-gradient-to-r from-green-500 to-blue-600 text-white p-6 rounded-2xl relative overflow-hidden">
-        <div className="relative z-10">
-          <h2>Provider Dashboard</h2>
-          <p className="opacity-90">Welcome back!</p>
-          <div className="flex gap-4 mt-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold">R2,340</div>
-              <div className="text-sm opacity-80">This Week</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold">12</div>
-              <div className="text-sm opacity-80">Jobs Done</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold">4.9</div>
-              <div className="text-sm opacity-80">Rating</div>
-            </div>
-          </div>
-        </div>
-        <div className="absolute -top-4 -right-4 text-8xl opacity-10">🛠️</div>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Provider Features</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-4">
-            <p className="text-sm text-muted-foreground">Provider dashboard functionality would be here</p>
-            <p className="text-xs text-muted-foreground mt-2">API: {API_BASE_URL}</p>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  // Add this component inside your App component, before the return statement
-  const DevelopmentStatus = () => {
-    if (!import.meta.env.DEV) return null;
-    
-    return (
-      <div className="fixed top-4 right-4 bg-green-100 border border-green-400 text-green-800 px-3 py-1 rounded text-xs">
-        🚀 Dev Mode • API: {API_BASE_URL}
-      </div>
-    );
+  const setAdminAccess = (access: boolean) => {
+    // This function is used in the admin interface
+    console.log('Admin access set to:', access);
   };
 
   return (
