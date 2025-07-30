@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './styles/globals.css';
 import LandingScreen from './components/LandingScreen';
 import AuthScreen from './components/AuthScreen';
@@ -10,20 +10,18 @@ import RatingsReviews from './components/RatingsReviews';
 // Import UI Components
 import { Button } from './components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from './components/ui/avatar';
+import { Avatar, AvatarFallback } from './components/ui/avatar';
 import { Badge } from './components/ui/badge';
 import { Alert, AlertDescription } from './components/ui/alert';
 import { Tabs, TabsContent } from './components/ui/tabs';
 
 // Import Lucide React Icons
 import { 
-  MessageCircle, Unlock, Lock, Send, Paperclip, X, BookOpen, 
-  AlertTriangle, CreditCard, Receipt, Copy, DollarSign, FileText,
-  Users, Ban, Calendar, Shield, TrendingUp, Wallet, AlertCircle,
-  ArrowLeft, ArrowRight, Settings, LogOut, Bell, User, Menu,
-  Search, Clock, MapPin, Phone, Star, Navigation, Briefcase,
-  Plus, CheckCircle, Eye, Edit3, Zap, Image, Video, FileIcon,
-  Download
+  MessageCircle, Unlock, X, BookOpen, 
+  AlertTriangle, CreditCard, Receipt, DollarSign, FileText,
+  Users, Ban, Shield, TrendingUp, LogOut, Bell, Menu,
+  Search, Clock, MapPin, Star, Navigation, Briefcase,
+  Eye, Edit3, Zap, Download, Settings, ArrowLeft
 } from 'lucide-react';
 
 // Import types and constants
