@@ -20,8 +20,8 @@ import {
   MessageCircle, Unlock, X, BookOpen, 
   AlertTriangle, CreditCard, Receipt, DollarSign, FileText,
   Users, Ban, Shield, TrendingUp, LogOut, Bell, Menu,
-  Search, Clock, MapPin, Star, Navigation, Briefcase,
-  Eye, Edit3, Zap, Download, Settings, ArrowLeft
+  Search, Clock, MapPin, Star, Briefcase,
+  Zap, Download, Settings, ArrowLeft
 } from 'lucide-react';
 
 // Import types and constants
