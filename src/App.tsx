@@ -5,22 +5,15 @@ import AuthScreen from './components/AuthScreen';
 import ServiceRequestModule from './components/ServiceRequestModule';
 import MatchingEngine from './components/MatchingEngine';
 import RatingsReviews from './components/RatingsReviews';
-import AdminInterface from './components/AdminInterface';
+// import AdminInterface from './components/AdminInterface';
 
 // Import UI Components
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './components/ui/dialog';
 import { Button } from './components/ui/button';
-import { Input } from './components/ui/input';
-import { Textarea } from './components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from './components/ui/avatar';
 import { Badge } from './components/ui/badge';
 import { Alert, AlertDescription } from './components/ui/alert';
-import { Progress } from './components/ui/progress';
-import { Separator } from './components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
-import { Checkbox } from './components/ui/checkbox';
+import { Tabs, TabsContent } from './components/ui/tabs';
 
 // Import Lucide React Icons
 import { 
@@ -246,88 +239,8 @@ export default function App() {
       setCurrentView('admin-overview');
       setShowAdminLogin(false);
     } else {
-      alert('Invalid admin password');
-    }
-  };
-
-  const handleNavigation = (view: string) => {
-    setCurrentView(view);
-  };
-
-  const handleServiceRequest = (request: ServiceRequest) => {
-    setServiceRequest(request);
-  };
-
-  // Provider Chat Functions
-  const startProviderChat = async (provider: Provider) => {
-    setCurrentChatProvider(provider);
-    setShowChat(true);
-    
-    // Load existing messages for this provider
-    if (!providerChats[provider.id]) {
-      try {
-        const response = await apiClient.chat.getProviderMessages(provider.id.toString(), authToken || '');
-        if (response.ok) {
-          const messages = await response.json();
-          setProviderChats(prev => ({
-            ...prev,
-            [provider.id]: messages
-          }));
-        }
-      } catch (error) {
-        console.error('Failed to load provider messages:', error);
-      }
-    }
-    
-    // Set current chat messages
-    setChatMessages(providerChats[provider.id] || []);
-  };
-
-  const sendProviderMessage = async () => {
-    if (!newMessage.trim() && selectedFiles.length === 0) return;
-    if (!currentChatProvider) return;
-
-    const message = {
-      id: Date.now(),
-      text: newMessage,
-      files: selectedFiles,
-      sender: currentUser?.name || 'Unknown',
-      timestamp: new Date().toISOString(),
-      type: 'user' as const,
-      providerId: currentChatProvider.id
-    };
-
-    // Update local state
-    const chatMessage: ChatMessage = {
-      ...message,
-      providerId: String(currentChatProvider.id)
-    };
-    const updatedMessages = [...chatMessages, chatMessage];
-    setChatMessages(updatedMessages);
-    setProviderChats(prev => ({
-      ...prev,
-      [currentChatProvider.id]: updatedMessages
-    }));
-
-    setNewMessage('');
-    setSelectedFiles([]);
-
-    try {
-      await apiClient.chat.sendMessage({
-        ...message,
-        providerId: currentChatProvider.id.toString()
-      }, authToken || '');
-    } catch (error) {
-      console.error('Failed to send message:', error);
-    }
-  };
-
-  // Booking Functions
-  const startBooking = (provider: Provider) => {
-    setSelectedProvider(provider);
-    setShowBookingDialog(true);
-    setBookingDetails({
-      date: '',
+// ...existing code...
+// Removed stray/duplicate code block. ProviderTrialManagement and HomeView are defined below as valid components.
       time: '',
       description: '',
       urgency: 'normal',
@@ -906,136 +819,9 @@ export default function App() {
     </div>
   );
 
-            <div className="space-y-3">
-              <h4 className="font-semibold">Active Trials</h4>
-              {providersLoading ? (
-                <div className="text-center py-4">Loading providers...</div>
-              ) : providersError ? (
-                <div className="text-center py-4 text-red-600">{providersError}</div>
-              ) : (
-                providers.filter(p => p.trialDaysLeft !== undefined).map((provider) => (
-                  <div key={provider.id} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-10 w-10">
-                        <AvatarFallback>{provider.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-      </div>
-    );
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="text-right">
-                        <div className={`text-sm font-medium ${provider.trialDaysLeft > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                          {provider.trialDaysLeft > 0 ? `${provider.trialDaysLeft} days left` : 'Trial expired'}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          Commission due: R{provider.commissionDue ? provider.commissionDue.toFixed(2) : '0.00'}
-                        </div>
-                      </div>
-                      <Badge variant={provider.trialDaysLeft > 0 ? 'default' : 'destructive'}>
-                        {provider.trialDaysLeft > 0 ? 'Active' : 'Expired'}
-                      </Badge>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-    return (
-      <div>
-        <div className="space-y-6">
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Application Fee Structure</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-semibold mb-2 text-blue-800">South African Providers</h4>
-                <div className="text-2xl font-bold text-blue-600">R150.00</div>
-                <p className="text-sm text-blue-700">One-time application fee</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-semibold mb-2 text-gray-800">International Providers</h4>
-                <div className="text-2xl font-bold text-gray-600">R300.00</div>
-                <p className="text-sm text-gray-700">One-time application fee</p>
-              </div>
-            </div>
-
-            <div className="mt-6 space-y-4">
-              <h4 className="font-semibold">Payment Options</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Button 
-                  className="h-16 flex-col"
-                  onClick={() => alert('EFT Payment clicked!')}
-                >
-                  <CreditCard className="h-6 w-6 mb-2" />
-                  EFT Payment
-                </Button>
-                <Button 
-                 variant="outline" 
-                 className="h-16 flex-col"
-                 onClick={() => alert('Manual Payment clicked')}
-                >
-                  <Receipt className="h-6 w-6 mb-2" />
-                  Manual Payment
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        </div>
-      </React.Fragment>
-      </div>
-    );
+// ...existing code...
   };
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              )}
-              
-              {/* Display Custom Services */}
-              {customServices.length > 0 && (
-                <div className="space-y-2">
-                  <h5 className="text-sm font-medium">Your Custom Services:</h5>
-                  {customServices.map((service) => (
-                    <div key={service.id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                      <div>
-                        <p className="font-medium">{service.name}</p>
-                        <p className="text-sm text-muted-foreground">{service.description}</p>
-                        <p className="text-sm text-green-600">{service.rate}</p>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeCustomService(service.id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-center py-8">
-              <Briefcase className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="font-semibold mb-2">Provider Registration</h3>
-              <p className="text-sm text-muted-foreground">Complete registration flow would be here</p>
-              <p className="text-xs text-muted-foreground mt-2">Connected to: {API_BASE_URL}</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  };
+// ...existing code...
 
   // Provider Trial Management Component
   const ProviderTrialManagement = () => (
@@ -1321,4 +1107,3 @@ export default function App() {
       <BookingDialogComponent />
     </div>
   );
-}
