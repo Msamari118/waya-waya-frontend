@@ -125,69 +125,31 @@ export default function App() {
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [bookingError, setBookingError] = useState('');
 
-  // Mock data with proper Provider interface
-  const mockProviders: Provider[] = [
-    {
-      id: 1,
-      name: 'John Smith',
-      email: 'john.smith@example.com',
-      phone: '+27 82 123 4567',
-      service: 'Plumbing',
-      hourlyRate: 150,
-      rating: 4.8,
-      location: 'Johannesburg, Gauteng',
-      available: true,
-      isVerified: true,
-      services: ['Plumbing', 'Emergency Repairs'],
-      reviews: 127,
-      distance: '2.3 km',
-      currency: 'R',
-      image: null,
-      trialDaysLeft: 0,
-      commissionDue: 0,
-      responseTime: '15 min'
-    },
-    {
-      id: 2,
-      name: 'Sarah Johnson',
-      email: 'sarah.johnson@example.com',
-      phone: '+27 83 456 7890',
-      service: 'Electrical',
-      hourlyRate: 180,
-      rating: 4.9,
-      location: 'Cape Town, Western Cape',
-      available: true,
-      isVerified: true,
-      services: ['Electrical', 'Installation'],
-      reviews: 89,
-      distance: '1.8 km',
-      currency: 'R',
-      image: null,
-      trialDaysLeft: 0,
-      commissionDue: 0,
-      responseTime: '20 min'
-    },
-    {
-      id: 3,
-      name: 'Mike Wilson',
-      email: 'mike.wilson@example.com',
-      phone: '+27 84 789 0123',
-      service: 'Cleaning',
-      hourlyRate: 120,
-      rating: 4.7,
-      location: 'Durban, KwaZulu-Natal',
-      available: false,
-      isVerified: true,
-      services: ['Cleaning', 'Deep Cleaning'],
-      reviews: 203,
-      distance: '3.1 km',
-      currency: 'R',
-      image: null,
-      trialDaysLeft: 0,
-      commissionDue: 0,
-      responseTime: '25 min'
-    }
-  ];
+  // Providers state and loading/error
+  const [providers, setProviders] = useState<Provider[]>([]);
+  const [providersLoading, setProvidersLoading] = useState<boolean>(true);
+  const [providersError, setProvidersError] = useState<string>('');
+
+  // Fetch providers from backend
+  useEffect(() => {
+    const fetchProviders = async () => {
+      setProvidersLoading(true);
+      setProvidersError('');
+      try {
+        const response = await apiClient.providers.getAll(authToken || '');
+        if (response.ok) {
+          const data = await response.json();
+          setProviders(data.providers || []);
+        } else {
+          setProvidersError('Failed to load providers.');
+        }
+      } catch (error) {
+        setProvidersError('Network error.');
+      }
+      setProvidersLoading(false);
+    };
+    fetchProviders();
+  }, [authToken]);
 
   // Check for admin access on app load
   useEffect(() => {
@@ -495,155 +457,6 @@ export default function App() {
     />
   );
 
-  // Payment Management Component
-  const PaymentManagement = () => (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" onClick={() => setCurrentView('admin-overview')}>
-          ← Back
-        </Button>
-        <WayaWayaLogo size="sm" />
-        <h1>Payment Management</h1>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-green-600" />
-              Total Revenue
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">R12,450.75</div>
-            <p className="text-sm text-muted-foreground">This month</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Wallet className="h-5 w-5 text-blue-600" />
-              Commission Due
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">R465.50</div>
-            <p className="text-sm text-muted-foreground">5% of earnings</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-red-600" />
-              Overdue Payments
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">R770.00</div>
-            <p className="text-sm text-muted-foreground">3 clients</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>EFT Payment Options</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="bg-blue-50 p-4 rounded-lg">
-            <h4 className="font-semibold mb-2">WAYA WAYA! Banking Details</h4>
-            <div className="space-y-1 text-sm">
-              <p><strong>Bank:</strong> Capitec Bank</p>
-              <p><strong>Account Holder:</strong> Sandile Lunga</p>
-              <p><strong>Account Number:</strong> 1178770999</p>
-              <p><strong>Branch Code:</strong> 470010</p>
-              <p><strong>Account Type:</strong> Savings</p>
-            </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="mt-2"
-              onClick={() => navigator.clipboard.writeText('1178770999')}
-            >
-              <Copy className="h-4 w-4 mr-2" />
-              Copy Account Number
-            </Button>
-          </div>
-
-          <div className="space-y-3">
-            <h4 className="font-semibold">Payment Processing</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Button 
-                className="h-16 flex-col"
-                onClick={() => alert('EFT Payment clicked!')}
-              >
-                <CreditCard className="h-6 w-6 mb-2" />
-                EFT Payment
-              </Button>
-              <Button 
-                variant="outline" 
-                className="h-16 flex-col"
-                onClick={() => alert('Manual Payment clicked!')}
-              >
-                <Receipt className="h-6 w-6 mb-2" />
-                Manual Payment
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Commission Collection System</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="bg-green-50 p-4 rounded-lg">
-              <h4 className="font-semibold mb-2 text-green-800">Monthly Commission Collection</h4>
-              <p className="text-sm text-green-700 mb-3">
-                WAYA WAYA! automatically collects 5% commission from provider earnings at the end of each month.
-              </p>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>Total Provider Earnings:</span>
-                  <span className="font-semibold">R9,310.00</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span>Commission (5%):</span>
-                  <span className="font-semibold">R465.50</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span>Next Collection:</span>
-                  <span className="font-semibold">March 1, 2024</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Button 
-                className="h-12"
-                onClick={() => alert('Collect Commission clicked!')}
-              >
-                <DollarSign className="h-4 w-4 mr-2" />
-                Collect Commission Now
-              </Button>
-              <Button 
-                variant="outline" 
-                className="h-12"
-                onClick={() => alert('Commission Report clicked!')}
-              >
-                <FileText className="h-4 w-4 mr-2" />
-                Commission Report
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
 
   // Client Management Component
   const ClientManagement = () => (
@@ -754,109 +567,6 @@ export default function App() {
   );
 
   // Provider Trial Management Component
-  const ProviderTrialManagement = () => (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" onClick={() => setCurrentView('admin-overview')}>
-          ← Back
-        </Button>
-        <WayaWayaLogo size="sm" />
-        <h1>Provider Trial Management</h1>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-green-600" />
-            7-Day Free Trial Overview
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="bg-green-50 p-4 rounded-lg mb-4">
-            <h4 className="font-semibold mb-2 text-green-800">Trial Benefits</h4>
-            <ul className="text-sm text-green-700 space-y-1">
-              <li>• Full access to all platform features</li>
-              <li>• Unlimited service requests</li>
-              <li>• No commission fees during trial</li>
-              <li>• Priority customer support</li>
-              <li>• Cancel anytime without charge</li>
-            </ul>
-          </div>
-
-          <div className="space-y-3">
-            <h4 className="font-semibold">Active Trials</h4>
-            {FEATURED_PROVIDERS.map((provider) => (
-              <div key={provider.id} className="flex items-center justify-between p-3 border rounded-lg">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback>{provider.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="font-medium">{provider.name}</p>
-                    <p className="text-sm text-muted-foreground">{provider.service}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="text-right">
-                    <div className={`text-sm font-medium ${provider.trialDaysLeft > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {provider.trialDaysLeft > 0 ? `${provider.trialDaysLeft} days left` : 'Trial expired'}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      Commission due: R{provider.commissionDue.toFixed(2)}
-                    </div>
-                  </div>
-                  <Badge variant={provider.trialDaysLeft > 0 ? 'default' : 'destructive'}>
-                    {provider.trialDaysLeft > 0 ? 'Active' : 'Expired'}
-                  </Badge>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Application Fee Structure</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h4 className="font-semibold mb-2 text-blue-800">South African Providers</h4>
-              <div className="text-2xl font-bold text-blue-600">R150.00</div>
-              <p className="text-sm text-blue-700">One-time application fee</p>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h4 className="font-semibold mb-2 text-gray-800">International Providers</h4>
-              <div className="text-2xl font-bold text-gray-600">R300.00</div>
-              <p className="text-sm text-gray-700">One-time application fee</p>
-            </div>
-          </div>
-
-          <div className="mt-6 space-y-4">
-            <h4 className="font-semibold">Payment Options</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Button 
-                className="h-16 flex-col"
-                onClick={() => alert('EFT Payment clicked!')}
-              >
-                <CreditCard className="h-6 w-6 mb-2" />
-                EFT Payment
-              </Button>
-              <Button 
-               variant="outline" 
-               className="h-16 flex-col"
-               onClick={() => alert('Manual Payment clicked')}
-              >
-                <Receipt className="h-6 w-6 mb-2" />
-                Manual Payment
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
 
   // Enhanced Admin Overview Component
   const AdminOverview = () => (
@@ -1046,7 +756,7 @@ export default function App() {
         <Alert className="bg-blue-50 border-blue-200">
           <Settings className="h-4 w-4" />
           <AlertDescription>
-            <strong>Admin Mode:</strong> You're viewing the app with admin privileges. 
+            <strong>Admin Mode:</strong> You're viewing the app with admin privileges.
             <Button variant="link" className="p-0 ml-2 h-auto" onClick={() => setCurrentView('admin-overview')}>
               Back to Admin Panel
             </Button>
@@ -1083,9 +793,9 @@ export default function App() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ServiceRequestModule 
-            onNavigate={handleNavigation} 
-            onRequestSubmit={handleServiceRequest} 
+          <ServiceRequestModule
+            onNavigate={handleNavigation}
+            onRequestSubmit={handleServiceRequest}
           />
         </CardContent>
       </Card>
@@ -1099,74 +809,78 @@ export default function App() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FEATURED_PROVIDERS.map((provider) => (
-              <Card key={provider.id} className="hover:shadow-md transition-shadow cursor-pointer">
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <Avatar>
-                        <AvatarFallback>{provider.name.charAt(0)}</AvatarFallback>
-                        {provider.image && <AvatarImage src={provider.image} alt={provider.name} />}
-                      </Avatar>
-                      <div>
-                        <h3 className="font-semibold">{provider.name}</h3>
-                        <p className="text-sm text-muted-foreground">{provider.service}</p>
+          {providersLoading ? (
+            <div className="text-center py-8">Loading providers...</div>
+          ) : providersError ? (
+            <div className="text-center py-8 text-red-600">{providersError}</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {providers.map((provider) => (
+                <Card key={provider.id} className="hover:shadow-md transition-shadow cursor-pointer">
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <Avatar>
+                          <AvatarFallback>{provider.name.charAt(0)}</AvatarFallback>
+                          {provider.image && <AvatarImage src={provider.image} alt={provider.name} />}
+                        </Avatar>
+                        <div>
+                          <h3 className="font-semibold">{provider.name}</h3>
+                          <p className="text-sm text-muted-foreground">{provider.service}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm font-medium">{provider.rating}</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm font-medium">{provider.rating}</span>
+                    <div className="space-y-2 mb-4">
+                      <div className="flex items-center gap-2 text-sm">
+                        <MapPin className="h-4 w-4 text-muted-foreground" />
+                        <span>{provider.location}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Phone className="h-4 w-4 text-muted-foreground" />
+                        <span>{provider.phone}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <span>Response: {provider.responseTime}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <DollarSign className="h-4 w-4 text-muted-foreground" />
+                        <span>{provider.currency} {provider.hourlyRate}/hour</span>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center gap-2 text-sm">
-                      <MapPin className="h-4 w-4 text-muted-foreground" />
-                      <span>{provider.location}</span>
+                    <div className="flex items-center justify-between">
+                      <Badge variant={provider.available ? "default" : "secondary"}>
+                        {provider.available ? "Available" : "Busy"}
+                      </Badge>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => startProviderChat(provider)}
+                          className="flex items-center gap-1"
+                        >
+                          <MessageCircle className="h-4 w-4" />
+                          Chat
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => startBooking(provider)}
+                          className="flex items-center gap-1"
+                        >
+                          <Navigation className="h-4 w-4" />
+                          Book
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      <span>{provider.phone}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Clock className="h-4 w-4 text-muted-foreground" />
-                      <span>Response: {provider.responseTime}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <DollarSign className="h-4 w-4 text-muted-foreground" />
-                      <span>{provider.currency} {provider.hourlyRate}/hour</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <Badge variant={provider.available ? "default" : "secondary"}>
-                      {provider.available ? "Available" : "Busy"}
-                    </Badge>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => startProviderChat(provider)}
-                        className="flex items-center gap-1"
-                      >
-                        <MessageCircle className="h-4 w-4" />
-                        Chat
-                      </Button>
-                      <Button
-                        size="sm"
-                        onClick={() => startBooking(provider)}
-                        className="flex items-center gap-1"
-                      >
-                        <Navigation className="h-4 w-4" />
-                        Book
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -1192,109 +906,89 @@ export default function App() {
     </div>
   );
 
-  // Provider Registration (simplified for space)
-  const ProviderRegistration = () => {
-    const totalSteps = 5;
-    const progress = (registrationStep / totalSteps) * 100;
-
+            <div className="space-y-3">
+              <h4 className="font-semibold">Active Trials</h4>
+              {providersLoading ? (
+                <div className="text-center py-4">Loading providers...</div>
+              ) : providersError ? (
+                <div className="text-center py-4 text-red-600">{providersError}</div>
+              ) : (
+                providers.filter(p => p.trialDaysLeft !== undefined).map((provider) => (
+                  <div key={provider.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-10 w-10">
+                        <AvatarFallback>{provider.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+      </div>
+    );
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="text-right">
+                        <div className={`text-sm font-medium ${provider.trialDaysLeft > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {provider.trialDaysLeft > 0 ? `${provider.trialDaysLeft} days left` : 'Trial expired'}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          Commission due: R{provider.commissionDue ? provider.commissionDue.toFixed(2) : '0.00'}
+                        </div>
+                      </div>
+                      <Badge variant={provider.trialDaysLeft > 0 ? 'default' : 'destructive'}>
+                        {provider.trialDaysLeft > 0 ? 'Active' : 'Expired'}
+                      </Badge>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
     return (
-      <div className="space-y-6">
-        <div className="flex items-center gap-4 mb-6">
-          <Button variant="ghost" onClick={() => setCurrentView(isAdminMode ? 'admin-overview' : 'home')}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
-          </Button>
-          <WayaWayaLogo size="sm" />
-          <div className="flex-1">
-            <h1>Become a Provider</h1>
-            <p className="text-sm text-muted-foreground">Step {registrationStep} of {totalSteps}</p>
-          </div>
-        </div>
-        <div className="mb-6">
-          <Progress value={progress} className="h-2" />
-        </div>
-        
-        {/* Service Selection */}
+      <div>
+        <div className="space-y-6">
+
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Briefcase className="h-5 w-5" />
-              Select Your Services
-            </CardTitle>
+            <CardTitle>Application Fee Structure</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              {['Plumbing', 'Electrical', 'Cleaning', 'Gardening', 'Painting', 'Carpentry'].map((service) => (
-                <div key={service} className="flex items-center space-x-2">
-                  <Checkbox 
-                    id={service}
-                    checked={selectedServices.includes(service)}
-                    onCheckedChange={() => togglePredefinedService(service)}
-                  />
-                  <label htmlFor={service} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    {service}
-                  </label>
-                </div>
-              ))}
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h4 className="font-semibold mb-2 text-blue-800">South African Providers</h4>
+                <div className="text-2xl font-bold text-blue-600">R150.00</div>
+                <p className="text-sm text-blue-700">One-time application fee</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-semibold mb-2 text-gray-800">International Providers</h4>
+                <div className="text-2xl font-bold text-gray-600">R300.00</div>
+                <p className="text-sm text-gray-700">One-time application fee</p>
+              </div>
             </div>
-            
-            <Separator />
-            
-            {/* Custom Service Form */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h4 className="text-sm font-medium">Custom Services</h4>
+
+            <div className="mt-6 space-y-4">
+              <h4 className="font-semibold">Payment Options</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => setShowCustomServiceForm(true)}
-                  className="flex items-center gap-2"
+                  className="h-16 flex-col"
+                  onClick={() => alert('EFT Payment clicked!')}
                 >
-                  <Plus className="h-4 w-4" />
-                  Add Custom Service
+                  <CreditCard className="h-6 w-6 mb-2" />
+                  EFT Payment
+                </Button>
+                <Button 
+                 variant="outline" 
+                 className="h-16 flex-col"
+                 onClick={() => alert('Manual Payment clicked')}
+                >
+                  <Receipt className="h-6 w-6 mb-2" />
+                  Manual Payment
                 </Button>
               </div>
-              
-              {showCustomServiceForm && (
-                <Card className="p-4 border-dashed">
-                  <div className="space-y-3">
-                    <Input
-                      placeholder="Service name"
-                      value={newCustomService.name}
-                      onChange={(e) => setNewCustomService(prev => ({ ...prev, name: e.target.value }))}
-                    />
-                    <Textarea
-                      placeholder="Description"
-                      value={newCustomService.description}
-                      onChange={(e) => setNewCustomService(prev => ({ ...prev, description: e.target.value }))}
-                    />
-                    <div className="flex gap-2">
-                      <Input
-                        placeholder="Rate (e.g., R150/hour)"
-                        value={newCustomService.rate}
-                        onChange={(e) => setNewCustomService(prev => ({ ...prev, rate: e.target.value }))}
-                      />
-                      <Select 
-                        value={newCustomService.category} 
-                        onValueChange={(value) => setNewCustomService(prev => ({ ...prev, category: value }))}
-                      >
-                        <SelectTrigger className="w-32">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="home">Home</SelectItem>
-                          <SelectItem value="office">Office</SelectItem>
-                          <SelectItem value="outdoor">Outdoor</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button onClick={addCustomService} className="flex items-center gap-2">
-                        <Plus className="h-4 w-4" />
-                        Add Service
-                      </Button>
-                      <Button variant="outline" onClick={() => setShowCustomServiceForm(false)}>
+            </div>
+          </CardContent>
+        </Card>
+        </div>
+      </React.Fragment>
+      </div>
+    );
+  };
                         Cancel
                       </Button>
                     </div>
@@ -1343,96 +1037,94 @@ export default function App() {
     );
   };
 
-  // Enhanced Provider Dashboard with navigation
-  const ProviderDashboard = () => (
+  // Provider Trial Management Component
+  const ProviderTrialManagement = () => (
     <div className="space-y-6">
       <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" onClick={() => setCurrentView(isAdminMode ? 'admin-overview' : 'home')}>
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+        <Button variant="ghost" onClick={() => setCurrentView('admin-overview')}>
+          ← Back
         </Button>
         <WayaWayaLogo size="sm" />
-        <h1>Provider Dashboard</h1>
-      </div>
-      
-      <div className="bg-gradient-to-r from-green-500 to-blue-600 text-white p-6 rounded-2xl relative overflow-hidden">
-        <div className="relative z-10">
-          <h2>Provider Dashboard</h2>
-          <p className="opacity-90">Welcome back!</p>
-          <div className="flex gap-4 mt-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold">R2,340</div>
-              <div className="text-sm opacity-80">This Week</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold">12</div>
-              <div className="text-sm opacity-80">Jobs Done</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold">4.9</div>
-              <div className="text-sm opacity-80">Rating</div>
-            </div>
-          </div>
-        </div>
-        <div className="absolute -top-4 -right-4 text-8xl opacity-10">🛠️</div>
-      </div>
-
-      {/* Navigation Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('payment-management')}>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <CreditCard className="h-5 w-5 text-green-600" />
-              </div>
-              <div>
-                <h3 className="font-semibold">Payment Management</h3>
-                <p className="text-sm text-muted-foreground">Manage earnings & payments</p>
-              </div>
-              <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setCurrentView('client-management')}>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Users className="h-5 w-5 text-blue-600" />
-              </div>
-              <div>
-                <h3 className="font-semibold">Client Management</h3>
-                <p className="text-sm text-muted-foreground">View & manage clients</p>
-              </div>
-              <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="cursor-pointer hover:shadow-md transition-shadow">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <Settings className="h-5 w-5 text-orange-600" />
-              </div>
-              <div>
-                <h3 className="font-semibold">Service Settings</h3>
-                <p className="text-sm text-muted-foreground">Configure your services</p>
-              </div>
-              <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
-            </div>
-          </CardContent>
-        </Card>
+        <h1>Provider Trials</h1>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Provider Features</CardTitle>
+          <CardTitle>Active Trials</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-4">
-            <p className="text-sm text-muted-foreground">Provider dashboard functionality would be here</p>
-            <p className="text-xs text-muted-foreground mt-2">API: {API_BASE_URL}</p>
+          {providersLoading ? (
+            <div className="text-center py-4">Loading providers...</div>
+          ) : providersError ? (
+            <div className="text-center py-4 text-red-600">{providersError}</div>
+          ) : (
+            providers.filter(p => p.trialDaysLeft !== undefined).map((provider) => (
+              <div key={provider.id} className="flex items-center justify-between p-3 border rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-10 w-10">
+                    <AvatarFallback>{provider.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="font-medium">{provider.name}</p>
+                    <p className="text-sm text-muted-foreground">{provider.service}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-right">
+                    <div className={`text-sm font-medium ${provider.trialDaysLeft > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {provider.trialDaysLeft > 0 ? `${provider.trialDaysLeft} days left` : 'Trial expired'}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Commission due: R{provider.commissionDue ? provider.commissionDue.toFixed(2) : '0.00'}
+                    </div>
+                  </div>
+                  <Badge variant={provider.trialDaysLeft > 0 ? 'default' : 'destructive'}>
+                    {provider.trialDaysLeft > 0 ? 'Active' : 'Expired'}
+                  </Badge>
+                </div>
+              </div>
+            ))
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Application Fee Structure</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h4 className="font-semibold mb-2 text-blue-800">South African Providers</h4>
+              <div className="text-2xl font-bold text-blue-600">R150.00</div>
+              <p className="text-sm text-blue-700">One-time application fee</p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h4 className="font-semibold mb-2 text-gray-800">International Providers</h4>
+              <div className="text-2xl font-bold text-gray-600">R300.00</div>
+              <p className="text-sm text-gray-700">One-time application fee</p>
+            </div>
+          </div>
+
+          <div className="mt-6 space-y-4">
+            <h4 className="font-semibold">Payment Options</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Button
+                className="h-16 flex-col"
+                onClick={() => alert('EFT Payment clicked!')}
+              >
+                <CreditCard className="h-6 w-6 mb-2" />
+                EFT Payment
+              </Button>
+              <Button
+                variant="outline"
+                className="h-16 flex-col"
+                onClick={() => alert('Manual Payment clicked')}
+              >
+                <Receipt className="h-6 w-6 mb-2" />
+                Manual Payment
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -1571,6 +1263,9 @@ export default function App() {
           </TabsContent>
           <TabsContent value="provider">
             <ProviderDashboard />
+          </TabsContent>
+          <TabsContent value="payment-management">
+            <PaymentManagement onBack={() => setCurrentView('admin-overview')} />
           </TabsContent>
         </Tabs>
       </main>
