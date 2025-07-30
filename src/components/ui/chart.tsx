@@ -97,7 +97,7 @@ function getPayloadConfigFromPayload(
   payload: unknown,
   key: string,
 ) {
-  return undefined;
+    return undefined;
 }
 
 export {

@@ -6,302 +6,68 @@ import ServiceRequestModule from './components/ServiceRequestModule';
 import MatchingEngine from './components/MatchingEngine';
 import RatingsReviews from './components/RatingsReviews';
 import AdminInterface from './components/AdminInterface';
-import { Search, MapPin, Star, Clock, Shield, Zap, Phone, Menu, User, Bell, Upload, CheckCircle, Plus, Briefcase, X, Edit3, MessageCircle, Navigation, CreditCard, Copy, Settings, Eye, Database, FileText, DollarSign, AlertTriangle, Ban, Lock, Unlock, Calendar, TrendingUp, Users, Receipt, Wallet, Send, Paperclip, Image, Video, FileIcon, Download, BookOpen, ArrowRight, ArrowLeft, LogOut } from 'lucide-react';
+
+// Import UI Components
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './components/ui/dialog';
 import { Button } from './components/ui/button';
 import { Input } from './components/ui/input';
+import { Textarea } from './components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
-import { Badge } from './components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from './components/ui/avatar';
+import { Badge } from './components/ui/badge';
+import { Alert, AlertDescription } from './components/ui/alert';
+import { Progress } from './components/ui/progress';
+import { Separator } from './components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
 import { Checkbox } from './components/ui/checkbox';
-import { Textarea } from './components/ui/textarea';
-import { Progress } from './components/ui/progress';
-import { Alert, AlertDescription } from './components/ui/alert';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './components/ui/dialog';
-import { Separator } from './components/ui/separator';
-import { checkEnvironmentAccess, checkAdminPassword } from './utils/adminAccess';
+
+// Import Lucide React Icons
+import { 
+  MessageCircle, Unlock, Lock, Send, Paperclip, X, BookOpen, 
+  AlertTriangle, CreditCard, Receipt, Copy, DollarSign, FileText,
+  Users, Ban, Calendar, Shield, TrendingUp, Wallet, AlertCircle,
+  ArrowLeft, ArrowRight, Settings, LogOut, Bell, User, Menu,
+  Search, Clock, MapPin, Phone, Star, Navigation, Briefcase,
+  Plus, CheckCircle, Eye, Edit3, Zap, Image, Video, FileIcon,
+  Download
+} from 'lucide-react';
+
+// Import types and constants
+import {
+  User,
+  ServiceRequest,
+  ChatMessage,
+  Provider,
+  CustomService,
+  BookingDetails,
+  BookingData,
+  CustomServiceForm,
+  WayaWayaLogoProps
+} from './types';
+
+import {
+  INTERNATIONAL_COUNTRY_CODES,
+  SERVICE_CATEGORIES,
+  FEATURED_PROVIDERS,
+  BLOCKED_CLIENTS,
+  getApiBaseUrl,
+  API_BASE_URL,
+  validatePassword,
+  checkAdminAccess,
+  setAdminAccess
+} from './utils/constants';
+
+// Import API client
 import apiClient from './types/apiClient';
 
-// TypeScript Interfaces
-interface User {
-  id: string;
-  email: string;
-  userType: 'client' | 'provider' | 'admin';
-  role?: string;
-  name: string;
-  phone?: string;
-  location?: string;
-  services?: string[];
-  hourlyRate?: number;
-  rating?: number;
-  isVerified?: boolean;
-}
+// Import WayaWayaLogo component
+import { WayaWayaLogo } from './components/common/WayaWayaLogo';
 
-interface ServiceRequest {
-  id: string;
-  serviceType: string;
-  description: string;
-  location: {
-    lat: number | null;
-    lng: number | null;
-    address: string;
-  };
-  preferredTime: string;
-  urgency: 'low' | 'normal' | 'high' | 'emergency';
-  clientId: string;
-  status: 'pending' | 'matched' | 'in-progress' | 'completed' | 'cancelled';
-  createdAt: string;
-}
-
-interface ChatMessage {
-  id: number;
-  text: string;
-  files: File[];
-  sender: string;
-  timestamp: string;
-  type: 'user' | 'provider' | 'system';
-  providerId?: string;
-}
-
-interface Provider {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  service: string;
-  hourlyRate: number;
-  rating: number;
-  location: string;
-  available: boolean;
-  isVerified: boolean;
-  services: string[];
-  reviews: number;
-  distance: string;
-  currency: string;
-  image: string | null;
-  trialDaysLeft: number;
-  commissionDue: number;
-  responseTime: string;
-}
-
-interface CustomService {
-  id: number;
-  name: string;
-  description: string;
-  rate: string;
-  category: string;
-}
-
-interface BookingDetails {
-  date: string;
-  time: string;
-  description: string;
-  urgency: 'low' | 'normal' | 'high' | 'emergency';
-  location: string;
-  estimatedHours: number;
-}
-
-interface BookingData {
-  serviceType: string;
-  description: string;
-  preferredTime: string;
-  location: {
-    lat: number | null;
-    lng: number | null;
-    address: string;
-  };
-}
-
-interface CustomServiceForm {
-  name: string;
-  description: string;
-  rate: string;
-  category: string;
-}
-
-// --- PRODUCTION API CLIENT ---
-const getApiBaseUrl = () => {
-  if (import.meta.env.DEV) {
-    return 'https://waya-waya-backend-production.up.railway.app';
-  }
-  return import.meta.env.VITE_API_BASE_URL || 'https://waya-waya-backend-production.up.railway.app';
-};
-
-const API_BASE_URL = getApiBaseUrl();
-
-// WAYA WAYA Logo Component
-interface WayaWayaLogoProps {
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  showText?: boolean;
-}
-
-const WayaWayaLogo = ({ size = 'sm', showText = true }: WayaWayaLogoProps) => {
-  const logoSizes = {
-    xs: 'w-6 h-6',
-    sm: 'w-8 h-8',
-    md: 'w-10 h-10',
-    lg: 'w-12 h-12',
-    xl: 'w-16 h-16'
-  };
-
-  const textSizes = {
-    xs: 'text-sm',
-    sm: 'text-base',
-    md: 'text-lg',
-    lg: 'text-xl',
-    xl: 'text-2xl'
-  };
-
-  return (
-    <div className="flex items-center gap-2">
-      <div className={`${logoSizes[size]} bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center`}>
-        <span className={`text-white font-bold ${size === 'xs' ? 'text-xs' : size === 'sm' ? 'text-sm' : 'text-lg'}`}>W</span>
-      </div>
-      {showText && (
-        <span className={`font-bold ${textSizes[size]} text-primary`}>WAYA WAYA!</span>
-      )}
-    </div>
-  );
-};
-
-// International Country Codes with guaranteed unique IDs
-const internationalCountryCodes = [
-  { id: 'cc-za', code: '+27', country: 'South Africa', flag: '🇿🇦' },
-  { id: 'cc-us', code: '+1', country: 'United States', flag: '🇺🇸' },
-  { id: 'cc-ca', code: '+1', country: 'Canada', flag: '🇨🇦' },
-  { id: 'cc-gb', code: '+44', country: 'United Kingdom', flag: '🇬🇧' },
-  { id: 'cc-de', code: '+49', country: 'Germany', flag: '🇩🇪' },
-  { id: 'cc-fr', code: '+33', country: 'France', flag: '🇫🇷' },
-  { id: 'cc-es', code: '+34', country: 'Spain', flag: '🇪🇸' },
-  { id: 'cc-it', code: '+39', country: 'Italy', flag: '🇮🇹' },
-  { id: 'cc-au', code: '+61', country: 'Australia', flag: '🇦🇺' },
-  { id: 'cc-in', code: '+91', country: 'India', flag: '🇮🇳' },
-  { id: 'cc-cn', code: '+86', country: 'China', flag: '🇨🇳' },
-  { id: 'cc-jp', code: '+81', country: 'Japan', flag: '🇯🇵' },
-  { id: 'cc-br', code: '+55', country: 'Brazil', flag: '🇧🇷' },
-  { id: 'cc-mx', code: '+52', country: 'Mexico', flag: '🇲🇽' },
-  { id: 'cc-ar', code: '+54', country: 'Argentina', flag: '🇦🇷' },
-  { id: 'cc-ru', code: '+7', country: 'Russia', flag: '🇷🇺' },
-  { id: 'cc-kr', code: '+82', country: 'South Korea', flag: '🇰🇷' },
-  { id: 'cc-sg', code: '+65', country: 'Singapore', flag: '🇸🇬' },
-  { id: 'cc-ae', code: '+971', country: 'United Arab Emirates', flag: '🇦🇪' },
-  { id: 'cc-ng', code: '+234', country: 'Nigeria', flag: '🇳🇬' },
-  { id: 'cc-ke', code: '+254', country: 'Kenya', flag: '🇰🇪' },
-  { id: 'cc-gh', code: '+233', country: 'Ghana', flag: '🇬🇭' },
-  { id: 'cc-eg', code: '+20', country: 'Egypt', flag: '🇪🇬' },
-  { id: 'cc-ma', code: '+212', country: 'Morocco', flag: '🇲🇦' },
-  { id: 'cc-th', code: '+66', country: 'Thailand', flag: '🇹🇭' },
-  { id: 'cc-ph', code: '+63', country: 'Philippines', flag: '🇵🇭' },
-  { id: 'cc-id', code: '+62', country: 'Indonesia', flag: '🇮🇩' },
-  { id: 'cc-my', code: '+60', country: 'Malaysia', flag: '🇲🇾' },
-  { id: 'cc-vn', code: '+84', country: 'Vietnam', flag: '🇻🇳' },
-  { id: 'cc-pk', code: '+92', country: 'Pakistan', flag: '🇵🇰' }
-];
-
-// Password validation function
-const validatePassword = (password: string) => {
-  const minLength = password.length >= 8;
-  const hasDigit = /\d/.test(password);
-  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-  
-  return {
-    isValid: minLength && hasDigit && hasSpecialChar,
-    minLength,
-    hasDigit,
-    hasSpecialChar
-  };
-};
-
-// Mock data for services and providers
-const serviceCategories = [
-  { name: 'Plumbing', icon: '🔧', color: 'bg-blue-500' },
-  { name: 'Electrical', icon: '⚡', color: 'bg-yellow-500' },
-  { name: 'Cleaning', icon: '🧽', color: 'bg-green-500' },
-  { name: 'Beauty', icon: '💄', color: 'bg-pink-500' },
-  { name: 'Transport', icon: '🚗', color: 'bg-purple-500' },
-  { name: 'Security', icon: '🛡️', color: 'bg-red-500' },
-  { name: 'Tutoring', icon: '📚', color: 'bg-indigo-500' },
-  { name: 'Garden', icon: '🌱', color: 'bg-emerald-500' },
-];
-
-const featuredProviders: Provider[] = [
-  {
-    id: 1,
-    name: 'Ahmed Hassan',
-    email: 'ahmed.hassan@example.com',
-    phone: '+27 82 123 4567',
-    service: 'Electrician',
-    hourlyRate: 250,
-    rating: 4.9,
-    location: 'Johannesburg, Gauteng',
-    available: true,
-    isVerified: true,
-    services: ['Electrical', 'Installation', 'Repairs'],
-    reviews: 127,
-    distance: '2.3 km',
-    currency: 'R',
-    image: null,
-    trialDaysLeft: 3,
-    commissionDue: 145.50,
-    responseTime: '~15 min'
-  },
-  {
-    id: 2,
-    name: 'Maria Santos',
-    email: 'maria.santos@example.com',
-    phone: '+27 83 456 7890',
-    service: 'House Cleaning',
-    hourlyRate: 180,
-    rating: 4.8,
-    location: 'Cape Town, Western Cape',
-    available: true,
-    isVerified: true,
-    services: ['Cleaning', 'Deep Cleaning', 'Organizing'],
-    reviews: 89,
-    distance: '1.8 km',
-    currency: 'R',
-    image: null,
-    trialDaysLeft: 0,
-    commissionDue: 89.25,
-    responseTime: '~5 min'
-  },
-  {
-    id: 3,
-    name: 'James Wilson',
-    email: 'james.wilson@example.com',
-    phone: '+27 84 789 0123',
-    service: 'Plumber',
-    hourlyRate: 300,
-    rating: 4.7,
-    location: 'Durban, KwaZulu-Natal',
-    available: false,
-    isVerified: true,
-    services: ['Plumbing', 'Emergency Repairs', 'Installation'],
-    reviews: 156,
-    distance: '3.1 km',
-    currency: 'R',
-    image: null,
-    trialDaysLeft: 7,
-    commissionDue: 230.75,
-    responseTime: '~30 min'
-  },
-];
-
-// Mock blocked clients data
-const blockedClients = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', reason: 'Non-payment of R450.00', blockedDate: '2024-01-15', amountDue: 450.00 },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', reason: 'Multiple payment failures', blockedDate: '2024-01-10', amountDue: 320.00 },
-];
-
-// --- ADMIN ACCESS FUNCTIONS ---
-const checkAdminAccess = () => {
-  return checkEnvironmentAccess();
-};
-
-const setAdminAccess = (access: boolean) => {
-  localStorage.setItem('adminAccess', access.toString());
-};
+// Import extracted components
+import { ChatSystem } from './components/chat/ChatSystem';
+import { BookingDialog } from './components/booking/BookingDialog';
+import { PaymentManagement } from './components/admin/PaymentManagement';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<string>('landing');
@@ -426,7 +192,7 @@ export default function App() {
   // Check for admin access on app load
   useEffect(() => {
     const checkAccess = async () => {
-      const hasAdminAccess = await checkEnvironmentAccess();
+      const hasAdminAccess = await checkAdminAccess();
       if (hasAdminAccess === true && import.meta.env.DEV) {
         // Auto-enable admin in localhost development
         setIsAdminMode(true);
@@ -502,7 +268,7 @@ export default function App() {
 
   // Handle admin login
   const handleAdminLogin = async () => {
-    const isValid = await checkAdminPassword(adminKey);
+    const isValid = await validatePassword(adminKey);
     
     if (isValid) {
       setIsAdminMode(true);
@@ -690,264 +456,43 @@ export default function App() {
     setChatFilesAllowed(!chatFilesAllowed);
   };
 
-  // Enhanced Chat Component with Provider Context
-  const ChatSystem = () => (
-    <>
-      {/* Chat Trigger Button - Only show when not in provider chat */}
-      {!currentChatProvider && (
-        <button 
-          onClick={() => setShowChat(true)}
-          className="fixed bottom-24 right-4 rounded-full h-12 w-12 shadow-lg bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors z-40"
-        >
-          <MessageCircle className="h-6 w-6" />
-        </button>
-      )}
-
-      {/* Chat Dialog */}
-      <Dialog open={showChat} onOpenChange={(open) => {
-        setShowChat(open);
-        if (!open) {
-          setCurrentChatProvider(null);
-        }
-      }}>
-        <DialogContent className="sm:max-w-md h-[80vh] flex flex-col p-0">
-          <DialogHeader className="p-6 pb-4">
-            <DialogTitle className="flex items-center gap-2">
-              <MessageCircle className="h-5 w-5" />
-              {currentChatProvider ? (
-                <div className="flex items-center gap-2">
-                  <Avatar className="h-6 w-6">
-                    <AvatarFallback className="text-xs">
-                      {currentChatProvider.name.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span>Chat with {currentChatProvider.name}</span>
-                </div>
-              ) : (
-                'Service Chat'
-              )}
-              {isAdminMode && (
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={toggleFileUploadPermission}
-                  className="ml-auto"
-                >
-                  {chatFilesAllowed ? <Unlock className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
-                  {chatFilesAllowed ? 'Files Allowed' : 'Files Locked'}
-                </Button>
-              )}
-            </DialogTitle>
-            <DialogDescription>
-              {currentChatProvider ? (
-                <div className="flex items-center gap-4 text-sm">
-                  <span>{currentChatProvider.service}</span>
-                  <Badge variant={currentChatProvider.available ? "default" : "secondary"}>
-                    {currentChatProvider.available ? "Available" : "Busy"}
-                  </Badge>
-                  <span className="text-muted-foreground">
-                    Responds in {currentChatProvider.responseTime}
-                  </span>
-                </div>
-              ) : (
-                'Chat with service providers about your requests'
-              )}
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="flex-1 flex flex-col min-h-0 px-6">
-            <div className="flex-1 overflow-y-auto space-y-4 pb-4">
-              {chatMessages.length === 0 ? (
-                <div className="text-center text-muted-foreground py-8">
-                  <MessageCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>
-                    {currentChatProvider 
-                      ? `Start a conversation with ${currentChatProvider.name}` 
-                      : 'Start a conversation about your service request'
-                    }
-                  </p>
-                </div>
-              ) : (
-                chatMessages.map((message) => (
-                  <div key={message.id} className="flex flex-col space-y-2">
-                    <div className="flex items-start gap-2">
-                      <Avatar className="h-8 w-8">
-                        <AvatarFallback>{message.sender.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 bg-muted p-3 rounded-lg">
-                        <p className="text-sm font-medium">{message.sender}</p>
-                        <p className="text-sm">{message.text}</p>
-                        {message.files && message.files.length > 0 && (
-                          <div className="mt-2 space-y-1">
-                            {message.files.map((file, index) => (
-                              <div key={index} className="flex items-center gap-2 text-xs bg-background p-2 rounded">
-                                {file.type?.startsWith('image/') ? <Image className="h-4 w-4" /> :
-                                 file.type?.startsWith('video/') ? <Video className="h-4 w-4" /> :
-                                 <FileIcon className="h-4 w-4" />}
-                                <span>{file.name}</span>
-                                <Download className="h-3 w-3 ml-auto cursor-pointer" />
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-            
-            <div className="border-t pt-4 pb-6 space-y-3">
-              {selectedFiles.length > 0 && (
-                <div className="space-y-2">
-                  <p className="text-sm font-medium">Selected Files:</p>
-                  {selectedFiles.map((file, index) => (
-                    <div key={index} className="flex items-center gap-2 text-sm bg-muted p-2 rounded">
-                      {file.type?.startsWith('image/') ? <Image className="h-4 w-4" /> :
-                       file.type?.startsWith('video/') ? <Video className="h-4 w-4" /> :
-                       <FileIcon className="h-4 w-4" />}
-                      <span className="flex-1">{file.name}</span>
-                      <Button variant="ghost" size="sm" onClick={() => removeFile(index)}>
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Type your message..."
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                  className="flex-1"
-                />
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*,video/*,.pdf,.doc,.docx"
-                  onChange={handleFileSelect}
-                  className="hidden"
-                  id="file-upload"
-                  disabled={!chatFilesAllowed}
-                />
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => document.getElementById('file-upload')?.click()}
-                  disabled={!chatFilesAllowed}
-                  title={chatFilesAllowed ? "Upload files" : "File upload disabled by admin"}
-                >
-                  <Paperclip className="h-4 w-4" />
-                </Button>
-                <Button onClick={sendMessage} size="sm">
-                  <Send className="h-4 w-4" />
-                </Button>
-              </div>
-              
-              {!chatFilesAllowed && (
-                <Alert className="bg-amber-50 border-amber-200">
-                  <Lock className="h-4 w-4" />
-                  <AlertDescription className="text-amber-800">
-                    File uploads are locked. Admin authorization required.
-                  </AlertDescription>
-                </Alert>
-              )}
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
+  // Chat System Component
+  const ChatSystemComponent = () => (
+    <ChatSystem
+      showChat={showChat}
+      setShowChat={setShowChat}
+      chatMessages={chatMessages}
+      setChatMessages={setChatMessages}
+      newMessage={newMessage}
+      setNewMessage={setNewMessage}
+      selectedFiles={selectedFiles}
+      setSelectedFiles={setSelectedFiles}
+      chatFilesAllowed={chatFilesAllowed}
+      currentChatProvider={currentChatProvider}
+      setCurrentChatProvider={setCurrentChatProvider}
+      providerChats={providerChats}
+      setProviderChats={setProviderChats}
+      currentUser={currentUser}
+      isAdminMode={isAdminMode}
+      toggleFileUploadPermission={toggleFileUploadPermission}
+      sendMessage={sendMessage}
+      handleFileSelect={handleFileSelect}
+      removeFile={removeFile}
+    />
   );
 
-  // Enhanced Booking Dialog
-  const BookingDialog = () => (
-    <Dialog open={showBookingDialog} onOpenChange={setShowBookingDialog}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <BookOpen className="h-5 w-5" />
-            Book {selectedProvider?.name}
-          </DialogTitle>
-          <DialogDescription>
-            {selectedProvider?.service} • R{selectedProvider?.hourlyRate}/hour
-          </DialogDescription>
-        </DialogHeader>
-        
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Service Type</label>
-            <Input
-              value={bookingData.serviceType}
-              onChange={(e) => handleBookingChange('serviceType', e.target.value)}
-              placeholder="e.g., Plumbing, Electrical"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Description</label>
-            <Textarea
-              value={bookingData.description}
-              onChange={(e) => handleBookingChange('description', e.target.value)}
-              placeholder="Describe your service need..."
-              rows={3}
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Preferred Time</label>
-            <Input
-              type="datetime-local"
-              value={bookingData.preferredTime}
-              onChange={(e) => handleBookingChange('preferredTime', e.target.value)}
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Location</label>
-            <div className="space-y-2">
-              <Input
-                placeholder="Address"
-                value={bookingData.location.address}
-                onChange={(e) => handleLocationChange('address', e.target.value)}
-              />
-              <div className="flex gap-2">
-                <Input
-                  type="number"
-                  placeholder="Latitude"
-                  value={bookingData.location.lat || ''}
-                  onChange={(e) => handleLocationChange('lat', parseFloat(e.target.value) || null)}
-                />
-                <Input
-                  type="number"
-                  placeholder="Longitude"
-                  value={bookingData.location.lng || ''}
-                  onChange={(e) => handleLocationChange('lng', parseFloat(e.target.value) || null)}
-                />
-              </div>
-            </div>
-          </div>
-          
-          {bookingError && (
-            <Alert>
-              <AlertTriangle className="h-4 w-4" />
-              <AlertDescription>{bookingError}</AlertDescription>
-            </Alert>
-          )}
-          
-          <div className="flex gap-2">
-            <Button onClick={handleSubmitBooking} className="flex-1">
-              <Send className="h-4 w-4 mr-2" />
-              Submit Booking
-            </Button>
-            <Button variant="outline" onClick={() => setShowBookingDialog(false)}>
-              Cancel
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+  // Booking Dialog Component
+  const BookingDialogComponent = () => (
+    <BookingDialog
+      showBookingDialog={showBookingDialog}
+      setShowBookingDialog={setShowBookingDialog}
+      selectedProvider={selectedProvider}
+      bookingData={bookingData}
+      bookingError={bookingError}
+      handleBookingChange={handleBookingChange}
+      handleLocationChange={handleLocationChange}
+      handleSubmitBooking={handleSubmitBooking}
+    />
   );
 
   // Payment Management Component
@@ -1133,7 +678,7 @@ export default function App() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{blockedClients.length}</div>
+            <div className="text-2xl font-bold">{BLOCKED_CLIENTS.length}</div>
             <p className="text-sm text-muted-foreground">Due to non-payment</p>
           </CardContent>
         </Card>
@@ -1157,7 +702,7 @@ export default function App() {
 
             <div className="space-y-3">
               <h4 className="font-semibold">Blocked Clients</h4>
-              {blockedClients.map((client) => (
+              {BLOCKED_CLIENTS.map((client) => (
                 <div key={client.id} className="flex items-center justify-between p-3 border rounded-lg">
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
@@ -1240,7 +785,7 @@ export default function App() {
 
           <div className="space-y-3">
             <h4 className="font-semibold">Active Trials</h4>
-            {featuredProviders.map((provider) => (
+            {FEATURED_PROVIDERS.map((provider) => (
               <div key={provider.id} className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
@@ -1555,7 +1100,7 @@ export default function App() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {featuredProviders.map((provider) => (
+            {FEATURED_PROVIDERS.map((provider) => (
               <Card key={provider.id} className="hover:shadow-md transition-shadow cursor-pointer">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-3">
@@ -2077,8 +1622,8 @@ export default function App() {
       </nav>
 
       {/* Chat and Booking Systems */}
-      <ChatSystem />
-      <BookingDialog />
+      <ChatSystemComponent />
+      <BookingDialogComponent />
     </div>
   );
 }

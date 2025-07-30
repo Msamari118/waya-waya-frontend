@@ -53,9 +53,9 @@ export async function checkAdminAccess(inputPassword?: string): Promise<boolean>
         return await checkAdminPassword(inputPassword);
       }
       // If no password provided but we have environment access, grant access
-      return true;
-    }
-    
+    return true;
+  }
+  
     // If no environment access, require password verification
     if (inputPassword) {
       return await checkAdminPassword(inputPassword);
