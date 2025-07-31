@@ -13,7 +13,7 @@ interface BookingDialogProps {
   bookingDetails: any;
   setBookingDetails: (details: any) => void;
   handleBookingSubmit: () => void;
-  isConnected: boolean | 'demo';
+  isConnected: boolean;
 }
 
 export const BookingDialog: React.FC<BookingDialogProps> = ({
@@ -34,7 +34,7 @@ export const BookingDialog: React.FC<BookingDialogProps> = ({
         </DialogTitle>
         <DialogDescription>
           {selectedProvider?.service} • R{selectedProvider?.hourlyRate}/hour
-          {isConnected === 'demo' && ' (Demo Mode)'}
+          
         </DialogDescription>
       </DialogHeader>
       

@@ -13,7 +13,7 @@ import { serviceCategories, featuredProviders } from '../../utils/constants.js';
 
 interface HomeViewProps {
   isAdminMode: boolean;
-  isConnected: boolean | 'demo';
+  isConnected: boolean;
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   setCurrentView: (view: string) => void;
@@ -35,11 +35,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
   <div className="space-y-6">
     {/* Admin access removed for security - only accessible via backend authentication */}
 
-    {isConnected === 'demo' && (
+          {!isConnected && (
       <Alert className="bg-blue-50 border-blue-200">
         <Server className="h-4 w-4" />
         <AlertDescription className="text-blue-800">
-          Demo Mode: All functionality is simulated. Backend not available.
+          
         </AlertDescription>
       </Alert>
     )}

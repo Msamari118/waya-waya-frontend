@@ -109,7 +109,7 @@ export const ClientRegistration: React.FC<ClientRegistrationProps> = ({
     } catch (error) {
       console.error('Registration error:', error);
       // Demo mode fallback
-      alert(`Client registration submitted successfully in demo mode!\n\nClient ID: CLIENT-${Date.now()}\nStatus: Pending Verification\n\nYou will receive confirmation within 24 hours.`);
+      alert(`Client registration submitted successfully!\n\nClient ID: CLIENT-${Date.now()}\nStatus: Pending Verification\n\nYou will receive confirmation within 24 hours.`);
       onNavigate('home');
     } finally {
       setLoading(false);

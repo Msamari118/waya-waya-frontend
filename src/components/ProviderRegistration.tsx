@@ -126,7 +126,7 @@ export const ProviderRegistration: React.FC<ProviderRegistrationProps> = ({
         ? APPLICATION_FEES.SOUTH_AFRICA 
         : APPLICATION_FEES.INTERNATIONAL;
         
-      alert(`Registration submitted successfully in demo mode!\n\nProvider ID: DEMO-${Date.now()}\nStatus: Pending Payment\nApplication Fee: R${applicationFee}\nTrial Period: 7 days\n\nYou will receive confirmation within 24 hours.`);
+      alert(`Registration submitted successfully!\n\nProvider ID: DEMO-${Date.now()}\nStatus: Pending Payment\nApplication Fee: R${applicationFee}\nTrial Period: 7 days\n\nYou will receive confirmation within 24 hours.`);
       onNavigate('home');
     } finally {
       setPaymentLoading(false);

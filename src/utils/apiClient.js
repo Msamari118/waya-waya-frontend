@@ -1,16 +1,6 @@
 import { API_BASE_URL } from './constants.js';
 
-// Production-ready API client with fallback responses
-const createMockResponse = (data, success = true, status = 200) => {
-  return {
-    ok: success,
-    status: status,
-    json: async () => success ? data : { error: 'Service temporarily unavailable', message: data },
-    text: async () => JSON.stringify(data)
-  };
-};
-
-// Silent error handler - suppresses all console errors
+// Production-ready API client - NO MOCK RESPONSES
 const silentFetch = async (url, options = {}) => {
   try {
     const controller = new AbortController();
@@ -24,13 +14,12 @@ const silentFetch = async (url, options = {}) => {
     clearTimeout(timeoutId);
     return response;
   } catch (error) {
-    // Completely silent - no console logs
     throw error;
   }
 };
 
 export const apiClient = {
-  // Enhanced connection testing with complete error suppression
+  // Connection testing
   testConnection: async () => {
     try {
       const response = await silentFetch(`${API_BASE_URL}/health`, {
@@ -41,899 +30,363 @@ export const apiClient = {
       });
       return response.ok;
     } catch (error) {
-      // Silent fallback to demo mode
-      return 'demo';
+      return false;
     }
   },
 
   auth: {
     login: async (credentials) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(credentials),
-        });
-        return response;
-      } catch (error) {
-        // Mock successful login
-        return createMockResponse({
-          token: 'mock-token-' + Date.now(),
-          user: {
-            id: 'user-' + Date.now(),
-            email: credentials.email,
-            name: credentials.email.split('@')[0],
-            userType: 'client'
-          }
-        });
-      }
+      const response = await silentFetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
+      return response;
     },
 
     sendPhoneOtp: async (userData) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/send-phone-otp`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(userData),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({ 
-          message: 'OTP sent successfully (demo mode)',
-          otpId: 'mock-otp-' + Date.now() 
-        });
-      }
+      const response = await silentFetch(`${API_BASE_URL}/auth/send-phone-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      return response;
     },
 
     verifyPhoneOtp: async (data) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/verify-phone-otp`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        return response;
-      } catch (error) {
-        // In demo mode, accept any 6-digit OTP
-        const otp = data.otp || '';
-        if (otp.length === 6 && /^\d{6}$/.test(otp)) {
-          return createMockResponse({ 
-            message: 'OTP verified successfully (demo mode)',
-            verified: true,
-            success: true
-          });
-        } else {
-          return createMockResponse({ 
-            error: 'OTP not found or expired',
-            success: false
-          }, false, 400);
-        }
-      }
+      const response = await silentFetch(`${API_BASE_URL}/auth/verify-phone-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
     },
 
     resendPhoneOtp: async (data) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/resend-phone-otp`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({ 
-          message: 'OTP resent successfully (demo mode)' 
-        });
-      }
+      const response = await silentFetch(`${API_BASE_URL}/auth/resend-phone-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
     },
 
     verifyEmail: async (data) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/verify-email`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({ 
-          message: 'Email verified successfully (demo mode)',
-          verified: true 
-        });
-      }
+      const response = await silentFetch(`${API_BASE_URL}/auth/verify-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
     },
 
     resendEmailVerification: async (data) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/resend-email-verification`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({ 
-          message: 'Email verification resent successfully (demo mode)' 
-        });
-      }
+      const response = await silentFetch(`${API_BASE_URL}/auth/resend-email-verification`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
     },
 
     forgotPassword: async (data) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/forgot-password`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({ 
-          message: 'Password reset email sent (demo mode)' 
-        });
-      }
+      const response = await silentFetch(`${API_BASE_URL}/auth/forgot-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
     },
 
     forgotUsername: async (data) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/forgot-username`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({ 
-          message: 'Username recovery email sent (demo mode)' 
-        });
-      }
+      const response = await silentFetch(`${API_BASE_URL}/auth/forgot-username`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
     },
 
     resetPassword: async (data) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/reset-password`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({ 
-          message: 'Password reset successfully (demo mode)' 
-        });
-      }
+      const response = await silentFetch(`${API_BASE_URL}/auth/reset-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
     },
-
-    verifyToken: async (token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/verify-token`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({ 
-          valid: true,
-          user: {
-            id: 'user-123',
-            email: 'demo@wayawaya.co.za',
-            name: 'Demo User',
-            userType: 'client'
-          }
-        });
-      }
-    },
-
-    signup: async (userData) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/signup`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(userData),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'Account created successfully (demo mode)',
-          token: 'mock-token-' + Date.now(),
-          user: {
-            id: 'user-' + Date.now(),
-            email: userData.email,
-            name: userData.firstName + ' ' + userData.lastName,
-            userType: userData.userType || 'client'
-          }
-        });
-      }
-    },
-
-    sendOtp: async (data) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/send-otp`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        return response;
-      } catch (error) {
-        // Only fallback to mock if there's a network error
-        console.error('Network error sending OTP:', error);
-        return createMockResponse({ 
-          message: 'OTP sent successfully (demo mode)',
-          expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 minutes
-          type: data.type
-        });
-      }
-    },
-
-    verifyOtp: async (data) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/verify-otp`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        return response;
-      } catch (error) {
-        // Only fallback to mock if there's a network error
-        console.error('Network error verifying OTP:', error);
-        const otp = data.otp || '';
-        if (otp.length === 6 && /^\d{6}$/.test(otp)) {
-          return createMockResponse({
-            message: 'OTP verified successfully (demo mode)',
-            verified: true,
-            type: data.type
-          });
-        } else {
-          return createMockResponse({
-            error: 'Invalid OTP code',
-            verified: false
-          }, false, 400);
-        }
-      }
-    },
-
-    getOtpStatus: async (data) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/otp-status`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        return response;
-      } catch (error) {
-        // Only fallback to mock if there's a network error
-        console.error('Network error getting OTP status:', error);
-        return createMockResponse({
-          hasOTP: true,
-          isExpired: false,
-          isUsed: false,
-          attempts: 0,
-          remainingTime: 8,
-          canResend: true
-        });
-      }
-    },
-
-    register: async (registrationData) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/register`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(registrationData),
-        });
-        return response;
-      } catch (error) {
-        console.error('Network error during registration:', error);
-        return createMockResponse({
-          message: 'Registration successful (demo mode)',
-          userId: 'user-' + Date.now(),
-          token: 'mock-token-' + Date.now(),
-          user: {
-            id: 'user-' + Date.now(),
-            email: registrationData.email,
-            name: registrationData.fullName,
-            userType: registrationData.userType || 'client'
-          }
-        });
-      }
-    },
-
-    resendOtp: async (data) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/auth/resend-otp`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        return response;
-      } catch (error) {
-        // Only fallback to mock if there's a network error
-        console.error('Network error resending OTP:', error);
-        return createMockResponse({
-          message: 'OTP resent successfully (demo mode)',
-          expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
-          type: data.type
-        });
-      }
-    }
   },
 
-  requests: {
-    submit: async (requestData, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/requests`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(requestData),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'Service request submitted successfully (demo mode)',
-          requestId: 'req-' + Date.now(),
-          estimatedProviders: 3
-        });
-      }
+  registration: {
+    registerClient: async (userData) => {
+      const response = await silentFetch(`${API_BASE_URL}/auth/register-client`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      return response;
     },
 
-    getMatches: async (requestId, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/requests/${requestId}/matches`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          matches: [
-            { id: 1, name: 'Ahmed Hassan', service: 'Electrician', rating: 4.9, available: true },
-            { id: 2, name: 'Maria Santos', service: 'House Cleaning', rating: 4.8, available: true },
-            { id: 3, name: 'James Wilson', service: 'Plumber', rating: 4.7, available: false }
-          ]
-        });
-      }
-    }
+    sendRegistrationOtp: async (userData) => {
+      const response = await silentFetch(`${API_BASE_URL}/auth/send-registration-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      return response;
+    },
+
+    verifyRegistrationOtp: async (data) => {
+      const response = await silentFetch(`${API_BASE_URL}/auth/verify-registration-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
+    },
+
+    registerProvider: async (providerData) => {
+      const response = await silentFetch(`${API_BASE_URL}/auth/register-provider`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(providerData),
+      });
+      return response;
+    },
   },
 
-  providers: {
-    register: async (registrationData, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/providers/register`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(registrationData),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'Provider registration submitted (demo mode)',
-          providerId: 'provider-' + Date.now(),
-          status: 'pending',
-          applicationFee: 150.00,
-          trialDays: 7
-        });
-      }
+  services: {
+    submitServiceRequest: async (requestData) => {
+      const response = await silentFetch(`${API_BASE_URL}/services/request`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      });
+      return response;
     },
 
-    uploadProfilePicture: async (fileData, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/providers/upload-profile`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-          body: fileData,
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'Profile picture uploaded successfully (demo mode)',
-          imageUrl: 'demo-profile-url-' + Date.now(),
-          fileId: 'file-' + Date.now()
-        });
-      }
+    getProviders: async () => {
+      const response = await silentFetch(`${API_BASE_URL}/services/providers`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
     },
 
-    getProfile: async (token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/providers/profile`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          id: 'provider-123',
-          name: 'Demo Provider',
-          service: 'General Services',
-          rating: 4.8,
-          available: true,
-          hourlyRate: 200
-        });
-      }
+    getProviderDetails: async (providerId) => {
+      const response = await silentFetch(`${API_BASE_URL}/services/providers/${providerId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
+    },
+  },
+
+  bookings: {
+    createBooking: async (bookingData) => {
+      const response = await silentFetch(`${API_BASE_URL}/bookings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData),
+      });
+      return response;
     },
 
-    updateAvailability: async (availability, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/providers/availability`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify({ available: availability }),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'Availability updated successfully (demo mode)',
-          available: availability
-        });
-      }
+    getBookings: async () => {
+      const response = await silentFetch(`${API_BASE_URL}/bookings`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
     },
 
-    processPayment: async (paymentData, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/providers/payment`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(paymentData),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'Payment processed successfully (demo mode)',
-          transactionId: 'tx-' + Date.now(),
-          amount: paymentData.amount
-        });
-      }
+    updateBooking: async (bookingId, bookingData) => {
+      const response = await silentFetch(`${API_BASE_URL}/bookings/${bookingId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData),
+      });
+      return response;
     },
-
-    bookService: async (bookingData, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/providers/book`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(bookingData),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'Booking confirmed successfully (demo mode)',
-          bookingId: 'booking-' + Date.now(),
-          providerName: bookingData.providerName,
-          date: bookingData.date,
-          time: bookingData.time
-        });
-      }
-    }
   },
 
   payments: {
-    processEFT: async (paymentData, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/payments/eft`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(paymentData),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'EFT payment processed successfully (demo mode)',
-          transactionId: 'eft-' + Date.now(),
-          amount: paymentData.amount
-        });
-      }
+    processPayment: async (paymentData) => {
+      const response = await silentFetch(`${API_BASE_URL}/payments/process`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(paymentData),
+      });
+      return response;
     },
 
-    getCommissions: async (token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/payments/commissions`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          totalCommissions: 465.50,
-          pendingCommissions: 123.75,
-          paidCommissions: 341.75
-        });
-      }
+    processEFT: async (eftData) => {
+      const response = await silentFetch(`${API_BASE_URL}/payments/eft`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(eftData),
+      });
+      return response;
     },
 
-    collectCommission: async (providerId, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/payments/collect-commission`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify({ providerId }),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'Commission collected successfully (demo mode)',
-          amount: 50.25,
-          providerId: providerId
-        });
-      }
-    }
+    collectCommission: async (commissionData) => {
+      const response = await silentFetch(`${API_BASE_URL}/payments/commission`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(commissionData),
+      });
+      return response;
+    },
   },
 
   chat: {
-    sendMessage: async (messageData, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/chat/send`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(messageData),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'Message sent successfully (demo mode)',
-          messageId: 'msg-' + Date.now()
-        });
-      }
+    sendMessage: async (messageData) => {
+      const response = await silentFetch(`${API_BASE_URL}/chat/send`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageData),
+      });
+      return response;
     },
 
-    uploadFile: async (fileData, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/chat/upload`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-          body: fileData,
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'File uploaded successfully (demo mode)',
-          fileId: 'file-' + Date.now(),
-          url: 'demo-file-url'
-        });
-      }
+    getMessages: async (chatId) => {
+      const response = await silentFetch(`${API_BASE_URL}/chat/${chatId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
     },
 
-    authorizeFileUpload: async (chatId, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/chat/authorize-upload`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify({ chatId }),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'File upload authorized (demo mode)',
-          authorized: true
-        });
-      }
+    uploadFile: async (fileData) => {
+      const response = await silentFetch(`${API_BASE_URL}/chat/upload`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(fileData),
+      });
+      return response;
     },
 
-    getProviderMessages: async (providerId, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/chat/provider/${providerId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse([
-          {
-            id: 1,
-            text: 'Hello! I\'m available to help with your service request.',
-            sender: 'Provider',
-            timestamp: new Date(Date.now() - 300000).toISOString(),
-            type: 'provider'
-          }
-        ]);
-      }
+    authorizeFileUpload: async (fileData) => {
+      const response = await silentFetch(`${API_BASE_URL}/chat/authorize-upload`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(fileData),
+      });
+      return response;
     },
-
-    getGeneralMessages: async (token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/chat/general`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse([
-          {
-            id: 1,
-            text: 'Welcome to WAYA WAYA! How can we assist you today?',
-            sender: 'Support',
-            timestamp: new Date(Date.now() - 600000).toISOString(),
-            type: 'support'
-          }
-        ]);
-      }
-    }
   },
 
   admin: {
-    verifySession: async (token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/admin/verify-session`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          valid: true
-        });
-      }
+    getStats: async () => {
+      const response = await silentFetch(`${API_BASE_URL}/admin/stats`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
     },
 
-    refreshSession: async (token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/admin/refresh-session`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          success: true,
-          session: {
-            token: 'demo-admin-token-' + Date.now(),
-            expiresAt: Date.now() + (24 * 60 * 60 * 1000), // 24 hours
-            permissions: ['*'],
-            userId: 'admin-demo'
-          }
-        });
-      }
+    getProviders: async () => {
+      const response = await silentFetch(`${API_BASE_URL}/admin/providers`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
     },
 
-    getStats: async (token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/admin/stats`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          totalUsers: 1247,
-          totalProviders: 156,
-          totalBookings: 892,
-          totalRevenue: 45670.25
-        });
-      }
+    approveProvider: async (providerId) => {
+      const response = await silentFetch(`${API_BASE_URL}/admin/providers/${providerId}/approve`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
     },
 
-    getUsers: async (token, type, page, limit) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/admin/users?type=${type}&page=${page}&limit=${limit}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          users: Array.from({ length: limit }, (_, i) => ({
-            id: `${type}_${i + (page - 1) * limit}`,
-            email: `${type}${i + (page - 1) * limit}@example.com`,
-            fullName: `Mock ${type === 'client' ? 'Client' : 'Provider'} ${i + (page - 1) * limit}`,
-            phone: `+27 82 123 456${i}`,
-            userType: type,
-            createdAt: new Date(Date.now() - Math.floor(Math.random() * 365) * 24 * 60 * 60 * 1000).toISOString(),
-          })),
-          total: 50,
-          page: page,
-          limit: limit
-        });
-      }
+    rejectProvider: async (providerId) => {
+      const response = await silentFetch(`${API_BASE_URL}/admin/providers/${providerId}/reject`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
     },
 
-    getPayments: async (token, page, limit) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/admin/payments?page=${page}&limit=${limit}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          payments: Array.from({ length: limit }, (_, i) => ({
-            id: `payment_${i + (page - 1) * limit}`,
-            userId: `user_${Math.floor(Math.random() * 5)}`,
-            userName: `User ${Math.floor(Math.random() * 5)}`,
-            amount: parseFloat((Math.random() * 1000).toFixed(2)),
-            currency: 'ZAR',
-            status: ['completed', 'pending', 'failed'][Math.floor(Math.random() * 3)],
-            processedAt: new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000).toISOString(),
-            transactionType: ['commission_earned', 'registration_fee'][Math.floor(Math.random() * 2)],
-          })),
-          total: 25,
-          page: page,
-          limit: limit
-        });
-      }
+    blockClient: async (clientId) => {
+      const response = await silentFetch(`${API_BASE_URL}/admin/clients/${clientId}/block`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
     },
 
-    getTrials: async (token, page, limit) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/admin/trials?page=${page}&limit=${limit}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          trials: Array.from({ length: limit }, (_, i) => {
-            const daysRem = Math.floor(Math.random() * 10) - 2;
-            return {
-              userId: `user_${i + (page - 1) * limit}_prov`,
-              userName: `Provider ${i + (page - 1) * limit}`,
-              providerId: `provider_${i + (page - 1) * limit}`,
-              trialStartsAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-              trialEndsAt: new Date(Date.now() + daysRem * 24 * 60 * 60 * 1000).toISOString(),
-              status: daysRem > 0 ? 'active' : (daysRem === 0 ? 'expired' : 'converted'),
-              daysRemaining: daysRem > 0 ? daysRem : undefined,
-            };
-          }),
-          total: 15,
-          page: page,
-          limit: limit
-        });
-      }
+    unblockClient: async (clientId) => {
+      const response = await silentFetch(`${API_BASE_URL}/admin/clients/${clientId}/unblock`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
     },
-
-    getPendingProviders: async (token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/admin/providers/pending`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse([
-          { id: 1, name: 'John Doe', service: 'Electrician', applicationDate: '2024-01-15' },
-          { id: 2, name: 'Jane Smith', service: 'Cleaner', applicationDate: '2024-01-14' }
-        ]);
-      }
-    },
-
-    approveProvider: async (providerId, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/admin/providers/${providerId}/approve`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'Provider approved successfully (demo mode)',
-          providerId: providerId
-        });
-      }
-    },
-
-    rejectProvider: async (providerId, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/admin/providers/${providerId}/reject`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'Provider rejected successfully (demo mode)',
-          providerId: providerId
-        });
-      }
-    },
-
-    blockClient: async (clientId, reason, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/admin/clients/${clientId}/block`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify({ reason }),
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'Client blocked successfully (demo mode)',
-          clientId: clientId,
-          reason: reason
-        });
-      }
-    },
-
-    unblockClient: async (clientId, token) => {
-      try {
-        const response = await silentFetch(`${API_BASE_URL}/admin/clients/${clientId}/unblock`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        return response;
-      } catch (error) {
-        return createMockResponse({
-          message: 'Client unblocked successfully (demo mode)',
-          clientId: clientId
-        });
-      }
-    }
-  }
+  },
 };

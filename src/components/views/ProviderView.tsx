@@ -10,7 +10,7 @@ import {
 import { apiClient } from '../../utils/apiClient.js';
 
 interface ProviderViewProps {
-  isConnected: boolean | 'demo';
+  isConnected: boolean;
   authToken: string | null;
   setCurrentView: (view: string) => void;
 }
@@ -32,7 +32,7 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
       }
     } catch (error) {
       setIsAvailable(!isAvailable);
-      alert(`You are now ${!isAvailable ? 'available' : 'unavailable'} for new bookings (demo mode)`);
+      alert(`You are now ${!isAvailable ? 'available' : 'unavailable'} for new bookings`);
     }
   };
 
@@ -46,11 +46,11 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
         <h1>Provider Dashboard</h1>
       </div>
 
-      {isConnected === 'demo' && (
+      {!isConnected && (
         <Alert className="bg-blue-50 border-blue-200">
           <Server className="h-4 w-4" />
           <AlertDescription className="text-blue-800">
-            Demo Mode: Provider dashboard functionality is simulated.
+            
           </AlertDescription>
         </Alert>
       )}

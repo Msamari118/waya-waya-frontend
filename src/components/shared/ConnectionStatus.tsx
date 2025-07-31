@@ -3,16 +3,16 @@ import { Server, Wifi, WifiOff } from 'lucide-react';
 import { Button } from '../ui/button';
 
 interface ConnectionStatusProps {
-  isConnected: boolean | 'demo';
+  isConnected: boolean;
   onRetry: () => void;
 }
 
 export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ isConnected, onRetry }) => {
-  if (isConnected === 'demo') {
+  if (!isConnected) {
     return (
       <div className="flex items-center gap-2 text-sm text-blue-600">
         <Server className="h-4 w-4" />
-        <span>Demo Mode</span>
+        <span>Offline</span>
       </div>
     );
   }

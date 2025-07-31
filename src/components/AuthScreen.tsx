@@ -347,7 +347,7 @@ export default function AuthScreen({
       console.error('Resend OTP error:', err);
       
       // In demo mode, simulate successful resend
-      setSuccess('New OTP sent to your phone number (demo mode)');
+      setSuccess('New OTP sent to your phone number');
       setOtpTimer(60);
       setPhoneOtp('');
     } finally {

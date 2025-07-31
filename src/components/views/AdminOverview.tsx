@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 
 interface AdminOverviewProps {
-  isConnected: boolean | 'demo';
+  isConnected: boolean;
   connectionError: string;
   retryConnection: () => void;
   handleLogout: () => void;
@@ -38,11 +38,11 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
       </div>
     </div>
 
-    {isConnected === 'demo' ? (
+          {!isConnected ? (
       <Alert className="bg-blue-50 border-blue-200">
         <Server className="h-4 w-4" />
         <AlertDescription>
-          <strong>Demo Mode Active:</strong> Backend not available. All functionality is simulated with mock responses for testing purposes.
+          
         </AlertDescription>
       </Alert>
     ) : (
@@ -55,9 +55,9 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
     )}
 
     {connectionError && (
-      <Alert className={isConnected === 'demo' ? "bg-blue-50 border-blue-200" : "bg-red-50 border-red-200"}>
+              <Alert className={!isConnected ? "bg-blue-50 border-blue-200" : "bg-red-50 border-red-200"}>
         <AlertTriangle className="h-4 w-4" />
-        <AlertDescription className={isConnected === 'demo' ? "text-blue-800" : "text-red-800"}>
+                  <AlertDescription className={!isConnected ? "text-blue-800" : "text-red-800"}>
           {connectionError}
         </AlertDescription>
       </Alert>
@@ -168,10 +168,10 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
         <h4 className="font-bold mb-2 text-blue-800">📡 API Testing Info</h4>
         <div className="text-sm text-blue-700 space-y-1">
           <p>• Backend URL: <code className="bg-blue-100 px-1 rounded">http://localhost:5000/api</code></p>
-          <p>• Connection Status: <strong>{isConnected === 'demo' ? 'Demo Mode' : isConnected ? 'Connected' : 'Offline'}</strong></p>
+          <p>• Connection Status: <strong>{isConnected ? 'Connected' : 'Offline'}</strong></p>
           <p>• Admin Mode: Active (bypass authentication)</p>
           <p>• Currency: South African Rand (ZAR) only</p>
-          <p>• {isConnected === 'demo' ? 'Mock API responses for all endpoints' : 'All API calls will be made to your localhost backend'}</p>
+                      <p>• {!isConnected ? 'Mock API responses for all endpoints' : 'All API calls will be made to your localhost backend'}</p>
           <p>• Chat system supports both provider-specific and general chats</p>
           <p>• OTP verification integrated for phone and email</p>
           <p>• All errors are handled gracefully with fallback responses</p>

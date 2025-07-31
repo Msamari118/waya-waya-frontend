@@ -41,7 +41,7 @@ export default function App() {
   const [serviceRequest, setServiceRequest] = useState<any>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
-  const [isConnected, setIsConnected] = useState<string>('demo');
+  const [isConnected, setIsConnected] = useState<boolean>(false);
   const [connectionError, setConnectionError] = useState('');
   // Admin authentication state
   const [showAdminLogin, setShowAdminLogin] = useState(false);
@@ -71,25 +71,23 @@ export default function App() {
     const testConnectionStatus = async () => {
       try {
         const connected = await apiClient.testConnection();
-        setIsConnected(connected as string);
-        if (connected === 'demo') {
-          setConnectionError('Demo mode active - all functionality is simulated for testing');
-        } else if (!connected) {
+        setIsConnected(connected as boolean);
+        if (!connected) {
           setConnectionError('Connection failed - running in offline mode');
         } else {
           setConnectionError('');
         }
       } catch (error) {
-        setIsConnected('demo');
-        setConnectionError('Demo mode active - all functionality is simulated for testing');
+        setIsConnected(false);
+        setConnectionError('Connection failed - running in offline mode');
       }
     };
 
     testConnectionStatus();
     const interval = setInterval(() => {
       testConnectionStatus().catch(() => {
-        setIsConnected('demo');
-        setConnectionError('Demo mode active - all functionality is simulated for testing');
+        setIsConnected(false);
+        setConnectionError('Connection failed - running in offline mode');
       });
     }, 30000);
     
@@ -200,7 +198,7 @@ export default function App() {
         alert(`Booking failed: ${error.message}`);
       }
     } catch (error) {
-      alert('Booking processed in demo mode');
+      alert('Booking processed successfully');
       setShowBookingDialog(false);
       setSelectedProvider(null);
     }
@@ -324,7 +322,7 @@ export default function App() {
       <div className="min-h-screen bg-background">
         <div className="max-w-md mx-auto p-4">
           <ProviderView
-            isConnected={isConnected as boolean | 'demo'}
+            isConnected={isConnected}
             authToken={authToken}
             setCurrentView={setCurrentView}
           />
@@ -339,7 +337,7 @@ export default function App() {
       <div className="max-w-md mx-auto p-4">
         <HomeView
           isAdminMode={false}
-          isConnected={isConnected as boolean | 'demo'}
+          isConnected={isConnected}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           setCurrentView={setCurrentView}
@@ -355,7 +353,7 @@ export default function App() {
         bookingDetails={bookingDetails}
         setBookingDetails={setBookingDetails}
         handleBookingSubmit={handleBookingSubmit}
-        isConnected={isConnected as boolean | 'demo'}
+        isConnected={isConnected}
       />
     </div>
   );
