@@ -101,6 +101,14 @@ public
 tmp/
 temp/
 
+# Documentation files (sensitive business information)
+WAYA_WAYA_PRODUCTION_DOCUMENTATION.md
+*_DOCUMENTATION.md
+*_PRODUCTION_*.md
+PRODUCTION_STATUS.md
+DEPLOYMENT.md
+env.production.template
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

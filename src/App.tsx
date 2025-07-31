@@ -5,7 +5,7 @@ import AuthScreen from './components/AuthScreen';
 import ServiceRequestModule from './components/ServiceRequestModule';
 import MatchingEngine from './components/MatchingEngine';
 import RatingsReviews from './components/RatingsReviews';
-import AdminInterface from './components/AdminInterface';
+import { AdminInterface } from './components/AdminInterface';
 import { ProviderRegistration } from './components/ProviderRegistration';
 import { ClientRegistration } from './components/ClientRegistration';
 import { PaymentManagement } from './components/admin/PaymentManagement';

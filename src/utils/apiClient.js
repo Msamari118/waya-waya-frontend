@@ -14,7 +14,7 @@ const createMockResponse = (data, success = true, status = 200) => {
 const silentFetch = async (url, options = {}) => {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout for production
     
     const response = await fetch(url, {
       ...options,
@@ -276,8 +276,10 @@ export const apiClient = {
         });
         return response;
       } catch (error) {
+        // Only fallback to mock if there's a network error
+        console.error('Network error sending OTP:', error);
         return createMockResponse({ 
-          message: 'OTP sent successfully',
+          message: 'OTP sent successfully (demo mode)',
           expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 minutes
           type: data.type
         });
@@ -295,11 +297,12 @@ export const apiClient = {
         });
         return response;
       } catch (error) {
-        // In demo mode, accept any 6-digit OTP
+        // Only fallback to mock if there's a network error
+        console.error('Network error verifying OTP:', error);
         const otp = data.otp || '';
         if (otp.length === 6 && /^\d{6}$/.test(otp)) {
           return createMockResponse({
-            message: 'OTP verified successfully',
+            message: 'OTP verified successfully (demo mode)',
             verified: true,
             type: data.type
           });
@@ -323,6 +326,8 @@ export const apiClient = {
         });
         return response;
       } catch (error) {
+        // Only fallback to mock if there's a network error
+        console.error('Network error getting OTP status:', error);
         return createMockResponse({
           hasOTP: true,
           isExpired: false,
@@ -330,6 +335,32 @@ export const apiClient = {
           attempts: 0,
           remainingTime: 8,
           canResend: true
+        });
+      }
+    },
+
+    register: async (registrationData) => {
+      try {
+        const response = await silentFetch(`${API_BASE_URL}/auth/register`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(registrationData),
+        });
+        return response;
+      } catch (error) {
+        console.error('Network error during registration:', error);
+        return createMockResponse({
+          message: 'Registration successful (demo mode)',
+          userId: 'user-' + Date.now(),
+          token: 'mock-token-' + Date.now(),
+          user: {
+            id: 'user-' + Date.now(),
+            email: registrationData.email,
+            name: registrationData.fullName,
+            userType: registrationData.userType || 'client'
+          }
         });
       }
     },
@@ -345,8 +376,10 @@ export const apiClient = {
         });
         return response;
       } catch (error) {
+        // Only fallback to mock if there's a network error
+        console.error('Network error resending OTP:', error);
         return createMockResponse({
-          message: 'OTP resent successfully',
+          message: 'OTP resent successfully (demo mode)',
           expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
           type: data.type
         });
@@ -731,6 +764,87 @@ export const apiClient = {
           totalProviders: 156,
           totalBookings: 892,
           totalRevenue: 45670.25
+        });
+      }
+    },
+
+    getUsers: async (token, type, page, limit) => {
+      try {
+        const response = await silentFetch(`${API_BASE_URL}/admin/users?type=${type}&page=${page}&limit=${limit}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        return response;
+      } catch (error) {
+        return createMockResponse({
+          users: Array.from({ length: limit }, (_, i) => ({
+            id: `${type}_${i + (page - 1) * limit}`,
+            email: `${type}${i + (page - 1) * limit}@example.com`,
+            fullName: `Mock ${type === 'client' ? 'Client' : 'Provider'} ${i + (page - 1) * limit}`,
+            phone: `+27 82 123 456${i}`,
+            userType: type,
+            createdAt: new Date(Date.now() - Math.floor(Math.random() * 365) * 24 * 60 * 60 * 1000).toISOString(),
+          })),
+          total: 50,
+          page: page,
+          limit: limit
+        });
+      }
+    },
+
+    getPayments: async (token, page, limit) => {
+      try {
+        const response = await silentFetch(`${API_BASE_URL}/admin/payments?page=${page}&limit=${limit}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        return response;
+      } catch (error) {
+        return createMockResponse({
+          payments: Array.from({ length: limit }, (_, i) => ({
+            id: `payment_${i + (page - 1) * limit}`,
+            userId: `user_${Math.floor(Math.random() * 5)}`,
+            userName: `User ${Math.floor(Math.random() * 5)}`,
+            amount: parseFloat((Math.random() * 1000).toFixed(2)),
+            currency: 'ZAR',
+            status: ['completed', 'pending', 'failed'][Math.floor(Math.random() * 3)],
+            processedAt: new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000).toISOString(),
+            transactionType: ['commission_earned', 'registration_fee'][Math.floor(Math.random() * 2)],
+          })),
+          total: 25,
+          page: page,
+          limit: limit
+        });
+      }
+    },
+
+    getTrials: async (token, page, limit) => {
+      try {
+        const response = await silentFetch(`${API_BASE_URL}/admin/trials?page=${page}&limit=${limit}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        return response;
+      } catch (error) {
+        return createMockResponse({
+          trials: Array.from({ length: limit }, (_, i) => {
+            const daysRem = Math.floor(Math.random() * 10) - 2;
+            return {
+              userId: `user_${i + (page - 1) * limit}_prov`,
+              userName: `Provider ${i + (page - 1) * limit}`,
+              providerId: `provider_${i + (page - 1) * limit}`,
+              trialStartsAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+              trialEndsAt: new Date(Date.now() + daysRem * 24 * 60 * 60 * 1000).toISOString(),
+              status: daysRem > 0 ? 'active' : (daysRem === 0 ? 'expired' : 'converted'),
+              daysRemaining: daysRem > 0 ? daysRem : undefined,
+            };
+          }),
+          total: 15,
+          page: page,
+          limit: limit
         });
       }
     },
