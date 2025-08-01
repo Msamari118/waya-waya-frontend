@@ -204,11 +204,7 @@ export default function AuthScreen({
       }
     } catch (err) {
       console.error('Registration error:', err);
-      // In demo mode, proceed to OTP verification
-      setCurrentStep('otp-verification');
-      setSuccess('Account created! Please verify your phone number.');
-      setOtpTimer(60);
-      setCanResendOtp(false);
+      setError('Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -262,8 +258,7 @@ export default function AuthScreen({
           } else if (formData.userType === 'provider') {
             onNavigate('registration');
           } else {
-            // For regular users, complete authentication
-            onAuthSuccess(data.token || 'demo-token', {
+            onAuthSuccess(data.token, {
               email: formData.email,
               phoneNumber: fullPhoneNumber,
               fullName: formData.fullName,
@@ -277,29 +272,7 @@ export default function AuthScreen({
       }
     } catch (err) {
       console.error('OTP verification error:', err);
-      
-      // In demo mode, accept any valid 6-digit OTP
-      if (phoneOtp.length === 6 && /^\d{6}$/.test(phoneOtp)) {
-        setSuccess('Phone number verified successfully!');
-        setPhoneOtp('');
-        
-        setTimeout(() => {
-          if (formData.userType === 'client') {
-            onNavigate('client-registration');
-          } else if (formData.userType === 'provider') {
-            onNavigate('registration');
-          } else {
-            onAuthSuccess('demo-token', {
-              email: formData.email,
-              phoneNumber: `${formData.countryCode}${formData.phoneNumber}`,
-              fullName: formData.fullName,
-              userType: formData.userType
-            });
-          }
-        }, 1500);
-      } else {
-        setError('Network error. Please try again.');
-      }
+      setError('OTP verification failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -374,11 +347,8 @@ export default function AuthScreen({
       }
     } catch (err) {
       console.error('Resend OTP error:', err);
-      
-      // In demo mode, simulate successful resend
-      setSuccess('New OTP sent to your phone number');
-      setOtpTimer(60);
-      setPhoneOtp('');
+      setError('Failed to send OTP. Please try again.');
+      setCanResendOtp(true); // Allow retry
     } finally {
       setLoading(false);
     }
