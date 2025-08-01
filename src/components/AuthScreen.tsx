@@ -64,15 +64,17 @@ export default function AuthScreen({
 
   // Timer for OTP resend
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: NodeJS.Timeout | undefined;
     if (otpTimer > 0) {
       interval = setInterval(() => {
         setOtpTimer(prev => prev - 1);
       }, 1000);
-    } else if (otpTimer === 0 && currentStep === 'phone-otp') {
+    } else if (otpTimer === 0 && currentStep === 'otp-verification') {
       setCanResendOtp(true);
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [otpTimer, currentStep]);
 
   // Password validation effect
@@ -313,7 +315,7 @@ export default function AuthScreen({
 
   const handleResendOtp = async () => {
     if (!canResendOtp) {
-      setError('Please wait 2 minutes before requesting a new OTP');
+      setError('Please wait before requesting a new OTP');
       return;
     }
     
@@ -324,25 +326,26 @@ export default function AuthScreen({
     try {
       const fullPhoneNumber = `${formData.countryCode}${formData.phoneNumber}`;
       
+      console.log('Resending OTP to:', fullPhoneNumber);
+      
       // Use the standardized backend API endpoint
       const response = await apiClient.auth.sendOtp({
         type: 'phone',
         identifier: fullPhoneNumber
       });
       
-      let data;
-      try {
-        data = await response.json();
-      } catch (parseError) {
-        data = { success: response.ok };
-      }
+      console.log('Resend OTP response:', response);
       
-      if (response.ok || data.message) {
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Resend OTP data:', data);
+        
         setSuccess('New OTP sent to your phone number');
-        setOtpTimer(60); // Reset timer to 60 seconds (10 minutes = 600 seconds, but UI shows 60 for demo)
+        setOtpTimer(60); // Reset timer to 60 seconds
         setPhoneOtp(''); // Clear previous OTP
       } else {
-        setError(data.error || 'Failed to send OTP. Please try again.');
+        const errorData = await response.json();
+        setError(errorData.error || 'Failed to send OTP. Please try again.');
         setCanResendOtp(true); // Allow retry
       }
     } catch (err) {
