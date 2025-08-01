@@ -226,6 +226,39 @@ export const apiClient = {
     },
   },
 
+  providers: {
+    register: async (providerData) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/providers/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(providerData),
+      });
+      return response;
+    },
+
+    getProviders: async () => {
+      const response = await silentFetch(`${API_BASE_URL}/api/providers`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
+    },
+
+    getProviderDetails: async (providerId) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/providers/${providerId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
+    },
+  },
+
   services: {
     submitServiceRequest: async (requestData) => {
       const response = await silentFetch(`${API_BASE_URL}/api/requests`, {
