@@ -3,18 +3,34 @@ import { API_BASE_URL } from './constants.js';
 // Production-ready API client - NO MOCK RESPONSES - Latest deployment
 const silentFetch = async (url, options = {}) => {
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout for production
-    
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal
-    });
-    
-    clearTimeout(timeoutId);
-    return response;
+    // Check if AbortController is available
+    if (typeof AbortController !== 'undefined') {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout for production
+      
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      return response;
+    } else {
+      // Fallback for environments without AbortController
+      const response = await fetch(url, {
+        ...options
+      });
+      return response;
+    }
   } catch (error) {
-    throw error;
+    console.error('API request failed:', error);
+    // Return a proper error response instead of throwing
+    return {
+      ok: false,
+      status: 0,
+      statusText: 'Network Error',
+      json: async () => ({ error: error.message || 'Network error occurred' })
+    };
   }
 };
 

@@ -1,0 +1,10 @@
+[33me053ce0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m FIX: Change fullName to full_name to match backend expectations
+[33ma1cc780[m FIX: Add favicon to resolve 404 favicon error
+[33m20dca5f[m FIX: Add password visibility toggles and fix signup field mapping
+[33m3514814[m FIX 404 ERRORS: Update frontend API calls to match backend endpoints
+[33m730156a[m FIX: Remove temp_user_id from OTPVerification component
+[33m72b6e83[m FIX FRONTEND: Update OTP verification to send identifier instead of userId
+[33m35f1e10[m CRITICAL FIX: Fix double /api/api/ URL issue - registration should work now
+[33mdbff7a5[m CLEANUP: Remove Twilio references from otpService.js - using Africa's Talking only
+[33m0a150a1[m FIX FORM FUNCTIONALITY: Correct updateAvailability parameter and remove optional chaining from clients.register
+[33m056c7ce[m FINAL COMPLETE SCAN: Fix getStats authToken parameter and add missing resendOtp function
