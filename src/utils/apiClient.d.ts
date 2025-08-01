@@ -1,31 +1,52 @@
 export const apiClient: {
-  testConnection: () => Promise<string | boolean>;
+  testConnection: () => Promise<boolean>;
   auth: {
-    verifyToken: (token: string) => Promise<any>;
-    login: (credentials: any) => Promise<any>;
-    sendPhoneOtp: (data: any) => Promise<any>;
-    verifyPhoneOtp: (data: any) => Promise<any>;
-    verifyEmail: (data: any) => Promise<any>;
-    resendPhoneOtp: (data: any) => Promise<any>;
+    login: (credentials: any) => Promise<Response>;
+    sendPhoneOtp: (userData: any) => Promise<Response>;
+    verifyPhoneOtp: (data: any) => Promise<Response>;
+    resendPhoneOtp: (data: any) => Promise<Response>;
+    verifyEmail: (data: any) => Promise<Response>;
+    resendEmailVerification: (data: any) => Promise<Response>;
+    forgotPassword: (data: any) => Promise<Response>;
+    forgotUsername: (data: any) => Promise<Response>;
+    resetPassword: (data: any) => Promise<Response>;
   };
-  providers: {
-    bookService: (data: any, token: string) => Promise<any>;
-    register: (data: any, token: string) => Promise<any>;
-    updateAvailability: (isAvailable: boolean, token: string) => Promise<any>;
+  registration: {
+    registerClient: (userData: any) => Promise<Response>;
+    sendRegistrationOtp: (userData: any) => Promise<Response>;
+    verifyRegistrationOtp: (data: any) => Promise<Response>;
+    registerProvider: (providerData: any) => Promise<Response>;
   };
-  clients: {
-    register: (data: any, token: string) => Promise<any>;
+  services: {
+    submitServiceRequest: (requestData: any) => Promise<Response>;
+    getProviders: () => Promise<Response>;
+    getProviderDetails: (providerId: string) => Promise<Response>;
+  };
+  bookings: {
+    createBooking: (bookingData: any) => Promise<Response>;
+    getBookings: () => Promise<Response>;
+    updateBooking: (bookingId: string, bookingData: any) => Promise<Response>;
+  };
+  payments: {
+    processPayment: (paymentData: any) => Promise<Response>;
+    processEFT: (eftData: any) => Promise<Response>;
+    getProviderEarnings: (status?: string | null) => Promise<Response>;
+    getEFTPayouts: (status?: string | null) => Promise<Response>;
+    getPaymentHistory: (limit?: number, offset?: number) => Promise<Response>;
+    collectCommission: (commissionData: any) => Promise<Response>;
+  };
+  chat: {
+    sendMessage: (messageData: any) => Promise<Response>;
+    getMessages: (chatId: string) => Promise<Response>;
+    uploadFile: (fileData: any) => Promise<Response>;
+    authorizeFileUpload: (fileData: any) => Promise<Response>;
   };
   admin: {
-    authenticate: (credentials: any) => Promise<any>;
-    verifySession: (token: string) => Promise<any>;
-    refreshSession: (token: string) => Promise<any>;
-    logout: (token: string) => Promise<any>;
-    getUsers: (token: string) => Promise<any>;
-    getProviders: (token: string) => Promise<any>;
-    getBookings: (token: string) => Promise<any>;
-    updateUserStatus: (userId: string, status: string, token: string) => Promise<any>;
-    updateProviderStatus: (providerId: string, status: string, token: string) => Promise<any>;
+    getStats: () => Promise<Response>;
+    getProviders: () => Promise<Response>;
+    approveProvider: (providerId: string) => Promise<Response>;
+    rejectProvider: (providerId: string) => Promise<Response>;
+    blockClient: (clientId: string) => Promise<Response>;
+    unblockClient: (clientId: string) => Promise<Response>;
   };
-  // Add other methods as needed
 };
