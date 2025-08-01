@@ -156,6 +156,29 @@ export const apiClient = {
       });
       return response;
     },
+
+    register: async (userData) => {
+      // Generic register function that handles both client and provider registration
+      const response = await silentFetch(`${API_BASE_URL}/api/auth/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      return response;
+    },
+
+    verifyOtp: async (data) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/auth/verify-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
+    },
   },
 
   registration: {
@@ -239,12 +262,18 @@ export const apiClient = {
   },
 
   providers: {
-    register: async (providerData) => {
+    register: async (providerData, authToken) => {
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+      
       const response = await silentFetch(`${API_BASE_URL}/api/providers/register`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify(providerData),
       });
       return response;
@@ -282,12 +311,18 @@ export const apiClient = {
       return response;
     },
 
-    updateAvailability: async (availabilityData) => {
+    updateAvailability: async (availabilityData, authToken) => {
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+      
       const response = await silentFetch(`${API_BASE_URL}/api/providers/update-availability`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify(availabilityData),
       });
       return response;

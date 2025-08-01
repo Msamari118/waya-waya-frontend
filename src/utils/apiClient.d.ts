@@ -1,12 +1,3 @@
-// Define a flexible response type that can include additional properties
-type ApiResponse = Response & {
-  success?: boolean;
-  session?: any;
-  error?: string;
-  valid?: boolean;
-  [key: string]: any;
-};
-
 export const apiClient: {
   testConnection: () => Promise<boolean>;
   auth: {
@@ -18,27 +9,31 @@ export const apiClient: {
     resendEmailVerification: (data: any) => Promise<Response>;
     verifyToken: (token: string) => Promise<Response>;
     sendOtp: (data: any) => Promise<Response>;
+    register: (userData: any) => Promise<Response>;
+    verifyOtp: (data: any) => Promise<Response>;
     forgotPassword: (data: any) => Promise<Response>;
     forgotUsername: (data: any) => Promise<Response>;
     resetPassword: (data: any) => Promise<Response>;
   };
+  registration: {
+    registerClient: (userData: any) => Promise<Response>;
+    register: (userData: any) => Promise<Response>;
+    sendOtp: (data: any) => Promise<Response>;
+    verifyOtp: (data: any) => Promise<Response>;
+    sendRegistrationOtp: (userData: any) => Promise<Response>;
+    verifyRegistrationOtp: (data: any) => Promise<Response>;
+    registerProvider: (providerData: any) => Promise<Response>;
+  };
   providers: {
-    register: (providerData: any) => Promise<Response>;
+    register: (providerData: any, authToken?: string) => Promise<Response>;
     getProviders: () => Promise<Response>;
     getProviderDetails: (providerId: string) => Promise<Response>;
     bookService: (bookingData: any, authToken: string) => Promise<Response>;
-    updateAvailability: (availabilityData: any) => Promise<Response>;
+    updateAvailability: (availabilityData: any, authToken?: string) => Promise<Response>;
   };
   clients: {
     register: (clientData: any, authToken?: string) => Promise<Response>;
     getClientDetails: (clientId: string) => Promise<Response>;
-  };
-  registration: {
-    registerClient: (userData: any) => Promise<Response>;
-    register: (userData: any) => Promise<Response>;
-    sendRegistrationOtp: (userData: any) => Promise<Response>;
-    verifyRegistrationOtp: (data: any) => Promise<Response>;
-    registerProvider: (providerData: any) => Promise<Response>;
   };
   services: {
     submitServiceRequest: (requestData: any) => Promise<Response>;
