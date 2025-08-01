@@ -153,7 +153,7 @@ export default function AuthScreen({
       const registrationData = {
         email: formData.email,
         phone: `${formData.countryCode}${formData.phoneNumber}`,
-        fullName: formData.fullName,
+        full_name: formData.fullName,
         password: formData.password,
         userType: formData.userType
       };
