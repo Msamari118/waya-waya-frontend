@@ -7,9 +7,19 @@ export const apiClient: {
     resendPhoneOtp: (data: any) => Promise<Response>;
     verifyEmail: (data: any) => Promise<Response>;
     resendEmailVerification: (data: any) => Promise<Response>;
+    verifyToken: (token: string) => Promise<Response>;
     forgotPassword: (data: any) => Promise<Response>;
     forgotUsername: (data: any) => Promise<Response>;
     resetPassword: (data: any) => Promise<Response>;
+  };
+  providers: {
+    register: (providerData: any) => Promise<Response>;
+    getProviders: () => Promise<Response>;
+    getProviderDetails: (providerId: string) => Promise<Response>;
+  };
+  clients: {
+    register: (clientData: any) => Promise<Response>;
+    getClientDetails: (clientId: string) => Promise<Response>;
   };
   registration: {
     registerClient: (userData: any) => Promise<Response>;
@@ -48,5 +58,8 @@ export const apiClient: {
     rejectProvider: (providerId: string) => Promise<Response>;
     blockClient: (clientId: string) => Promise<Response>;
     unblockClient: (clientId: string) => Promise<Response>;
+    authenticate: (credentials: any) => Promise<Response>;
+    verifySession: (sessionToken: string) => Promise<Response>;
+    refreshSession: (refreshToken: string) => Promise<Response>;
   };
 };
