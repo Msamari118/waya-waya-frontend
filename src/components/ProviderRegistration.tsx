@@ -18,7 +18,7 @@ import {
   PROGRESS_LABELS
 } from '../utils/registrationConstants.js';
 import { validateRegistrationStep, getStepCompletionPercentage } from '../utils/registrationValidation';
-import paymentGateway from '../utils/paymentGateway.js';
+import southAfricanPaymentService from '../utils/southAfricanPaymentService.js';
 import { apiClient } from '../utils/apiClient.js';
 
 interface ProviderRegistrationProps {
@@ -89,29 +89,16 @@ export const ProviderRegistration: React.FC<ProviderRegistrationProps> = ({
         ? APPLICATION_FEES.SOUTH_AFRICA 
         : APPLICATION_FEES.INTERNATIONAL;
       
-      const paymentData = {
-        email: formData.email,
-        amount: applicationFee,
-        userId: 'temp_user_id',
-        userType: 'provider',
-        paymentType: 'provider_application_fee',
-        providerApplicationFee: true,
-        metadata: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          service: formData.primaryService,
-          country: formData.countryCode === '+27' ? 'South Africa' : 'International'
-        }
-      };
+      // Use Railway backend payment system instead of Paystack
+      const result = await southAfricanPaymentService.processRegistrationFee({
+        ...formData,
+        applicationFee: applicationFee,
+        paymentMethod: 'EFT'
+      });
 
-      const result = await paymentGateway.initializePayment(paymentData);
-      
       if (result.success) {
-        // Open payment URL in new window
-        window.open(result.authorizationUrl, '_blank');
-        
         // Show success message
-        alert(`Registration submitted successfully!\n\nPayment Reference: ${result.reference}\nAmount: R${applicationFee}\n\nComplete payment to activate your account.\nYou will receive confirmation within 24 hours.`);
+        alert(`Registration submitted successfully!\n\nProvider ID: ${result.providerId}\nApplication Fee: ${southAfricanPaymentService.formatAmount(applicationFee)}\n\nYou will receive confirmation within 24 hours.`);
         
         // Navigate back to home
         onNavigate('home');

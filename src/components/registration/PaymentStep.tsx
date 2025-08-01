@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Textarea } from '../ui/textarea';
 import { Badge } from '../ui/badge';
 import { X, Plus, CreditCard, Building2, Wallet } from 'lucide-react';
+import southAfricanPaymentService, { PaymentMethod } from '../../utils/southAfricanPaymentService.js';
 
 interface PaymentStepProps {
   formData: any;
@@ -21,15 +22,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
   onFieldChange,
   onError
 }) => {
-  const paymentMethods = [
-    'Cash',
-    'Bank Transfer',
-    'Credit Card',
-    'Debit Card',
-    'Mobile Money',
-    'PayPal',
-    'Other'
-  ];
+  const paymentMethods: PaymentMethod[] = southAfricanPaymentService.getSupportedPaymentMethods();
 
   const addPaymentMethod = () => {
     const newMethod = prompt('Enter payment method:');
@@ -51,7 +44,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
       <div>
         <h3 className="text-lg font-semibold mb-4">Payment & Pricing</h3>
         <p className="text-sm text-muted-foreground mb-6">
-          Set your rates and payment preferences.
+          Set your rates and payment preferences for South African clients.
         </p>
       </div>
 
@@ -145,49 +138,33 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
         )}
       </div>
 
-      {/* Payment Methods */}
-      <div className="space-y-2">
+      {/* South African Payment Methods */}
+      <div className="space-y-4">
         <Label>Accepted Payment Methods</Label>
-        <div className="flex flex-wrap gap-2 mb-2">
-          {(formData.paymentMethods || []).map((method: string) => (
-            <Badge key={method} variant="secondary" className="flex items-center gap-1">
-              {method === 'Credit Card' || method === 'Debit Card' ? (
-                <CreditCard className="h-3 w-3" />
-              ) : method === 'Bank Transfer' ? (
-            <Building2 className="h-3 w-3" />
-              ) : (
-                <Wallet className="h-3 w-3" />
-              )}
-              {method}
-              <X
-                className="h-3 w-3 cursor-pointer"
-                onClick={() => removePaymentMethod(method)}
-              />
-            </Badge>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {paymentMethods.map((method: PaymentMethod) => (
+            <div key={method.id} className="flex items-center space-x-3 p-3 border rounded-lg">
+              <span className="text-2xl">{method.icon}</span>
+              <div className="flex-1">
+                <p className="font-medium">{method.name}</p>
+                <p className="text-sm text-muted-foreground">{method.description}</p>
+                <p className="text-xs text-muted-foreground">Processing: {method.processingTime}</p>
+              </div>
+            </div>
           ))}
         </div>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={addPaymentMethod}
-          className="flex items-center gap-2"
-        >
-          <Plus className="h-4 w-4" />
-          Add Payment Method
-        </Button>
       </div>
 
       {/* Banking Information */}
       <div className="space-y-4">
-        <Label>Banking Information</Label>
+        <Label>Banking Information (Required for EFT Payments)</Label>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Bank Name */}
           <div className="space-y-2">
             <Label htmlFor="bankName">Bank Name *</Label>
             <Input
               id="bankName"
-              placeholder="Enter bank name"
+              placeholder="e.g., Standard Bank, FNB, ABSA"
               value={formData.bankName || ''}
               onChange={(e) => onFieldChange('bankName', e.target.value)}
             />
@@ -263,49 +240,56 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
         </div>
       </div>
 
-      {/* Payment Terms */}
-      <div className="space-y-2">
-        <Label htmlFor="paymentTerms">Payment Terms</Label>
-        <Textarea
-          id="paymentTerms"
-          placeholder="Describe your payment terms (e.g., 50% upfront, payment within 7 days, etc.)"
-          value={formData.paymentTerms || ''}
-          onChange={(e) => onFieldChange('paymentTerms', e.target.value)}
-          rows={3}
-        />
-        <p className="text-xs text-muted-foreground">
-          Optional: Specify your payment terms and conditions
-        </p>
-      </div>
-
-      {/* Tax Information */}
-      <div className="space-y-2">
-        <Label>Tax Information</Label>
+      {/* Additional Payment Information */}
+      <div className="space-y-4">
+        <Label>Additional Payment Information</Label>
+        
+        {/* Minimum Charge */}
         <div className="space-y-2">
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="vatRegistered"
-              checked={formData.vatRegistered || false}
-              onChange={(e) => onFieldChange('vatRegistered', e.target.checked)}
-              className="rounded"
+          <Label htmlFor="minimumCharge">Minimum Charge (ZAR)</Label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+              R
+            </span>
+            <Input
+              id="minimumCharge"
+              type="number"
+              min="0"
+              max="1000"
+              step="10"
+              placeholder="Enter minimum charge"
+              value={formData.minimumCharge || ''}
+              onChange={(e) => onFieldChange('minimumCharge', e.target.value)}
+              className="pl-8"
             />
-            <Label htmlFor="vatRegistered" className="text-sm">
-              I am VAT registered
-            </Label>
           </div>
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="taxCompliant"
-              checked={formData.taxCompliant || false}
-              onChange={(e) => onFieldChange('taxCompliant', e.target.checked)}
-              className="rounded"
+          <p className="text-xs text-muted-foreground">
+            Minimum amount for any service call
+          </p>
+        </div>
+
+        {/* Callout Fee */}
+        <div className="space-y-2">
+          <Label htmlFor="calloutFee">Callout Fee (ZAR)</Label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+              R
+            </span>
+            <Input
+              id="calloutFee"
+              type="number"
+              min="0"
+              max="500"
+              step="10"
+              placeholder="Enter callout fee"
+              value={formData.calloutFee || ''}
+              onChange={(e) => onFieldChange('calloutFee', e.target.value)}
+              className="pl-8"
             />
-            <Label htmlFor="taxCompliant" className="text-sm">
-              I am tax compliant and can provide tax invoices
-            </Label>
           </div>
+          <p className="text-xs text-muted-foreground">
+            Fee for traveling to client location
+          </p>
         </div>
       </div>
     </div>

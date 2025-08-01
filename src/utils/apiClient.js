@@ -261,12 +261,50 @@ export const apiClient = {
     },
 
     processEFT: async (eftData) => {
-      const response = await silentFetch(`${API_BASE_URL}/payments/eft`, {
+      const response = await silentFetch(`${API_BASE_URL}/payments/eft-payout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(eftData),
+      });
+      return response;
+    },
+
+    getProviderEarnings: async (status = null) => {
+      const url = status 
+        ? `${API_BASE_URL}/payments/provider-earnings?status=${status}`
+        : `${API_BASE_URL}/payments/provider-earnings`;
+      
+      const response = await silentFetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
+    },
+
+    getEFTPayouts: async (status = null) => {
+      const url = status 
+        ? `${API_BASE_URL}/payments/eft-payouts?status=${status}`
+        : `${API_BASE_URL}/payments/eft-payouts`;
+      
+      const response = await silentFetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
+    },
+
+    getPaymentHistory: async (limit = 20, offset = 0) => {
+      const response = await silentFetch(`${API_BASE_URL}/payments/history?limit=${limit}&offset=${offset}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
       return response;
     },
