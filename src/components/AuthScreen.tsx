@@ -62,7 +62,7 @@ export default function AuthScreen({
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
-  // Timer for OTP resend
+  // Timer for OTP resend - Production ready
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
     if (otpTimer > 0) {
