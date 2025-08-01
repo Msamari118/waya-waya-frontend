@@ -269,15 +269,44 @@ export const apiClient = {
       });
       return response;
     },
-  },
 
-  clients: {
-    register: async (clientData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/clients/register`, {
+    bookService: async (bookingData, authToken) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/providers/book-service`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
         },
+        body: JSON.stringify(bookingData),
+      });
+      return response;
+    },
+
+    updateAvailability: async (availabilityData) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/providers/update-availability`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(availabilityData),
+      });
+      return response;
+    },
+  },
+
+  clients: {
+    register: async (clientData, authToken) => {
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+      
+      const response = await silentFetch(`${API_BASE_URL}/api/clients/register`, {
+        method: 'POST',
+        headers,
         body: JSON.stringify(clientData),
       });
       return response;

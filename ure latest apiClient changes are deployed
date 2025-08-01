@@ -1,0 +1,5 @@
+[33mfa79831[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Add missing apiClient functions - verifyToken, clients, admin functions
+[33m203de4a[m Force redeploy - Fix s.auth.register error and remove demo code
+[33m47f389a[m Fix OTP timer logic and improve resend OTP function
+[33med4654f[m Remove demo mode fallbacks and fix error handling
+[33m742bc4a[m Add missing sendOtp and verifyOtp functions to apiClient

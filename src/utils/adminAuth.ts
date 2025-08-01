@@ -35,15 +35,24 @@ export async function adminLogin(credentials: AdminLoginRequest): Promise<AdminL
     // This would call your backend admin authentication endpoint
     const response = await apiClient.admin.authenticate(credentials);
     
-    if (response.success && response.session) {
-      // Store admin session securely
-      localStorage.setItem('adminSession', JSON.stringify(response.session));
-      return response;
+    if (response.ok) {
+      const json = await response.json();
+      
+      if (json.success && json.session) {
+        // Store admin session securely
+        localStorage.setItem('adminSession', JSON.stringify(json.session));
+        return json;
+      }
+      
+      return {
+        success: false,
+        error: json.error || 'Authentication failed'
+      };
     }
     
     return {
       success: false,
-      error: response.error || 'Authentication failed'
+      error: 'Authentication failed'
     };
   } catch (error) {
     console.error('Admin login error:', error);
@@ -73,7 +82,11 @@ export async function verifyAdminSession(): Promise<boolean> {
     
     // Verify session with backend
     const response = await apiClient.admin.verifySession(session.token);
-    return response.valid;
+    if (response.ok) {
+      const json = await response.json();
+      return json.valid;
+    }
+    return false;
   } catch (error) {
     console.error('Session verification error:', error);
     localStorage.removeItem('adminSession');
@@ -136,9 +149,13 @@ export async function refreshAdminSession(): Promise<boolean> {
     
     const response = await apiClient.admin.refreshSession(session.token);
     
-    if (response.success && response.session) {
-      localStorage.setItem('adminSession', JSON.stringify(response.session));
-      return true;
+    if (response.ok) {
+      const json = await response.json();
+      
+      if (json.success && json.session) {
+        localStorage.setItem('adminSession', JSON.stringify(json.session));
+        return true;
+      }
     }
     
     return false;
