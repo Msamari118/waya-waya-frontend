@@ -163,8 +163,8 @@ export default function AuthScreen({
         // Send OTP using standardized backend API
         const otpResponse = await apiClient.auth.sendOtp({
           type: 'phone',
-          identifier: fullPhoneNumber,
-          userId: 'temp_user_id' // Will be replaced with actual user ID from registration response
+          identifier: fullPhoneNumber
+          // Remove userId - backend will find user by phone number
         });
         
         if (otpResponse.ok) {
@@ -331,8 +331,7 @@ export default function AuthScreen({
       // Use the standardized backend API endpoint
       const response = await apiClient.auth.sendOtp({
         type: 'phone',
-        identifier: fullPhoneNumber,
-        userId: 'temp_user_id' // Will be replaced with actual user ID after account creation
+        identifier: fullPhoneNumber
       });
       
       let data;
