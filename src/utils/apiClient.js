@@ -123,6 +123,17 @@ export const apiClient = {
       return response;
     },
 
+    sendOtp: async (data) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/auth/send-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
+    },
+
     resetPassword: async (data) => {
       const response = await silentFetch(`${API_BASE_URL}/api/auth/reset-password`, {
         method: 'POST',
@@ -138,6 +149,18 @@ export const apiClient = {
   registration: {
     registerClient: async (userData) => {
       const response = await silentFetch(`${API_BASE_URL}/api/auth/register-client`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      return response;
+    },
+
+    register: async (userData) => {
+      // Generic register function that handles both client and provider registration
+      const response = await silentFetch(`${API_BASE_URL}/api/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
