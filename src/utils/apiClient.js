@@ -1,6 +1,6 @@
 import { API_BASE_URL } from './constants.js';
 
-// Production-ready API client - NO MOCK RESPONSES
+// Production-ready API client - NO MOCK RESPONSES - Latest deployment
 const silentFetch = async (url, options = {}) => {
   try {
     const controller = new AbortController();
