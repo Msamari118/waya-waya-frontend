@@ -236,9 +236,9 @@ export default function AuthScreen({
       
       // Use the standardized backend API endpoint
       const response = await apiClient.auth.verifyOtp({
-        userId: 'temp_user_id', // Will be replaced with actual user ID after account creation
         otp: phoneOtp,
-        type: 'phone'
+        type: 'phone',
+        identifier: fullPhoneNumber
       });
       
       let data;
