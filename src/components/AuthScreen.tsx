@@ -93,6 +93,13 @@ export default function AuthScreen({
     setLoading(true);
     setError('');
     
+    // Validate required fields
+    if (!formData.emailOrPhone || !formData.password) {
+      setError('Please fill in all required fields');
+      setLoading(false);
+      return;
+    }
+    
     try {
       const response = await apiClient.auth.login({
         emailOrPhone: formData.emailOrPhone,
