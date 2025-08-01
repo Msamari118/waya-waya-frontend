@@ -101,6 +101,18 @@ export const apiClient = {
       return response;
     },
 
+    verifyToken: async (token) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/auth/verify-token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ token }),
+      });
+      return response;
+    },
+
     forgotPassword: async (data) => {
       const response = await silentFetch(`${API_BASE_URL}/api/auth/forgot-password`, {
         method: 'POST',
@@ -250,6 +262,29 @@ export const apiClient = {
 
     getProviderDetails: async (providerId) => {
       const response = await silentFetch(`${API_BASE_URL}/api/providers/${providerId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response;
+    },
+  },
+
+  clients: {
+    register: async (clientData) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/clients/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(clientData),
+      });
+      return response;
+    },
+
+    getClientDetails: async (clientId) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/clients/${clientId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -501,6 +536,39 @@ export const apiClient = {
         headers: {
           'Content-Type': 'application/json',
         },
+      });
+      return response;
+    },
+
+    authenticate: async (credentials) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/admin/auth`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
+      return response;
+    },
+
+    verifySession: async (sessionToken) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/admin/verify-session`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionToken}`
+        },
+      });
+      return response;
+    },
+
+    refreshSession: async (refreshToken) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/admin/refresh-session`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refreshToken }),
       });
       return response;
     },
