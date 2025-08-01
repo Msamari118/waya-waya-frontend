@@ -47,7 +47,7 @@ export const apiClient = {
     },
 
     sendPhoneOtp: async (userData) => {
-      const response = await silentFetch(`${API_BASE_URL}/auth/send-phone-otp`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/send-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ export const apiClient = {
     },
 
     verifyPhoneOtp: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/auth/verify-phone-otp`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/verify-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export const apiClient = {
     },
 
     resendPhoneOtp: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/auth/resend-phone-otp`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/resend-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
