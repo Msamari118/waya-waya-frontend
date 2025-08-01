@@ -22,7 +22,7 @@ export const apiClient = {
   // Connection testing
   testConnection: async () => {
     try {
-      const response = await silentFetch(`${API_BASE_URL}/health`, {
+      const response = await silentFetch(`${API_BASE_URL.replace('/api', '')}/health`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export const apiClient = {
 
   auth: {
     login: async (credentials) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/login`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export const apiClient = {
     },
 
     sendPhoneOtp: async (userData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/send-phone-otp`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/send-phone-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ export const apiClient = {
     },
 
     verifyPhoneOtp: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/verify-phone-otp`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/verify-phone-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export const apiClient = {
     },
 
     resendPhoneOtp: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/resend-phone-otp`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/resend-phone-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export const apiClient = {
     },
 
     verifyEmail: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/verify-email`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/verify-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ export const apiClient = {
     },
 
     resendEmailVerification: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/resend-email-verification`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/resend-email-verification`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ export const apiClient = {
     },
 
     verifyToken: async (token) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/verify-token`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/verify-token`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ export const apiClient = {
     },
 
     forgotPassword: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/forgot-password`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ export const apiClient = {
     },
 
     forgotUsername: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/forgot-username`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/forgot-username`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -136,7 +136,7 @@ export const apiClient = {
     },
 
     sendOtp: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/send-otp`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/send-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -147,7 +147,7 @@ export const apiClient = {
     },
 
     resetPassword: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/reset-password`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -159,7 +159,7 @@ export const apiClient = {
 
     register: async (userData) => {
       // Generic register function that handles both client and provider registration
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/signup`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ export const apiClient = {
     },
 
     verifyOtp: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/verify-otp`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/verify-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ export const apiClient = {
     },
 
     resendOtp: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/resend-otp`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/resend-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -194,7 +194,7 @@ export const apiClient = {
 
   registration: {
     registerClient: async (userData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/register-client`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/register-client`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -206,7 +206,7 @@ export const apiClient = {
 
     register: async (userData) => {
       // Generic register function that handles both client and provider registration
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/signup`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -217,7 +217,7 @@ export const apiClient = {
     },
 
     sendOtp: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/send-otp`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/send-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -228,7 +228,7 @@ export const apiClient = {
     },
 
     verifyOtp: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/verify-otp`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/verify-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -239,7 +239,7 @@ export const apiClient = {
     },
 
     sendRegistrationOtp: async (userData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/send-registration-otp`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/send-registration-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -250,7 +250,7 @@ export const apiClient = {
     },
 
     verifyRegistrationOtp: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/verify-registration-otp`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/verify-registration-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -261,7 +261,7 @@ export const apiClient = {
     },
 
     registerProvider: async (providerData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/auth/register-provider`, {
+      const response = await silentFetch(`${API_BASE_URL}/auth/register-provider`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -282,7 +282,7 @@ export const apiClient = {
         headers['Authorization'] = `Bearer ${authToken}`;
       }
       
-      const response = await silentFetch(`${API_BASE_URL}/api/providers/register`, {
+      const response = await silentFetch(`${API_BASE_URL}/providers/register`, {
         method: 'POST',
         headers,
         body: JSON.stringify(providerData),
@@ -301,7 +301,7 @@ export const apiClient = {
     },
 
     getProviderDetails: async (providerId) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/providers/${providerId}`, {
+      const response = await silentFetch(`${API_BASE_URL}/providers/${providerId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -311,7 +311,7 @@ export const apiClient = {
     },
 
     bookService: async (bookingData, authToken) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/providers/book-service`, {
+      const response = await silentFetch(`${API_BASE_URL}/providers/book-service`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -331,7 +331,7 @@ export const apiClient = {
         headers['Authorization'] = `Bearer ${authToken}`;
       }
       
-      const response = await silentFetch(`${API_BASE_URL}/api/providers/update-availability`, {
+      const response = await silentFetch(`${API_BASE_URL}/providers/update-availability`, {
         method: 'PUT',
         headers,
         body: JSON.stringify(availabilityData),
@@ -350,7 +350,7 @@ export const apiClient = {
         headers['Authorization'] = `Bearer ${authToken}`;
       }
       
-      const response = await silentFetch(`${API_BASE_URL}/api/clients/register`, {
+      const response = await silentFetch(`${API_BASE_URL}/clients/register`, {
         method: 'POST',
         headers,
         body: JSON.stringify(clientData),
@@ -359,7 +359,7 @@ export const apiClient = {
     },
 
     getClientDetails: async (clientId) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/clients/${clientId}`, {
+      const response = await silentFetch(`${API_BASE_URL}/clients/${clientId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -371,7 +371,7 @@ export const apiClient = {
 
   services: {
     submitServiceRequest: async (requestData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/requests`, {
+      const response = await silentFetch(`${API_BASE_URL}/requests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -392,7 +392,7 @@ export const apiClient = {
     },
 
     getProviderDetails: async (providerId) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/providers/${providerId}`, {
+      const response = await silentFetch(`${API_BASE_URL}/providers/${providerId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -438,7 +438,7 @@ export const apiClient = {
 
   payments: {
     processPayment: async (paymentData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/payments/process`, {
+      const response = await silentFetch(`${API_BASE_URL}/payments/process`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -449,7 +449,7 @@ export const apiClient = {
     },
 
     processEFT: async (eftData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/payments/eft-payout`, {
+      const response = await silentFetch(`${API_BASE_URL}/payments/eft-payout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -461,8 +461,8 @@ export const apiClient = {
 
     getProviderEarnings: async (status = null) => {
       const url = status 
-        ? `${API_BASE_URL}/api/payments/provider-earnings?status=${status}`
-        : `${API_BASE_URL}/api/payments/provider-earnings`;
+        ? `${API_BASE_URL}/payments/provider-earnings?status=${status}`
+        : `${API_BASE_URL}/payments/provider-earnings`;
       
       const response = await silentFetch(url, {
         method: 'GET',
@@ -475,8 +475,8 @@ export const apiClient = {
 
     getEFTPayouts: async (status = null) => {
       const url = status 
-        ? `${API_BASE_URL}/api/payments/eft-payouts?status=${status}`
-        : `${API_BASE_URL}/api/payments/eft-payouts`;
+        ? `${API_BASE_URL}/payments/eft-payouts?status=${status}`
+        : `${API_BASE_URL}/payments/eft-payouts`;
       
       const response = await silentFetch(url, {
         method: 'GET',
@@ -488,7 +488,7 @@ export const apiClient = {
     },
 
     getPaymentHistory: async (limit = 20, offset = 0) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/payments/history?limit=${limit}&offset=${offset}`, {
+      const response = await silentFetch(`${API_BASE_URL}/payments/history?limit=${limit}&offset=${offset}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -498,7 +498,7 @@ export const apiClient = {
     },
 
     collectCommission: async (commissionData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/payments/commission`, {
+      const response = await silentFetch(`${API_BASE_URL}/payments/commission`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -511,7 +511,7 @@ export const apiClient = {
 
   chat: {
     sendMessage: async (messageData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/chat/send`, {
+      const response = await silentFetch(`${API_BASE_URL}/chat/send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -522,7 +522,7 @@ export const apiClient = {
     },
 
     getMessages: async (chatId) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/chat/${chatId}`, {
+      const response = await silentFetch(`${API_BASE_URL}/chat/${chatId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -532,7 +532,7 @@ export const apiClient = {
     },
 
     uploadFile: async (fileData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/chat/upload`, {
+      const response = await silentFetch(`${API_BASE_URL}/chat/upload`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -543,7 +543,7 @@ export const apiClient = {
     },
 
     authorizeFileUpload: async (fileData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/chat/authorize-upload`, {
+      const response = await silentFetch(`${API_BASE_URL}/chat/authorize-upload`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -556,7 +556,7 @@ export const apiClient = {
 
   admin: {
     getStats: async (authToken) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/admin/stats`, {
+      const response = await silentFetch(`${API_BASE_URL}/admin/stats`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -567,7 +567,7 @@ export const apiClient = {
     },
 
     getProviders: async () => {
-      const response = await silentFetch(`${API_BASE_URL}/api/admin/providers`, {
+      const response = await silentFetch(`${API_BASE_URL}/admin/providers`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -577,7 +577,7 @@ export const apiClient = {
     },
 
     approveProvider: async (providerId) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/admin/providers/${providerId}/approve`, {
+      const response = await silentFetch(`${API_BASE_URL}/admin/providers/${providerId}/approve`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -587,7 +587,7 @@ export const apiClient = {
     },
 
     rejectProvider: async (providerId) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/admin/providers/${providerId}/reject`, {
+      const response = await silentFetch(`${API_BASE_URL}/admin/providers/${providerId}/reject`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -597,7 +597,7 @@ export const apiClient = {
     },
 
     blockClient: async (clientId) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/admin/clients/${clientId}/block`, {
+      const response = await silentFetch(`${API_BASE_URL}/admin/clients/${clientId}/block`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -607,7 +607,7 @@ export const apiClient = {
     },
 
     unblockClient: async (clientId) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/admin/clients/${clientId}/unblock`, {
+      const response = await silentFetch(`${API_BASE_URL}/admin/clients/${clientId}/unblock`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -617,7 +617,7 @@ export const apiClient = {
     },
 
     authenticate: async (credentials) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/admin/auth`, {
+      const response = await silentFetch(`${API_BASE_URL}/admin/auth`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -628,7 +628,7 @@ export const apiClient = {
     },
 
     verifySession: async (sessionToken) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/admin/verify-session`, {
+      const response = await silentFetch(`${API_BASE_URL}/admin/verify-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -639,7 +639,7 @@ export const apiClient = {
     },
 
     refreshSession: async (refreshToken) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/admin/refresh-session`, {
+      const response = await silentFetch(`${API_BASE_URL}/admin/refresh-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -650,7 +650,7 @@ export const apiClient = {
     },
 
     getUsers: async (authToken, type, page = 1, limit = 10) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/admin/users?type=${type}&page=${page}&limit=${limit}`, {
+      const response = await silentFetch(`${API_BASE_URL}/admin/users?type=${type}&page=${page}&limit=${limit}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -661,7 +661,7 @@ export const apiClient = {
     },
 
     getPayments: async (authToken, page = 1, limit = 10) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/admin/payments?page=${page}&limit=${limit}`, {
+      const response = await silentFetch(`${API_BASE_URL}/admin/payments?page=${page}&limit=${limit}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -672,7 +672,7 @@ export const apiClient = {
     },
 
     getTrials: async (authToken, page = 1, limit = 10) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/admin/trials?page=${page}&limit=${limit}`, {
+      const response = await silentFetch(`${API_BASE_URL}/admin/trials?page=${page}&limit=${limit}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
