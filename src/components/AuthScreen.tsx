@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Alert, AlertDescription } from './ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { CheckCircle, Clock, Mail, Phone, ArrowLeft, AlertCircle } from 'lucide-react';
+import { CheckCircle, Clock, Mail, Phone, ArrowLeft, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { Label } from './ui/label';
 
 interface AuthScreenProps {
@@ -53,7 +53,9 @@ export default function AuthScreen({
   const [phoneOtp, setPhoneOtp] = useState('');
   const [emailOtp, setEmailOtp] = useState('');
   const [otpTimer, setOtpTimer] = useState(0);
-  const [canResendOtp, setCanResendOtp] = useState(false);
+  const [canResendOtp, setCanResendOtp] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
   // Forgot password/username states
   const [forgotType, setForgotType] = useState(''); // 'password' or 'username'
@@ -150,7 +152,7 @@ export default function AuthScreen({
       // Create account first
       const registrationData = {
         email: formData.email,
-        phoneNumber: `${formData.countryCode}${formData.phoneNumber}`,
+        phone: `${formData.countryCode}${formData.phoneNumber}`,
         fullName: formData.fullName,
         password: formData.password,
         userType: formData.userType
@@ -509,15 +511,30 @@ export default function AuthScreen({
                   
                   <div>
                     <Label htmlFor="password" className="text-slate-700 font-medium">Password</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder="Enter your password"
-                      value={formData.password}
-                      onChange={(e) => handleInputChange('password', e.target.value)}
-                      className="h-12 border border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-lg transition-all duration-200"
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        value={formData.password}
+                        onChange={(e) => handleInputChange('password', e.target.value)}
+                        className="h-12 border border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-lg transition-all duration-200 pr-12"
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-slate-100"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4 text-slate-500" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-slate-500" />
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 </div>
                 
@@ -842,27 +859,57 @@ export default function AuthScreen({
                   {/* Password with enhanced styling */}
                   <div className="space-y-2">
                     <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Password</Label>
-                    <Input
-                      type="password"
-                      placeholder="Create a strong password"
-                      value={formData.password}
-                      onChange={(e) => handleInputChange('password', e.target.value)}
-                      className="h-14 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg"
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Create a strong password"
+                        value={formData.password}
+                        onChange={(e) => handleInputChange('password', e.target.value)}
+                        className="h-14 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg pr-12"
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 hover:bg-slate-100"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4 text-slate-500" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-slate-500" />
+                        )}
+                      </Button>
+                    </div>
                   </div>
                   
                   {/* Confirm Password with enhanced styling */}
                   <div className="space-y-2">
                     <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Confirm Password</Label>
-                    <Input
-                      type="password"
-                      placeholder="Confirm your password"
-                      value={formData.confirmPassword}
-                      onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                      className="h-14 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg"
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Confirm your password"
+                        value={formData.confirmPassword}
+                        onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                        className="h-14 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg pr-12"
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 hover:bg-slate-100"
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-4 w-4 text-slate-500" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-slate-500" />
+                        )}
+                      </Button>
+                    </div>
                   </div>
                   
                   {/* User Type Selection with enhanced styling */}

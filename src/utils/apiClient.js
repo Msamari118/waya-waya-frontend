@@ -291,7 +291,7 @@ export const apiClient = {
     },
 
     getProviders: async () => {
-      const response = await silentFetch(`${API_BASE_URL}/api/providers`, {
+      const response = await silentFetch(`${API_BASE_URL}/providers`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -382,7 +382,7 @@ export const apiClient = {
     },
 
     getProviders: async () => {
-      const response = await silentFetch(`${API_BASE_URL}/api/providers`, {
+      const response = await silentFetch(`${API_BASE_URL}/providers`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -404,7 +404,7 @@ export const apiClient = {
 
   bookings: {
     createBooking: async (bookingData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/bookings`, {
+      const response = await silentFetch(`${API_BASE_URL}/bookings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -415,7 +415,7 @@ export const apiClient = {
     },
 
     getBookings: async () => {
-      const response = await silentFetch(`${API_BASE_URL}/api/bookings`, {
+      const response = await silentFetch(`${API_BASE_URL}/bookings`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -425,7 +425,7 @@ export const apiClient = {
     },
 
     updateBooking: async (bookingId, bookingData) => {
-      const response = await silentFetch(`${API_BASE_URL}/api/bookings/${bookingId}`, {
+      const response = await silentFetch(`${API_BASE_URL}/bookings/${bookingId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
