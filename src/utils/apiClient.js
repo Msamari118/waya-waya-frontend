@@ -179,6 +179,17 @@ export const apiClient = {
       });
       return response;
     },
+
+    resendOtp: async (data) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/auth/resend-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
+    },
   },
 
   registration: {
@@ -544,11 +555,12 @@ export const apiClient = {
   },
 
   admin: {
-    getStats: async () => {
+    getStats: async (authToken) => {
       const response = await silentFetch(`${API_BASE_URL}/api/admin/stats`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
         },
       });
       return response;

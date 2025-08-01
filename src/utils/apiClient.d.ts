@@ -11,6 +11,7 @@ export const apiClient: {
     sendOtp: (data: any) => Promise<Response>;
     register: (userData: any) => Promise<Response>;
     verifyOtp: (data: any) => Promise<Response>;
+    resendOtp: (data: any) => Promise<Response>;
     forgotPassword: (data: any) => Promise<Response>;
     forgotUsername: (data: any) => Promise<Response>;
     resetPassword: (data: any) => Promise<Response>;
@@ -60,7 +61,7 @@ export const apiClient: {
     authorizeFileUpload: (fileData: any) => Promise<Response>;
   };
   admin: {
-    getStats: () => Promise<Response>;
+    getStats: (authToken: string) => Promise<Response>;
     getProviders: () => Promise<Response>;
     approveProvider: (providerId: string) => Promise<Response>;
     rejectProvider: (providerId: string) => Promise<Response>;
