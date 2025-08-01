@@ -154,6 +154,17 @@ export default function AuthScreen({
         userType: formData.userType
       };
       
+      // Debug: Check if apiClient and auth exist
+      console.log('apiClient:', apiClient);
+      console.log('apiClient.auth:', apiClient?.auth);
+      
+      if (!apiClient || !apiClient.auth || !apiClient.auth.register) {
+        console.error('apiClient or auth.register is not available');
+        setError('Registration service not available. Please try again.');
+        setLoading(false);
+        return;
+      }
+      
       const response = await apiClient.auth.register(registrationData);
       
       if (response.ok) {
