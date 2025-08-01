@@ -636,5 +636,38 @@ export const apiClient = {
       });
       return response;
     },
+
+    getUsers: async (authToken, type, page = 1, limit = 10) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/admin/users?type=${type}&page=${page}&limit=${limit}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+        },
+      });
+      return response;
+    },
+
+    getPayments: async (authToken, page = 1, limit = 10) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/admin/payments?page=${page}&limit=${limit}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+        },
+      });
+      return response;
+    },
+
+    getTrials: async (authToken, page = 1, limit = 10) => {
+      const response = await silentFetch(`${API_BASE_URL}/api/admin/trials?page=${page}&limit=${limit}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+        },
+      });
+      return response;
+    },
   },
 };

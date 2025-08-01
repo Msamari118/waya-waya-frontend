@@ -69,5 +69,8 @@ export const apiClient: {
     authenticate: (credentials: any) => Promise<Response>;
     verifySession: (sessionToken: string) => Promise<Response>;
     refreshSession: (refreshToken: string) => Promise<Response>;
+    getUsers: (authToken: string, type: string, page?: number, limit?: number) => Promise<Response>;
+    getPayments: (authToken: string, page?: number, limit?: number) => Promise<Response>;
+    getTrials: (authToken: string, page?: number, limit?: number) => Promise<Response>;
   };
 };
