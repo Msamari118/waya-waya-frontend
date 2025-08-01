@@ -37,8 +37,8 @@ export const OTPVerification: React.FC<OTPVerificationProps> = ({
     setLoading(true);
     try {
       const result = type === 'phone' 
-        ? await otpService.sendSMSOTP(identifier, 'temp_user_id', 'verification')
-        : await otpService.sendEmailOTP(identifier, 'temp_user_id', 'verification');
+        ? await otpService.sendSMSOTP(identifier, '', 'verification')
+        : await otpService.sendEmailOTP(identifier, '', 'verification');
 
       if (result.success) {
         setOtpSent(true);
