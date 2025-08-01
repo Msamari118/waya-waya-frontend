@@ -1,11 +1,11 @@
 /**
  * Production-Ready OTP Service (Browser-compatible)
- * Supports SMS and Email verification with real providers
+ * Supports SMS and Email verification with Africa's Talking and SendGrid
  */
 
 class OTPService {
     constructor() {
-      this.smsProvider = 'twilio'; // or 'africastalking' for African markets
+      this.smsProvider = 'africastalking'; // Using Africa's Talking for African markets
       this.emailProvider = 'sendgrid';
       this.otpLength = 6;
       this.otpExpiry = 10; // minutes
@@ -16,10 +16,6 @@ class OTPService {
       const env = (typeof process !== 'undefined' && process.env) ? process.env : {};
       
       // Configuration with fallbacks
-      this.twilioAccountSid = env.REACT_APP_TWILIO_ACCOUNT_SID || 'demo_account_sid';
-      this.twilioAuthToken = env.REACT_APP_TWILIO_AUTH_TOKEN || 'demo_auth_token';
-      this.twilioPhoneNumber = env.REACT_APP_TWILIO_PHONE_NUMBER || '+1234567890';
-      
       this.sendGridApiKey = env.REACT_APP_SENDGRID_API_KEY || 'demo_sendgrid_key';
       this.fromEmail = env.REACT_APP_FROM_EMAIL || 'noreply@wayawaya.co.za';
       
@@ -68,9 +64,7 @@ class OTPService {
   
         // Send SMS based on provider
         let result;
-        if (this.smsProvider === 'twilio' && this.twilioAccountSid !== 'demo_account_sid') {
-          result = await this.sendTwilioSMS(phoneNumber, otp, purpose);
-        } else if (this.smsProvider === 'africastalking' && this.africasTalkingApiKey !== 'demo_at_key') {
+        if (this.smsProvider === 'africastalking' && this.africasTalkingApiKey !== 'demo_at_key') {
           result = await this.sendAfricasTalkingSMS(phoneNumber, otp, purpose);
         } else {
           // Fallback to demo mode
@@ -198,38 +192,6 @@ class OTPService {
           success: false,
           error: error.message
         };
-      }
-    }
-  
-    /**
-     * Send SMS via Twilio
-     */
-    async sendTwilioSMS(phoneNumber, otp, purpose) {
-      const message = this.getSMSMessage(otp, purpose);
-      
-      try {
-        const response = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${this.twilioAccountSid}/Messages.json`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Basic ${btoa(`${this.twilioAccountSid}:${this.twilioAuthToken}`)}`,
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({
-            From: this.twilioPhoneNumber,
-            To: phoneNumber,
-            Body: message
-          })
-        });
-  
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message || 'Failed to send SMS');
-        }
-  
-        return await response.json();
-      } catch (error) {
-        console.warn('Twilio SMS failed, falling back to demo mode:', error.message);
-        return await this.sendDemoSMS(phoneNumber, otp, purpose);
       }
     }
   
