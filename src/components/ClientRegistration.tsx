@@ -95,8 +95,7 @@ export const ClientRegistration: React.FC<ClientRegistrationProps> = ({
         userType: 'client'
       };
 
-      const response = await apiClient.clients?.register?.(registrationPayload, authToken || '') || 
-                      { ok: true }; // Fallback for demo
+      const response = await apiClient.clients.register(registrationPayload, authToken || '');
       
       if (response.ok) {
         // Registration successful

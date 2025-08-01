@@ -25,7 +25,7 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
 
   const handleToggleAvailability = async () => {
     try {
-      const response = await apiClient.providers.updateAvailability(!isAvailable, authToken || '');
+      const response = await apiClient.providers.updateAvailability({ isAvailable: !isAvailable }, authToken || '');
       if (response.ok) {
         setIsAvailable(!isAvailable);
         alert(`You are now ${!isAvailable ? 'available' : 'unavailable'} for new bookings`);
