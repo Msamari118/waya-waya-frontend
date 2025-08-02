@@ -404,7 +404,45 @@ export default function App() {
     );
   }
 
-  // Default home view
+  // Default home view - only show for unauthenticated users
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="max-w-md mx-auto p-4">
+          <HomeView
+            isAdminMode={false}
+            isConnected={isConnected}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            setCurrentView={setCurrentView}
+            setSelectedService={setSelectedService}
+            startProviderChat={startProviderChat}
+            startBooking={startBooking}
+          />
+        </div>
+        <BookingDialog 
+          showBookingDialog={showBookingDialog}
+          setShowBookingDialog={setShowBookingDialog}
+          selectedProvider={selectedProvider}
+          bookingDetails={bookingDetails}
+          setBookingDetails={setBookingDetails}
+          handleBookingSubmit={handleBookingSubmit}
+          isConnected={isConnected}
+        />
+      </div>
+    );
+  }
+
+  // For authenticated users, redirect to appropriate dashboard
+  if (userType === 'client') {
+    setCurrentView('client');
+    return null;
+  } else if (userType === 'provider') {
+    setCurrentView('provider');
+    return null;
+  }
+
+  // Fallback for other user types
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-md mx-auto p-4">
