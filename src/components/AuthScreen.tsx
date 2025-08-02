@@ -1137,8 +1137,8 @@ export default function AuthScreen({
                       <div className="space-y-2">
                         <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Years of Experience</Label>
                         <Select value={formData.yearsExperience || ''} onValueChange={(value) => handleInputChange('yearsExperience', value)}>
-                          <SelectTrigger className="h-14 border border-yellow-500/30 bg-black/40 text-gray-100 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg backdrop-blur-sm">
-                            <SelectValue placeholder="Select years of experience" className="text-white" />
+                          <SelectTrigger className="h-14 border border-yellow-500/30 bg-black/40 text-white placeholder:text-white focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg backdrop-blur-sm">
+                            <SelectValue placeholder="Select years of experience" />
                           </SelectTrigger>
                           <SelectContent className="bg-black/80 border-yellow-500/30 backdrop-blur-md">
                             <SelectItem value="0-1" className="text-gray-100 hover:bg-yellow-500/20">0-1 years</SelectItem>
