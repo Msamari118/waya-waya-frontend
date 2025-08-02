@@ -165,10 +165,6 @@ export default function AuthScreen({
         localStorage.setItem('tempUserId', data.userId);
         localStorage.setItem('pendingPhoneNumber', fullPhoneNumber);
         
-        // 🔧 DEBUG: Log the userId for testing
-        console.log('🔧 DEBUG: UserId for testing:', data.userId);
-        console.log('🔧 DEBUG: Check OTP at: https://waya-waya-backend-production.up.railway.app/api/auth/debug-otp/' + data.userId);
-        
         setCurrentStep('otp-verification');
         setSuccess('OTP sent to your phone number. Please verify.');
         setOtpTimer(60); // Start 60-second timer
