@@ -104,7 +104,7 @@ export default function AuthScreen({
     setError('');
     
     // Validate required fields
-    if (!formData.emailOrPhone || !formData.password) {
+    if (!formData.email || !formData.password) {
       setError('Please fill in all required fields');
       setLoading(false);
       return;
@@ -112,7 +112,7 @@ export default function AuthScreen({
     
     try {
       const response = await apiClient.auth.login({
-        emailOrPhone: formData.emailOrPhone,
+        emailOrPhone: formData.email,
         password: formData.password
       });
       
