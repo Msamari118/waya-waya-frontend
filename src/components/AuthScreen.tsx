@@ -493,29 +493,29 @@ export default function AuthScreen({
           </div>
           
           {/* Main Form Card */}
-          <Card className="bg-zinc-900/95 backdrop-blur-sm border border-zinc-700/60 shadow-2xl">
+          <Card className="bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80 backdrop-blur-md border border-yellow-500/30 shadow-2xl">
             <CardContent className="p-8">
               {/* Header with South African colors */}
               <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 via-green-400 to-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <span className="text-white font-bold text-2xl">W</span>
                 </div>
-                <h2 className="text-2xl font-bold text-zinc-100 mb-2">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 bg-clip-text text-transparent mb-2">
                   {view === 'login' ? 'Welcome Back!' : 'Join Waya Waya!'}
                 </h2>
-                <p className="text-zinc-300">
+                <p className="text-gray-300">
                   {view === 'login' ? 'Sign in to your account' : 'Start your journey with us'}
                 </p>
               </div>
               <form onSubmit={handleLogin} className="space-y-6">
                 {error && (
-                  <Alert variant="destructive" className="border-red-400/40 bg-red-950/40 text-red-200">
+                  <Alert variant="destructive" className="border-red-400/40 bg-red-950/40 text-red-200 backdrop-blur-sm">
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription className="text-red-200">{error}</AlertDescription>
                   </Alert>
                 )}
                 {success && (
-                  <Alert className="border-green-400/40 bg-green-950/40 text-green-200">
+                  <Alert className="border-green-400/40 bg-green-950/40 text-green-200 backdrop-blur-sm">
                     <CheckCircle className="h-4 w-4" />
                     <AlertDescription className="text-green-200">{success}</AlertDescription>
                   </Alert>
@@ -523,20 +523,20 @@ export default function AuthScreen({
                 
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="email" className="text-zinc-200 font-medium">Email Address</Label>
+                    <Label htmlFor="email" className="text-gray-200 font-medium">Email Address</Label>
                     <Input
                       id="email"
                       type="email"
                       placeholder="Enter your email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="h-12 border border-zinc-600/60 bg-zinc-800/60 text-zinc-100 placeholder:text-zinc-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-lg transition-all duration-200"
+                      className="h-12 border border-yellow-500/30 bg-black/40 text-gray-100 placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-lg transition-all duration-200 backdrop-blur-sm"
                       required
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="password" className="text-zinc-200 font-medium">Password</Label>
+                    <Label htmlFor="password" className="text-gray-200 font-medium">Password</Label>
                     <div className="relative">
                       <Input
                         id="password"
@@ -544,7 +544,7 @@ export default function AuthScreen({
                         placeholder="Enter your password"
                         value={formData.password}
                         onChange={(e) => handleInputChange('password', e.target.value)}
-                        className="h-12 border border-zinc-600/60 bg-zinc-800/60 text-zinc-100 placeholder:text-zinc-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-lg transition-all duration-200 pr-12"
+                        className="h-12 border border-yellow-500/30 bg-black/40 text-gray-100 placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-lg transition-all duration-200 pr-12 backdrop-blur-sm"
                         required
                       />
                       <Button
@@ -552,12 +552,12 @@ export default function AuthScreen({
                         variant="ghost"
                         size="sm"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-zinc-700/60"
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-yellow-500/20"
                       >
                         {showPassword ? (
-                          <EyeOff className="h-4 w-4 text-zinc-400" />
+                          <EyeOff className="h-4 w-4 text-gray-400" />
                         ) : (
-                          <Eye className="h-4 w-4 text-zinc-400" />
+                          <Eye className="h-4 w-4 text-gray-400" />
                         )}
                       </Button>
                     </div>
@@ -566,7 +566,7 @@ export default function AuthScreen({
                 
                 <Button 
                   type="submit" 
-                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-indigo-500 hover:from-blue-700 hover:to-indigo-600 text-white font-medium rounded-lg shadow-lg transform hover:scale-[1.02] transition-all duration-200" 
+                  className="w-full h-12 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white font-medium rounded-lg shadow-lg transform hover:scale-[1.02] transition-all duration-200" 
                   disabled={loading}
                 >
                   {loading ? 'Signing In...' : 'Sign In'}
@@ -576,17 +576,17 @@ export default function AuthScreen({
                   <Button 
                     variant="link" 
                     onClick={() => onNavigate('forgot-password')}
-                    className="text-zinc-300 hover:text-zinc-100 font-medium"
+                    className="text-gray-300 hover:text-gray-100 font-medium"
                   >
                     Forgot Password?
                   </Button>
                   
-                  <div className="text-zinc-300">
+                  <div className="text-gray-300">
                     Don't have an account?{' '}
                     <Button 
                       variant="link" 
                       onClick={() => onNavigate('signup')}
-                      className="text-blue-400 hover:text-blue-300 font-medium p-0 h-auto"
+                      className="text-yellow-400 hover:text-yellow-300 font-medium p-0 h-auto"
                     >
                       Sign up
                     </Button>
@@ -792,57 +792,57 @@ export default function AuthScreen({
             </div>
           </div>
           
-          {/* Main Form Card with elegant dark background */}
-          <Card className="w-full bg-zinc-900/95 backdrop-blur-sm border border-zinc-700/60 shadow-2xl rounded-2xl">
+          {/* Main Form Card with South African inspired background */}
+          <Card className="w-full bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80 backdrop-blur-md border border-yellow-500/30 shadow-2xl rounded-2xl">
             <CardHeader className="text-center pb-6">
               <div className="flex justify-center mb-4">
                 <WayaWayaLogo size="md" showText={false} />
               </div>
-              <CardTitle className="text-2xl font-bold text-zinc-100">Join Waya Waya!</CardTitle>
-              <p className="text-zinc-300 mt-2">Start your journey with us</p>
+              <CardTitle className="text-2xl font-bold bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 bg-clip-text text-transparent">Join Waya Waya!</CardTitle>
+              <p className="text-gray-300 mt-2">Start your journey with us</p>
             </CardHeader>
             
             <CardContent className="p-8">
-              {/* Initial Signup Form with elegant dark styling */}
+              {/* Initial Signup Form with South African styling */}
               {currentStep === 'form' && (
                 <form onSubmit={handleSignupSubmit} className="space-y-6">
                   {error && (
-                    <Alert variant="destructive" className="border-red-400/40 bg-red-950/40 text-red-200 rounded-xl">
+                    <Alert variant="destructive" className="border-red-400/40 bg-red-950/40 text-red-200 rounded-xl backdrop-blur-sm">
                       <AlertCircle className="h-4 w-4" />
                       <AlertDescription className="text-red-200">{error}</AlertDescription>
                     </Alert>
                   )}
                   
                   {success && (
-                    <Alert className="border-green-400/40 bg-green-950/40 text-green-200 rounded-xl">
+                    <Alert className="border-green-400/40 bg-green-950/40 text-green-200 rounded-xl backdrop-blur-sm">
                       <CheckCircle className="h-4 w-4" />
                       <AlertDescription className="text-green-200">{success}</AlertDescription>
                     </Alert>
                   )}
                   
-                  {/* Full Name with elegant styling */}
+                  {/* Full Name with South African styling */}
                   <div className="space-y-2">
-                    <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">Full Name</Label>
+                    <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Full Name</Label>
                     <Input
                       placeholder="Enter your full name"
                       value={formData.fullName}
                       onChange={(e) => handleInputChange('fullName', e.target.value)}
-                      className="h-14 border border-zinc-600/60 bg-zinc-800/60 text-zinc-100 placeholder:text-zinc-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-300 text-lg"
+                      className="h-14 border border-yellow-500/30 bg-black/40 text-gray-100 placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg backdrop-blur-sm"
                       required
                     />
                   </div>
                   
-                  {/* Phone Number with elegant styling */}
+                  {/* Phone Number with South African styling */}
                   <div className="space-y-2">
-                    <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">Phone Number</Label>
+                    <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Phone Number</Label>
                     <div className="flex gap-3">
                       <Select value={formData.countryCode} onValueChange={(value) => handleInputChange('countryCode', value)}>
-                        <SelectTrigger className="w-28 h-14 border border-zinc-600/60 bg-zinc-800/60 text-zinc-100 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-300">
+                        <SelectTrigger className="w-28 h-14 border border-yellow-500/30 bg-black/40 text-gray-100 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 backdrop-blur-sm">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="max-h-60 bg-zinc-800 border-zinc-700">
+                        <SelectContent className="max-h-60 bg-black/80 border-yellow-500/30 backdrop-blur-md">
                           {internationalCountryCodes.map((country) => (
-                            <SelectItem key={country.id} value={country.code} className="text-zinc-100 hover:bg-zinc-700">
+                            <SelectItem key={country.id} value={country.code} className="text-gray-100 hover:bg-yellow-500/20">
                               <div className="flex items-center gap-2">
                                 <span>{country.flag}</span>
                                 <span className="font-medium">{country.code}</span>
@@ -856,35 +856,35 @@ export default function AuthScreen({
                         type="tel"
                         value={formData.phoneNumber}
                         onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-                        className="flex-1 h-14 border border-zinc-600/60 bg-zinc-800/60 text-zinc-100 placeholder:text-zinc-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-300 text-lg"
+                        className="flex-1 h-14 border border-yellow-500/30 bg-black/40 text-gray-100 placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg backdrop-blur-sm"
                         required
                       />
                     </div>
                   </div>
                   
-                  {/* Email with elegant styling */}
+                  {/* Email with South African styling */}
                   <div className="space-y-2">
-                    <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">Email Address</Label>
+                    <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Email Address</Label>
                     <Input
                       type="email"
                       placeholder="Enter your email address"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="h-14 border border-zinc-600/60 bg-zinc-800/60 text-zinc-100 placeholder:text-zinc-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-300 text-lg"
+                      className="h-14 border border-yellow-500/30 bg-black/40 text-gray-100 placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg backdrop-blur-sm"
                       required
                     />
                   </div>
                   
-                  {/* Password with elegant styling */}
+                  {/* Password with South African styling */}
                   <div className="space-y-2">
-                    <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">Password</Label>
+                    <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Password</Label>
                     <div className="relative">
                       <Input
                         type={showPassword ? "text" : "password"}
                         placeholder="Create a strong password"
                         value={formData.password}
                         onChange={(e) => handleInputChange('password', e.target.value)}
-                        className="h-14 border border-zinc-600/60 bg-zinc-800/60 text-zinc-100 placeholder:text-zinc-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-300 text-lg pr-12"
+                        className="h-14 border border-yellow-500/30 bg-black/40 text-gray-100 placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg pr-12 backdrop-blur-sm"
                         required
                       />
                       <Button
@@ -892,27 +892,27 @@ export default function AuthScreen({
                         variant="ghost"
                         size="sm"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 hover:bg-zinc-700/60"
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 hover:bg-yellow-500/20"
                       >
                         {showPassword ? (
-                          <EyeOff className="h-4 w-4 text-zinc-400" />
+                          <EyeOff className="h-4 w-4 text-gray-400" />
                         ) : (
-                          <Eye className="h-4 w-4 text-zinc-400" />
+                          <Eye className="h-4 w-4 text-gray-400" />
                         )}
                       </Button>
                     </div>
                   </div>
                   
-                  {/* Confirm Password with elegant styling */}
+                  {/* Confirm Password with South African styling */}
                   <div className="space-y-2">
-                    <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">Confirm Password</Label>
+                    <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Confirm Password</Label>
                     <div className="relative">
                       <Input
                         type={showConfirmPassword ? "text" : "password"}
                         placeholder="Confirm your password"
                         value={formData.confirmPassword}
                         onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                        className="h-14 border border-zinc-600/60 bg-zinc-800/60 text-zinc-100 placeholder:text-zinc-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-300 text-lg pr-12"
+                        className="h-14 border border-yellow-500/30 bg-black/40 text-gray-100 placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg pr-12 backdrop-blur-sm"
                         required
                       />
                       <Button
@@ -920,29 +920,29 @@ export default function AuthScreen({
                         variant="ghost"
                         size="sm"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 hover:bg-zinc-700/60"
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 hover:bg-yellow-500/20"
                       >
                         {showConfirmPassword ? (
-                          <EyeOff className="h-4 w-4 text-zinc-400" />
+                          <EyeOff className="h-4 w-4 text-gray-400" />
                         ) : (
-                          <Eye className="h-4 w-4 text-zinc-400" />
+                          <Eye className="h-4 w-4 text-gray-400" />
                         )}
                       </Button>
                     </div>
                   </div>
                   
-                  {/* User Type Selection with elegant styling */}
+                  {/* User Type Selection with South African styling */}
                   {view === 'signup' && (
                     <div className="space-y-3">
-                      <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">I want to:</Label>
+                      <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">I want to:</Label>
                       <div className="grid grid-cols-2 gap-4">
                         <Button
                           type="button"
                           variant={formData.userType === 'client' ? 'default' : 'outline'}
                           className={`h-16 text-base font-semibold rounded-xl transition-all duration-300 ${
                             formData.userType === 'client' 
-                              ? 'bg-gradient-to-r from-blue-600 to-indigo-500 text-white shadow-lg transform scale-105' 
-                              : 'bg-zinc-800/60 border border-zinc-600/60 text-zinc-200 hover:border-blue-500 hover:bg-zinc-700/60 hover:scale-105'
+                              ? 'bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 text-white shadow-lg transform scale-105' 
+                              : 'bg-black/40 border border-yellow-500/30 text-gray-200 hover:border-green-500 hover:bg-yellow-500/20 hover:scale-105 backdrop-blur-sm'
                           }`}
                           onClick={() => handleInputChange('userType', 'client')}
                         >
@@ -956,8 +956,8 @@ export default function AuthScreen({
                           variant={formData.userType === 'provider' ? 'default' : 'outline'}
                           className={`h-16 text-base font-semibold rounded-xl transition-all duration-300 ${
                             formData.userType === 'provider' 
-                              ? 'bg-gradient-to-r from-blue-600 to-indigo-500 text-white shadow-lg transform scale-105' 
-                              : 'bg-zinc-800/60 border border-zinc-600/60 text-zinc-200 hover:border-blue-500 hover:bg-zinc-700/60 hover:scale-105'
+                              ? 'bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 text-white shadow-lg transform scale-105' 
+                              : 'bg-black/40 border border-yellow-500/30 text-gray-200 hover:border-green-500 hover:bg-yellow-500/20 hover:scale-105 backdrop-blur-sm'
                           }`}
                           onClick={() => handleInputChange('userType', 'provider')}
                         >
@@ -970,10 +970,10 @@ export default function AuthScreen({
                     </div>
                   )}
 
-                  {/* Profile Picture Upload for Providers with elegant styling */}
+                  {/* Profile Picture Upload for Providers with South African styling */}
                   {(view === 'signup-provider' || (view === 'signup' && formData.userType === 'provider')) && (
                     <div className="space-y-2">
-                      <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">Profile Picture</Label>
+                      <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Profile Picture</Label>
                       <div className="relative">
                         <input
                           type="file"
@@ -989,24 +989,24 @@ export default function AuthScreen({
                         />
                         <label
                           htmlFor="profile-picture"
-                          className="flex items-center justify-center w-full h-32 border border-dashed border-zinc-600/60 bg-zinc-800/60 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-zinc-700/60 transition-all duration-300"
+                          className="flex items-center justify-center w-full h-32 border border-dashed border-yellow-500/30 bg-black/40 rounded-xl cursor-pointer hover:border-green-500 hover:bg-yellow-500/20 transition-all duration-300 backdrop-blur-sm"
                         >
                           <div className="text-center">
-                            <Upload className="h-8 w-8 text-zinc-400 mx-auto mb-2" />
-                            <p className="text-sm text-zinc-300">Click to upload profile picture</p>
-                            <p className="text-xs text-zinc-400">PNG, JPG up to 5MB</p>
+                            <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                            <p className="text-sm text-gray-300">Click to upload profile picture</p>
+                            <p className="text-xs text-gray-400">PNG, JPG up to 5MB</p>
                           </div>
                         </label>
                       </div>
                     </div>
                   )}
 
-                  {/* Provider-Specific Fields with elegant styling */}
+                  {/* Provider-Specific Fields with South African styling */}
                   {(view === 'signup-provider' || (view === 'signup' && formData.userType === 'provider')) && (
                     <>
-                      {/* CV Upload with elegant styling */}
+                      {/* CV Upload with South African styling */}
                       <div className="space-y-2">
-                        <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">CV/Resume</Label>
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">CV/Resume</Label>
                         <div className="relative">
                           <input
                             type="file"
@@ -1022,32 +1022,32 @@ export default function AuthScreen({
                           />
                           <label
                             htmlFor="cv-upload"
-                            className="flex items-center justify-center w-full h-20 border border-dashed border-zinc-600/60 bg-zinc-800/60 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-zinc-700/60 transition-all duration-300"
+                            className="flex items-center justify-center w-full h-20 border border-dashed border-yellow-500/30 bg-black/40 rounded-xl cursor-pointer hover:border-green-500 hover:bg-yellow-500/20 transition-all duration-300 backdrop-blur-sm"
                           >
                             <div className="text-center">
-                              <FileText className="h-6 w-6 text-zinc-400 mx-auto mb-1" />
-                              <p className="text-sm text-zinc-300">Upload your CV/Resume</p>
-                              <p className="text-xs text-zinc-400">PDF, DOC, DOCX up to 10MB</p>
+                              <FileText className="h-6 w-6 text-gray-400 mx-auto mb-1" />
+                              <p className="text-sm text-gray-300">Upload your CV/Resume</p>
+                              <p className="text-xs text-gray-400">PDF, DOC, DOCX up to 10MB</p>
                             </div>
                           </label>
                         </div>
                       </div>
 
-                      {/* Residential Address with elegant styling */}
+                      {/* Residential Address with South African styling */}
                       <div className="space-y-2">
-                        <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">Residential Address</Label>
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Residential Address</Label>
                         <Textarea
                           placeholder="Enter your full residential address"
                           value={formData.residentialAddress || ''}
                           onChange={(e) => handleInputChange('residentialAddress', e.target.value)}
-                          className="h-20 border border-zinc-600/60 bg-zinc-800/60 text-zinc-100 placeholder:text-zinc-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-300 text-base resize-none"
+                          className="h-20 border border-yellow-500/30 bg-black/40 text-gray-100 placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-base resize-none backdrop-blur-sm"
                           required
                         />
                       </div>
 
-                      {/* Proof of Residential Address with elegant styling */}
+                      {/* Proof of Residential Address with South African styling */}
                       <div className="space-y-2">
-                        <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">Proof of Residential Address (Optional)</Label>
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Proof of Residential Address (Optional)</Label>
                         <div className="relative">
                           <input
                             type="file"
@@ -1063,20 +1063,20 @@ export default function AuthScreen({
                           />
                           <label
                             htmlFor="address-proof"
-                            className="flex items-center justify-center w-full h-20 border border-dashed border-zinc-600/60 bg-zinc-800/60 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-zinc-700/60 transition-all duration-300"
+                            className="flex items-center justify-center w-full h-20 border border-dashed border-yellow-500/30 bg-black/40 rounded-xl cursor-pointer hover:border-green-500 hover:bg-yellow-500/20 transition-all duration-300 backdrop-blur-sm"
                           >
                             <div className="text-center">
-                              <Home className="h-6 w-6 text-zinc-400 mx-auto mb-1" />
-                              <p className="text-sm text-zinc-300">Upload proof of address</p>
-                              <p className="text-xs text-zinc-400">PDF, JPG, PNG up to 5MB (Optional)</p>
+                              <Home className="h-6 w-6 text-gray-400 mx-auto mb-1" />
+                              <p className="text-sm text-gray-300">Upload proof of address</p>
+                              <p className="text-xs text-gray-400">PDF, JPG, PNG up to 5MB (Optional)</p>
                             </div>
                           </label>
                         </div>
                       </div>
 
-                      {/* ID Upload with elegant styling */}
+                      {/* ID Upload with South African styling */}
                       <div className="space-y-2">
-                        <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">ID Document</Label>
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">ID Document</Label>
                         <div className="relative">
                           <input
                             type="file"
@@ -1093,20 +1093,20 @@ export default function AuthScreen({
                           />
                           <label
                             htmlFor="id-document"
-                            className="flex items-center justify-center w-full h-20 border border-dashed border-zinc-600/60 bg-zinc-800/60 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-zinc-700/60 transition-all duration-300"
+                            className="flex items-center justify-center w-full h-20 border border-dashed border-yellow-500/30 bg-black/40 rounded-xl cursor-pointer hover:border-green-500 hover:bg-yellow-500/20 transition-all duration-300 backdrop-blur-sm"
                           >
                             <div className="text-center">
-                              <FileText className="h-6 w-6 text-zinc-400 mx-auto mb-1" />
-                              <p className="text-sm text-zinc-300">Upload your ID document</p>
-                              <p className="text-xs text-zinc-400">PDF, JPG, PNG up to 5MB (Required)</p>
+                              <FileText className="h-6 w-6 text-gray-400 mx-auto mb-1" />
+                              <p className="text-sm text-gray-300">Upload your ID document</p>
+                              <p className="text-xs text-gray-400">PDF, JPG, PNG up to 5MB (Required)</p>
                             </div>
                           </label>
                         </div>
                       </div>
 
-                      {/* Trade Certificate with elegant styling */}
+                      {/* Trade Certificate with South African styling */}
                       <div className="space-y-2">
-                        <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">Trade Certificate / Company Certificate (Optional)</Label>
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Trade Certificate / Company Certificate (Optional)</Label>
                         <div className="relative">
                           <input
                             type="file"
@@ -1122,52 +1122,52 @@ export default function AuthScreen({
                           />
                           <label
                             htmlFor="trade-certificate"
-                            className="flex items-center justify-center w-full h-20 border border-dashed border-zinc-600/60 bg-zinc-800/60 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-zinc-700/60 transition-all duration-300"
+                            className="flex items-center justify-center w-full h-20 border border-dashed border-yellow-500/30 bg-black/40 rounded-xl cursor-pointer hover:border-green-500 hover:bg-yellow-500/20 transition-all duration-300 backdrop-blur-sm"
                           >
                             <div className="text-center">
-                              <Award className="h-6 w-6 text-zinc-400 mx-auto mb-1" />
-                              <p className="text-sm text-zinc-300">Upload trade/company certificate</p>
-                              <p className="text-xs text-zinc-400">PDF, JPG, PNG up to 5MB (Optional)</p>
+                              <Award className="h-6 w-6 text-gray-400 mx-auto mb-1" />
+                              <p className="text-sm text-gray-300">Upload trade/company certificate</p>
+                              <p className="text-xs text-gray-400">PDF, JPG, PNG up to 5MB (Optional)</p>
                             </div>
                           </label>
                         </div>
                       </div>
 
-                      {/* Years of Experience with elegant styling */}
+                      {/* Years of Experience with South African styling */}
                       <div className="space-y-2">
-                        <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">Years of Experience</Label>
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Years of Experience</Label>
                         <Select value={formData.yearsExperience || ''} onValueChange={(value) => handleInputChange('yearsExperience', value)}>
-                          <SelectTrigger className="h-14 border border-zinc-600/60 bg-zinc-800/60 text-zinc-100 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-300 text-lg">
+                          <SelectTrigger className="h-14 border border-yellow-500/30 bg-black/40 text-gray-100 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg backdrop-blur-sm">
                             <SelectValue placeholder="Select years of experience" />
                           </SelectTrigger>
-                          <SelectContent className="bg-zinc-800 border-zinc-700">
-                            <SelectItem value="0-1" className="text-zinc-100 hover:bg-zinc-700">0-1 years</SelectItem>
-                            <SelectItem value="1-3" className="text-zinc-100 hover:bg-zinc-700">1-3 years</SelectItem>
-                            <SelectItem value="3-5" className="text-zinc-100 hover:bg-zinc-700">3-5 years</SelectItem>
-                            <SelectItem value="5-10" className="text-zinc-100 hover:bg-zinc-700">5-10 years</SelectItem>
-                            <SelectItem value="10+" className="text-zinc-100 hover:bg-zinc-700">10+ years</SelectItem>
+                          <SelectContent className="bg-black/80 border-yellow-500/30 backdrop-blur-md">
+                            <SelectItem value="0-1" className="text-gray-100 hover:bg-yellow-500/20">0-1 years</SelectItem>
+                            <SelectItem value="1-3" className="text-gray-100 hover:bg-yellow-500/20">1-3 years</SelectItem>
+                            <SelectItem value="3-5" className="text-gray-100 hover:bg-yellow-500/20">3-5 years</SelectItem>
+                            <SelectItem value="5-10" className="text-gray-100 hover:bg-yellow-500/20">5-10 years</SelectItem>
+                            <SelectItem value="10+" className="text-gray-100 hover:bg-yellow-500/20">10+ years</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
 
-                      {/* Services Offered with elegant styling */}
+                      {/* Services Offered with South African styling */}
                       <div className="space-y-2">
-                        <Label className="text-zinc-200 font-semibold text-sm uppercase tracking-wide">Services You Offer</Label>
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Services You Offer</Label>
                         <Textarea
                           placeholder="Describe the services you provide (e.g., Plumbing, Electrical, Cleaning, etc.)"
                           value={formData.servicesOffered || ''}
                           onChange={(e) => handleInputChange('servicesOffered', e.target.value)}
-                          className="h-20 border border-zinc-600/60 bg-zinc-800/60 text-zinc-100 placeholder:text-zinc-400 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl transition-all duration-300 text-base resize-none"
+                          className="h-20 border border-yellow-500/30 bg-black/40 text-gray-100 placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-base resize-none backdrop-blur-sm"
                           required
                         />
                       </div>
                     </>
                   )}
                   
-                  {/* Submit Button with elegant styling */}
+                  {/* Submit Button with South African gradient */}
                   <Button 
                     type="submit" 
-                    className="w-full h-14 bg-gradient-to-r from-blue-600 to-indigo-500 hover:from-blue-700 hover:to-indigo-600 text-white font-semibold text-lg rounded-xl shadow-lg transform hover:scale-[1.02] transition-all duration-200" 
+                    className="w-full h-14 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white font-semibold text-lg rounded-xl shadow-lg transform hover:scale-[1.02] transition-all duration-200" 
                     disabled={loading}
                   >
                     {loading ? 'Creating Account...' : 'Create Account'}
