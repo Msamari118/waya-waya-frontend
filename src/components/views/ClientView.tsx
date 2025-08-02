@@ -64,7 +64,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
     id: 'client-1',
     name: 'John Doe',
     email: 'john@example.com',
-    avatar: null
+    avatar: undefined
   });
   
   const [serviceRequests, setServiceRequests] = useState<ServiceRequest[]>([
@@ -101,7 +101,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
       rating: 4.8,
       location: 'Cape Town, Western Cape',
       isOnline: true,
-      avatar: null
+      avatar: undefined
     },
     {
       id: 'provider-2',
@@ -110,7 +110,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
       rating: 4.6,
       location: 'Cape Town, Western Cape',
       isOnline: true,
-      avatar: null
+      avatar: undefined
     },
     {
       id: 'provider-3',
@@ -119,7 +119,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
       rating: 4.9,
       location: 'Cape Town, Western Cape',
       isOnline: false,
-      avatar: null
+      avatar: undefined
     },
     {
       id: 'provider-4',
@@ -128,7 +128,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
       rating: 4.7,
       location: 'Cape Town, Western Cape',
       isOnline: true,
-      avatar: null
+      avatar: undefined
     }
   ]);
 
