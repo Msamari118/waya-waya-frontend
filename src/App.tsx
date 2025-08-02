@@ -14,6 +14,7 @@ import { TrialManagement } from './components/admin/TrialManagement';
 import { AdminOverview } from './components/views/AdminOverview';
 import { HomeView } from './components/views/HomeView';
 import { ProviderView } from './components/views/ProviderView';
+import { ClientView } from './components/views/ClientView';
 import { SecureAdminLogin } from './components/admin/SecureAdminLogin';
 import { WayaWayaLogo } from './components/shared/WayaWayaLogo';
 import { BookingDialog } from './components/BookingDialog';
@@ -126,7 +127,16 @@ export default function App() {
     setCurrentUser(user);
     setUserType(user.userType);
     setIsAuthenticated(true);
-    setCurrentView('home');
+    
+    // Redirect based on user type
+    if (user.userType === 'provider') {
+      setCurrentView('provider');
+    } else if (user.userType === 'client') {
+      setCurrentView('client');
+    } else {
+      setCurrentView('home');
+    }
+    
     localStorage.setItem('authToken', token);
     localStorage.setItem('currentUser', JSON.stringify(user));
   };
@@ -322,6 +332,20 @@ export default function App() {
       <div className="min-h-screen bg-background">
         <div className="max-w-md mx-auto p-4">
           <ProviderView
+            isConnected={isConnected}
+            authToken={authToken}
+            setCurrentView={setCurrentView}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (currentView === 'client') {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="max-w-md mx-auto p-4">
+          <ClientView
             isConnected={isConnected}
             authToken={authToken}
             setCurrentView={setCurrentView}
