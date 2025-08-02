@@ -107,8 +107,8 @@ export const ClientView: React.FC<ClientViewProps> = ({
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
             <Button 
-              className="h-16 flex-col bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white" 
-              onClick={() => setCurrentView('service-request')}
+              className="h-16 flex-col bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white"
+              onClick={() => setCurrentView('service-selection')}
             >
               <Search className="h-6 w-6 mb-2" />
               Find Services

@@ -15,6 +15,8 @@ import { AdminOverview } from './components/views/AdminOverview';
 import { HomeView } from './components/views/HomeView';
 import { ProviderView } from './components/views/ProviderView';
 import { ClientView } from './components/views/ClientView';
+import { ServiceSelectionView } from './components/views/ServiceSelectionView';
+import { ProviderListView } from './components/views/ProviderListView';
 import { SecureAdminLogin } from './components/admin/SecureAdminLogin';
 import { WayaWayaLogo } from './components/shared/WayaWayaLogo';
 import { BookingDialog } from './components/BookingDialog';
@@ -349,6 +351,35 @@ export default function App() {
             isConnected={isConnected}
             authToken={authToken}
             setCurrentView={setCurrentView}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (currentView === 'service-selection') {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="max-w-md mx-auto p-4">
+          <ServiceSelectionView
+            isConnected={isConnected}
+            authToken={authToken}
+            setCurrentView={setCurrentView}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (currentView === 'provider-list') {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="max-w-md mx-auto p-4">
+          <ProviderListView
+            isConnected={isConnected}
+            authToken={authToken}
+            setCurrentView={setCurrentView}
+            selectedService="plumbing"
           />
         </div>
       </div>
