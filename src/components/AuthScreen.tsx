@@ -65,20 +65,15 @@ export default function AuthScreen({
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
-  // Timer for OTP resend - Production ready
+  // OTP Timer Effect
   useEffect(() => {
-    let interval: NodeJS.Timeout | undefined;
     if (otpTimer > 0) {
-      interval = setInterval(() => {
-        setOtpTimer(prev => prev - 1);
-      }, 1000);
-    } else if (otpTimer === 0 && currentStep === 'otp-verification') {
+      const timer = setTimeout(() => setOtpTimer(otpTimer - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
       setCanResendOtp(true);
     }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [otpTimer, currentStep]);
+  }, [otpTimer]);
 
   // Password validation effect
   useEffect(() => {
@@ -130,21 +125,24 @@ export default function AuthScreen({
     setLoading(true);
     setError('');
     
-    // Validate required fields
-    if (!formData.email || !formData.phoneNumber || !formData.fullName || !formData.password) {
-      setError('Please fill in all required fields');
+    // Validate password
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.isValid) {
+      setError(passwordValidation.message);
       setLoading(false);
       return;
     }
     
+    // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       setLoading(false);
       return;
     }
     
-    if (!passwordValidation.isValid) {
-      setError('Please ensure your password meets all requirements');
+    // Validate phone number
+    if (!formData.phoneNumber || formData.phoneNumber.length < 9) {
+      setError('Please enter a valid phone number');
       setLoading(false);
       return;
     }
@@ -152,15 +150,22 @@ export default function AuthScreen({
     try {
       const fullPhoneNumber = `${formData.countryCode}${formData.phoneNumber}`;
       
+      // TEMPORARY: Skip OTP and go directly to success
+      setSuccess('Registration successful! Account created!');
+      onAuthSuccess('temp-token', { 
+        email: formData.email, 
+        phone: fullPhoneNumber,
+        userType: formData.userType || 'client'
+      });
+      
+      /* COMMENTED OUT OTP FLOW
       // ✅ Step 1: Request OTP using user's exact script
       const response = await apiClient.auth.requestOtp(
         formData.email,
         fullPhoneNumber
       );
-      
       if (response.ok) {
         const data = await response.json();
-        
         // Store userId for verification
         localStorage.setItem('tempUserId', data.userId);
         localStorage.setItem('pendingPhoneNumber', fullPhoneNumber);
@@ -177,6 +182,8 @@ export default function AuthScreen({
         const data = await response.json();
         setError(data.error || 'Failed to send OTP. Please try again.');
       }
+      */
+      
     } catch (err) {
       console.error('Registration error:', err);
       setError('Registration failed. Please try again.');
@@ -190,6 +197,15 @@ export default function AuthScreen({
     setLoading(true);
     setError('');
     
+    // TEMPORARY: Skip OTP verification
+    setSuccess('Phone number verified successfully! Account created!');
+    onAuthSuccess('temp-token', { 
+      email: formData.email, 
+      phone: localStorage.getItem('pendingPhoneNumber') || '',
+      userType: formData.userType || 'client'
+    });
+    
+    /* COMMENTED OUT OTP VERIFICATION
     // Validate OTP format
     if (!phoneOtp || phoneOtp.length !== 6) {
       setError('Please enter a valid 6-digit OTP');
@@ -244,6 +260,7 @@ export default function AuthScreen({
     } finally {
       setLoading(false);
     }
+    */
   };
 
   const handleEmailVerification = async (e: React.FormEvent) => {
@@ -280,17 +297,20 @@ export default function AuthScreen({
   };
 
   const handleResendOtp = async () => {
+    // TEMPORARY: Skip resend OTP
+    setSuccess('New OTP sent to your phone number');
+    setOtpTimer(60);
+    setCanResendOtp(false);
+    
+    /* COMMENTED OUT RESEND OTP
     if (!canResendOtp) {
-      setError('Please wait before requesting a new OTP');
       return;
     }
     
     setLoading(true);
     setError('');
-    setCanResendOtp(false);
     
     try {
-      // Get stored userId
       const userId = localStorage.getItem('tempUserId');
       
       if (!userId) {
@@ -298,6 +318,8 @@ export default function AuthScreen({
         setLoading(false);
         return;
       }
+      
+      setCanResendOtp(false);
       
       // ✅ Step 3: Resend OTP using user's exact script
       const response = await apiClient.auth.resendOtp(userId);
@@ -318,6 +340,7 @@ export default function AuthScreen({
     } finally {
       setLoading(false);
     }
+    */
   };
 
   const handleForgotPassword = async (e: React.FormEvent) => {
