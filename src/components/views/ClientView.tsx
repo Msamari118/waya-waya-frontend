@@ -256,7 +256,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
           )}
 
           {/* Welcome Section */}
-          <Card className="bg-gradient-to-r from-purple-500/30 to-pink-500/30 backdrop-blur-md border border-white/30 shadow-2xl">
+          <Card className="bg-gradient-to-r from-purple-900/80 to-pink-900/80 backdrop-blur-md border border-white/30 shadow-2xl">
             <CardContent className="p-6">
               <div className="text-center">
                 <h2 className="text-xl font-semibold text-white mb-2">Welcome back!</h2>
@@ -269,7 +269,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="bg-gradient-to-r from-blue-500/30 to-cyan-500/30 border-white/30 backdrop-blur-sm">
+            <Card className="bg-gradient-to-r from-blue-900/80 to-cyan-900/80 border-white/30 backdrop-blur-sm">
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-cyan-200 text-sm">
                   <Clock className="h-4 w-4" />
@@ -282,7 +282,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-r from-green-500/30 to-emerald-500/30 border-white/30 backdrop-blur-sm">
+            <Card className="bg-gradient-to-r from-green-900/80 to-emerald-900/80 border-white/30 backdrop-blur-sm">
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-emerald-200 text-sm">
                   <CreditCard className="h-4 w-4" />
@@ -295,7 +295,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-r from-yellow-500/30 to-orange-500/30 border-white/30 backdrop-blur-sm">
+            <Card className="bg-gradient-to-r from-yellow-900/80 to-orange-900/80 border-white/30 backdrop-blur-sm">
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-orange-200 text-sm">
                   <Star className="h-4 w-4" />
@@ -310,7 +310,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
           </div>
 
           {/* Available Service Providers */}
-          <Card className="bg-gradient-to-r from-indigo-500/30 to-purple-500/30 backdrop-blur-md border border-white/30 shadow-2xl">
+          <Card className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80 backdrop-blur-md border border-white/30 shadow-2xl">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between">
                 Available Service Providers
@@ -322,7 +322,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {availableProviders.map((provider) => (
-                  <div key={provider.id} className="flex items-center justify-between p-4 bg-white/20 rounded-lg border border-white/30 hover:bg-white/30 transition-colors">
+                                     <div key={provider.id} className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-white/30 hover:bg-black/50 transition-colors">
                     <div className="flex items-center gap-3">
                       <div className="relative">
                         <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full flex items-center justify-center text-white font-semibold">
@@ -358,7 +358,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
           </Card>
 
           {/* Quick Actions */}
-          <Card className="bg-gradient-to-r from-indigo-500/30 to-purple-500/30 backdrop-blur-md border border-white/30 shadow-2xl">
+          <Card className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80 backdrop-blur-md border border-white/30 shadow-2xl">
             <CardHeader>
               <CardTitle className="text-white">Quick Actions</CardTitle>
             </CardHeader>
@@ -397,7 +397,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
           </Card>
 
           {/* Service Requests */}
-          <Card className="bg-gradient-to-r from-slate-500/30 to-gray-500/30 backdrop-blur-md border border-white/30 shadow-2xl">
+          <Card className="bg-gradient-to-r from-slate-900/80 to-gray-900/80 backdrop-blur-md border border-white/30 shadow-2xl">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between">
                 Service Requests
@@ -416,7 +416,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                   </div>
                 ) : (
                   filteredRequests.map((request) => (
-                    <div key={request.id} className="flex items-center gap-4 p-4 bg-white/20 rounded-lg border border-white/30 hover:bg-white/30 transition-colors">
+                                         <div key={request.id} className="flex items-center gap-4 p-4 bg-black/40 rounded-lg border border-white/30 hover:bg-black/50 transition-colors">
                       <div className="flex-shrink-0">
                         {getCategoryIcon(request.category)}
                       </div>
@@ -467,7 +467,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
           </Card>
 
           {/* Service Categories */}
-          <Card className="bg-gradient-to-r from-teal-500/30 to-cyan-500/30 backdrop-blur-md border border-white/30 shadow-2xl">
+          <Card className="bg-gradient-to-r from-teal-900/80 to-cyan-900/80 backdrop-blur-md border border-white/30 shadow-2xl">
             <CardHeader>
               <CardTitle className="text-white">Popular Services</CardTitle>
             </CardHeader>
