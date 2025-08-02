@@ -150,72 +150,28 @@ export default function AuthScreen({
     }
     
     try {
-      // Create account first
-      const registrationData = {
-        email: formData.email,
-        phone: `${formData.countryCode}${formData.phoneNumber}`,
-        fullName: formData.fullName,
-        password: formData.password,
-        userType: formData.userType
-      };
+      const fullPhoneNumber = `${formData.countryCode}${formData.phoneNumber}`;
       
-      // Debug: Check if apiClient and auth exist
-      console.log('apiClient:', apiClient);
-      console.log('apiClient.auth:', apiClient?.auth);
-      console.log('apiClient.auth.register:', apiClient?.auth?.register);
-      console.log('typeof apiClient.auth.register:', typeof apiClient?.auth?.register);
-      
-      // Test if apiClient is working
-      try {
-        const testResponse = await apiClient.testConnection();
-        console.log('apiClient test connection:', testResponse);
-      } catch (testError) {
-        console.error('apiClient test failed:', testError);
-      }
-      
-      if (!apiClient || !apiClient.auth || !apiClient.auth.register) {
-        console.error('apiClient or auth.register is not available');
-        console.error('apiClient type:', typeof apiClient);
-        console.error('apiClient.auth type:', typeof apiClient?.auth);
-        setError('Registration service not available. Please try again.');
-        setLoading(false);
-        return;
-      }
-      
-      // Step 1: Request OTP using the new improved flow
-      const response = await apiClient.auth.requestPhoneOtp({
-        phoneNumber: `${formData.countryCode}${formData.phoneNumber}`,
-        userData: {
-          email: formData.email,
-          fullName: formData.fullName,
-          password: formData.password,
-          userType: formData.userType,
-          profilePictureUrl: formData.profilePicture ? 'pending-upload' : null
-        }
-      });
+      // ✅ Step 1: Request OTP using user's exact script
+      const response = await apiClient.auth.requestOtp(
+        formData.email,
+        fullPhoneNumber
+      );
       
       if (response.ok) {
-        // Account created successfully, now send OTP for verification
-        const fullPhoneNumber = `${formData.countryCode}${formData.phoneNumber}`;
+        const data = await response.json();
         
-        // Send OTP using standardized backend API
-        const otpResponse = await apiClient.auth.sendOtp({
-          type: 'phone',
-          identifier: fullPhoneNumber
-          // Remove userId - backend will find user by phone number
-        });
+        // Store userId for verification
+        localStorage.setItem('tempUserId', data.userId);
+        localStorage.setItem('pendingPhoneNumber', fullPhoneNumber);
         
-        if (otpResponse.ok) {
-          setCurrentStep('otp-verification');
-          setSuccess('Account created! Please verify your phone number.');
-          setOtpTimer(60); // Start 60-second timer (10 minutes in backend)
-          setCanResendOtp(false);
-        } else {
-          setError('Account created but failed to send verification code. Please try again.');
-        }
+        setCurrentStep('otp-verification');
+        setSuccess('OTP sent to your phone number. Please verify.');
+        setOtpTimer(60); // Start 60-second timer
+        setCanResendOtp(false);
       } else {
         const data = await response.json();
-        setError(data.error || 'Registration failed. Please try again.');
+        setError(data.error || 'Failed to send OTP. Please try again.');
       }
     } catch (err) {
       console.error('Registration error:', err);
@@ -230,14 +186,14 @@ export default function AuthScreen({
     setLoading(true);
     setError('');
     
-    // Validate OTP format according to backend specs
+    // Validate OTP format
     if (!phoneOtp || phoneOtp.length !== 6) {
       setError('Please enter a valid 6-digit OTP');
       setLoading(false);
       return;
     }
     
-    // Validate OTP contains only digits (backend pattern: /^\d{6}$/)
+    // Validate OTP contains only digits
     if (!/^\d{6}$/.test(phoneOtp)) {
       setError('OTP must contain only numbers');
       setLoading(false);
@@ -245,13 +201,17 @@ export default function AuthScreen({
     }
     
     try {
-      const fullPhoneNumber = `${formData.countryCode}${formData.phoneNumber}`;
+      // Get stored userId
+      const userId = localStorage.getItem('tempUserId');
       
-      // Step 2: Verify OTP using the new improved flow
-      const response = await apiClient.auth.verifyPhoneOtp({
-        phoneNumber: fullPhoneNumber,
-        otp: phoneOtp
-      });
+      if (!userId) {
+        setError('Session expired. Please try registration again.');
+        setLoading(false);
+        return;
+      }
+      
+      // ✅ Step 2: Verify OTP using user's exact script
+      const response = await apiClient.auth.verifyOtp(userId, phoneOtp);
       
       let data;
       try {
@@ -260,18 +220,16 @@ export default function AuthScreen({
         data = { success: response.ok };
       }
       
-      // Check for successful verification with new flow
       if (response.ok && data.success) {
         setSuccess('Phone number verified successfully! Account created!');
         setPhoneOtp(''); // Clear OTP for security
         
-        // Store authentication data
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        localStorage.removeItem('pendingPhoneNumber'); // Clean up
+        // Clean up stored data
+        localStorage.removeItem('tempUserId');
+        localStorage.removeItem('pendingPhoneNumber');
         
         // Call success callback
-        onAuthSuccess(data.token, data.user);
+        onAuthSuccess('temp-token', { email: formData.email, phone: `${formData.countryCode}${formData.phoneNumber}` });
       } else {
         setError(data.error || 'Invalid OTP. Please try again.');
         setPhoneOtp(''); // Clear invalid OTP
@@ -328,21 +286,19 @@ export default function AuthScreen({
     setCanResendOtp(false);
     
     try {
-      const fullPhoneNumber = `${formData.countryCode}${formData.phoneNumber}`;
+      // Get stored userId
+      const userId = localStorage.getItem('tempUserId');
       
-      console.log('Resending OTP to:', fullPhoneNumber);
+      if (!userId) {
+        setError('Session expired. Please try registration again.');
+        setLoading(false);
+        return;
+      }
       
-      // Use the new improved OTP flow
-      const response = await apiClient.auth.resendPhoneOtp({
-        phoneNumber: fullPhoneNumber
-      });
-      
-      console.log('Resend OTP response:', response);
+      // ✅ Step 3: Resend OTP using user's exact script
+      const response = await apiClient.auth.resendOtp(userId);
       
       if (response.ok) {
-        const data = await response.json();
-        console.log('Resend OTP data:', data);
-        
         setSuccess('New OTP sent to your phone number');
         setOtpTimer(60); // Reset timer to 60 seconds
         setPhoneOtp(''); // Clear previous OTP

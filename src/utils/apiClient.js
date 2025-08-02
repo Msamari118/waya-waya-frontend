@@ -86,48 +86,40 @@ export const apiClient = {
     }
   },
 
+  // OTP Flow - User's exact script
   auth: {
-    login: async (credentials) => {
-      const response = await silentFetch(`${API_BASE_URL}/auth/login`, {
+    // ✅ 1. Request OTP
+    requestOtp: async (email, phone) => {
+      const response = await silentFetch(`${API_BASE_URL}/auth/request-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(credentials),
+        body: JSON.stringify({ email, phone })
       });
       return response;
     },
 
-    // NEW: Improved OTP flow endpoints
-    requestPhoneOtp: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/auth/request-phone-otp`, {
+    // ✅ 2. Verify OTP  
+    verifyOtp: async (userId, otp) => {
+      const response = await silentFetch(`${API_BASE_URL}/auth/verify-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ userId, otp })
       });
       return response;
     },
 
-    verifyPhoneOtp: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/auth/verify-phone-otp`, {
+    // ✅ 3. Resend OTP
+    resendOtp: async (userId) => {
+      const response = await silentFetch(`${API_BASE_URL}/auth/resend-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
-      });
-      return response;
-    },
-
-    resendPhoneOtp: async (data) => {
-      const response = await silentFetch(`${API_BASE_URL}/auth/resend-phone-otp`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ userId })
       });
       return response;
     },
