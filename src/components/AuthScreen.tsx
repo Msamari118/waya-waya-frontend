@@ -45,7 +45,9 @@ export default function AuthScreen({
     tradeCertificate: null as File | null,
     yearsExperience: '',
     servicesOffered: '',
-    idDocument: null as File | null
+    idDocument: null as File | null,
+    serviceCategory: '',
+    serviceArea: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -177,28 +179,47 @@ export default function AuthScreen({
         setLoading(false);
         return;
       }
+      if (!formData.serviceCategory) {
+        setError('Please select your service category');
+        setLoading(false);
+        return;
+      }
+      if (!formData.serviceArea) {
+        setError('Please enter your service area');
+        setLoading(false);
+        return;
+      }
     }
     
     try {
       const fullPhoneNumber = `${formData.countryCode}${formData.phoneNumber}`;
       
       // TEMPORARY: Skip OTP and go directly to success
-      setSuccess('Registration successful! Account created!');
-      onAuthSuccess('temp-token', { 
-        email: formData.email, 
-        phone: fullPhoneNumber,
-        userType: formData.userType || 'client',
-        // Provider-specific data
-        ...(formData.userType === 'provider' && {
-          residentialAddress: formData.residentialAddress,
-          yearsExperience: formData.yearsExperience,
-          servicesOffered: formData.servicesOffered,
-          hasCv: !!formData.cv,
-          hasAddressProof: !!formData.addressProof,
-          hasTradeCertificate: !!formData.tradeCertificate,
-          hasIdDocument: !!formData.idDocument
-        })
-      });
+      if (formData.userType === 'provider') {
+        // Show confirmation screen for provider applications
+        setCurrentStep('confirmation');
+        setSuccess('Application submitted successfully!');
+      } else {
+        // Regular client registration
+        setSuccess('Registration successful! Account created!');
+        onAuthSuccess('temp-token', { 
+          email: formData.email, 
+          phone: fullPhoneNumber,
+          userType: formData.userType || 'client',
+          // Provider-specific data
+          ...(formData.userType === 'provider' && {
+            residentialAddress: formData.residentialAddress,
+            yearsExperience: formData.yearsExperience,
+            servicesOffered: formData.servicesOffered,
+            serviceCategory: formData.serviceCategory,
+            serviceArea: formData.serviceArea,
+            hasCv: !!formData.cv,
+            hasAddressProof: !!formData.addressProof,
+            hasTradeCertificate: !!formData.tradeCertificate,
+            hasIdDocument: !!formData.idDocument
+          })
+        });
+      }
       
       /* COMMENTED OUT OTP FLOW
       // ✅ Step 1: Request OTP using user's exact script
@@ -1161,6 +1182,39 @@ export default function AuthScreen({
                           required
                         />
                       </div>
+
+                      {/* Service Category with South African styling */}
+                      <div className="space-y-2">
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Service Category</Label>
+                        <Select value={formData.serviceCategory || ''} onValueChange={(value) => handleInputChange('serviceCategory', value)}>
+                          <SelectTrigger className="h-14 border border-yellow-500/30 bg-black/40 text-white placeholder:text-white focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg backdrop-blur-sm">
+                            <SelectValue placeholder="Select your service category" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-black/80 border-yellow-500/30 backdrop-blur-md">
+                            <SelectItem value="plumber" className="text-gray-100 hover:bg-yellow-500/20">Plumber</SelectItem>
+                            <SelectItem value="electrician" className="text-gray-100 hover:bg-yellow-500/20">Electrician</SelectItem>
+                            <SelectItem value="carpenter" className="text-gray-100 hover:bg-yellow-500/20">Carpenter</SelectItem>
+                            <SelectItem value="painter" className="text-gray-100 hover:bg-yellow-500/20">Painter</SelectItem>
+                            <SelectItem value="cleaner" className="text-gray-100 hover:bg-yellow-500/20">Cleaner</SelectItem>
+                            <SelectItem value="gardener" className="text-gray-100 hover:bg-yellow-500/20">Gardener</SelectItem>
+                            <SelectItem value="mechanic" className="text-gray-100 hover:bg-yellow-500/20">Mechanic</SelectItem>
+                            <SelectItem value="technician" className="text-gray-100 hover:bg-yellow-500/20">Technician</SelectItem>
+                            <SelectItem value="other" className="text-gray-100 hover:bg-yellow-500/20">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Service Area with South African styling */}
+                      <div className="space-y-2">
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Service Area / Address</Label>
+                        <Textarea
+                          placeholder="Enter the areas where you provide services (e.g., Johannesburg CBD, Sandton, etc.)"
+                          value={formData.serviceArea || ''}
+                          onChange={(e) => handleInputChange('serviceArea', e.target.value)}
+                          className="h-20 border border-yellow-500/30 bg-black/40 text-gray-100 placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-base resize-none backdrop-blur-sm"
+                          required
+                        />
+                      </div>
                     </>
                   )}
                   
@@ -1170,9 +1224,64 @@ export default function AuthScreen({
                     className="w-full h-14 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white font-semibold text-lg rounded-xl shadow-lg transform hover:scale-[1.02] transition-all duration-200" 
                     disabled={loading}
                   >
-                    {loading ? 'Creating Account...' : 'Create Account'}
+                    {loading ? 'Submitting Application...' : 'Submit Application'}
                   </Button>
                 </form>
+              )}
+
+              {/* Application Confirmation Screen */}
+              {currentStep === 'confirmation' && (
+                <div className="text-center space-y-6">
+                  <div className="w-20 h-20 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle className="h-10 w-10 text-white" />
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h2 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 bg-clip-text text-transparent">
+                      Application Submitted Successfully!
+                    </h2>
+                    
+                    <p className="text-gray-300 text-lg leading-relaxed">
+                      Thank you for applying to WAYA WAYA! Your application is under review. 
+                      You'll receive an SMS or email once approved.
+                    </p>
+                    
+                    <div className="bg-black/40 border border-yellow-500/30 rounded-xl p-6 backdrop-blur-sm">
+                      <h3 className="text-yellow-400 font-semibold mb-3">What happens next?</h3>
+                      <ul className="text-gray-300 text-sm space-y-2 text-left">
+                        <li className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                          Admin reviews your application (1-2 business days)
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                          You'll receive approval notification via SMS/Email
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                          Access your provider dashboard once approved
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <Button 
+                      className="w-full h-12 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white font-medium rounded-lg shadow-lg transform hover:scale-[1.02] transition-all duration-200"
+                      disabled
+                    >
+                      Go to Dashboard (Available after approval)
+                    </Button>
+                    
+                    <Button 
+                      variant="outline"
+                      className="w-full h-12 border border-yellow-500/30 bg-black/40 text-gray-300 hover:bg-yellow-500/20 rounded-lg backdrop-blur-sm"
+                      onClick={() => onNavigate('login')}
+                    >
+                      Back to Login
+                    </Button>
+                  </div>
+                </div>
               )}
             </CardContent>
           </Card>
