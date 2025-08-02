@@ -486,50 +486,50 @@ export default function AuthScreen({
           </div>
           
           {/* Main Form Card */}
-          <Card className="bg-white/95 backdrop-blur-sm border border-slate-200 shadow-xl">
+          <Card className="bg-gray-900/95 backdrop-blur-sm border border-gray-700 shadow-2xl">
             <CardContent className="p-8">
               {/* Header with South African colors */}
               <div className="text-center mb-8">
                 <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-yellow-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <span className="text-white font-bold text-2xl">W</span>
                 </div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-2">
+                <h2 className="text-2xl font-bold text-white mb-2">
                   {view === 'login' ? 'Welcome Back!' : 'Join Waya Waya!'}
                 </h2>
-                <p className="text-slate-600">
+                <p className="text-gray-300">
                   {view === 'login' ? 'Sign in to your account' : 'Start your journey with us'}
                 </p>
               </div>
               <form onSubmit={handleLogin} className="space-y-6">
                 {error && (
-                  <Alert variant="destructive" className="border-red-200 bg-red-50">
+                  <Alert variant="destructive" className="border-red-500 bg-red-900/50 text-red-200">
                     <AlertCircle className="h-4 w-4" />
-                    <AlertDescription className="text-red-800">{error}</AlertDescription>
+                    <AlertDescription className="text-red-200">{error}</AlertDescription>
                   </Alert>
                 )}
                 {success && (
-                  <Alert className="border-green-200 bg-green-50">
+                  <Alert className="border-green-500 bg-green-900/50 text-green-200">
                     <CheckCircle className="h-4 w-4" />
-                    <AlertDescription className="text-green-800">{success}</AlertDescription>
+                    <AlertDescription className="text-green-200">{success}</AlertDescription>
                   </Alert>
                 )}
                 
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="email" className="text-slate-700 font-medium">Email Address</Label>
+                    <Label htmlFor="email" className="text-gray-200 font-medium">Email Address</Label>
                     <Input
                       id="email"
                       type="email"
                       placeholder="Enter your email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="h-12 border border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-lg transition-all duration-200"
+                      className="h-12 border border-gray-600 bg-gray-800 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-lg transition-all duration-200"
                       required
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="password" className="text-slate-700 font-medium">Password</Label>
+                    <Label htmlFor="password" className="text-gray-200 font-medium">Password</Label>
                     <div className="relative">
                       <Input
                         id="password"
@@ -537,7 +537,7 @@ export default function AuthScreen({
                         placeholder="Enter your password"
                         value={formData.password}
                         onChange={(e) => handleInputChange('password', e.target.value)}
-                        className="h-12 border border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-lg transition-all duration-200 pr-12"
+                        className="h-12 border border-gray-600 bg-gray-800 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-lg transition-all duration-200 pr-12"
                         required
                       />
                       <Button
@@ -545,12 +545,12 @@ export default function AuthScreen({
                         variant="ghost"
                         size="sm"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-slate-100"
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-gray-700"
                       >
                         {showPassword ? (
-                          <EyeOff className="h-4 w-4 text-slate-500" />
+                          <EyeOff className="h-4 w-4 text-gray-400" />
                         ) : (
-                          <Eye className="h-4 w-4 text-slate-500" />
+                          <Eye className="h-4 w-4 text-gray-400" />
                         )}
                       </Button>
                     </div>
@@ -564,42 +564,28 @@ export default function AuthScreen({
                 >
                   {loading ? 'Signing In...' : 'Sign In'}
                 </Button>
-              </form>
-              
-              {/* Forgot Password/Username Links */}
-              <div className="mt-6 space-y-4 text-center">
-                <div className="flex justify-center gap-4 text-sm">
+                
+                <div className="text-center space-y-4">
                   <Button 
                     variant="link" 
-                    className="p-0 h-auto text-blue-600 hover:text-blue-700"
-                    onClick={() => {
-                      setForgotType('password');
-                      onNavigate('forgot-password');
-                    }}
+                    onClick={() => onNavigate('forgot-password')}
+                    className="text-gray-300 hover:text-white font-medium"
                   >
                     Forgot Password?
                   </Button>
-                  <span className="text-gray-400">•</span>
-                  <Button 
-                    variant="link" 
-                    className="p-0 h-auto text-blue-600 hover:text-blue-700"
-                    onClick={() => {
-                      setForgotType('username');
-                      onNavigate('forgot-username');
-                    }}
-                  >
-                    Forgot Username?
-                  </Button>
+                  
+                  <div className="text-gray-300">
+                    Don't have an account?{' '}
+                    <Button 
+                      variant="link" 
+                      onClick={() => onNavigate('signup')}
+                      className="text-green-400 hover:text-green-300 font-medium p-0 h-auto"
+                    >
+                      Sign up
+                    </Button>
+                  </div>
                 </div>
-                
-                <Button 
-                  variant="link" 
-                  onClick={() => onNavigate('signup')}
-                  className="text-blue-600 hover:text-blue-700"
-                >
-                  Don't have an account? Sign up
-                </Button>
-              </div>
+              </form>
             </CardContent>
           </Card>
         </div>
@@ -799,50 +785,57 @@ export default function AuthScreen({
             </div>
           </div>
           
-          {/* Main Form Card with enhanced design */}
-          <Card className="w-full bg-white/95 backdrop-blur-sm border border-slate-200 shadow-xl rounded-2xl">
+          {/* Main Form Card with dark background */}
+          <Card className="w-full bg-gray-900/95 backdrop-blur-sm border border-gray-700 shadow-2xl rounded-2xl">
             <CardHeader className="text-center pb-6">
               <div className="flex justify-center mb-4">
                 <WayaWayaLogo size="md" showText={false} />
               </div>
-              <CardTitle className="text-2xl font-bold text-slate-900">Join Waya Waya!</CardTitle>
-              <p className="text-slate-600 mt-2">Start your journey with us</p>
+              <CardTitle className="text-2xl font-bold text-white">Join Waya Waya!</CardTitle>
+              <p className="text-gray-300 mt-2">Start your journey with us</p>
             </CardHeader>
             
             <CardContent className="p-8">
-              {/* Initial Signup Form with enhanced design */}
+              {/* Initial Signup Form with dark styling */}
               {currentStep === 'form' && (
                 <form onSubmit={handleSignupSubmit} className="space-y-6">
                   {error && (
-                    <Alert variant="destructive" className="border-red-200 bg-red-50 rounded-xl">
+                    <Alert variant="destructive" className="border-red-500 bg-red-900/50 text-red-200 rounded-xl">
                       <AlertCircle className="h-4 w-4" />
-                      <AlertDescription className="text-red-800">{error}</AlertDescription>
+                      <AlertDescription className="text-red-200">{error}</AlertDescription>
                     </Alert>
                   )}
                   
-                  {/* Full Name with enhanced styling */}
+                  {success && (
+                    <Alert className="border-green-500 bg-green-900/50 text-green-200 rounded-xl">
+                      <CheckCircle className="h-4 w-4" />
+                      <AlertDescription className="text-green-200">{success}</AlertDescription>
+                    </Alert>
+                  )}
+                  
+                  {/* Full Name with dark styling */}
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Full Name</Label>
+                    <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Full Name</Label>
                     <Input
                       placeholder="Enter your full name"
                       value={formData.fullName}
                       onChange={(e) => handleInputChange('fullName', e.target.value)}
-                      className="h-14 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg"
+                      className="h-14 border-2 border-gray-600 bg-gray-800 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg"
                       required
                     />
                   </div>
                   
-                  {/* Phone Number with enhanced styling */}
+                  {/* Phone Number with dark styling */}
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Phone Number</Label>
+                    <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Phone Number</Label>
                     <div className="flex gap-3">
                       <Select value={formData.countryCode} onValueChange={(value) => handleInputChange('countryCode', value)}>
-                        <SelectTrigger className="w-28 h-14 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300">
+                        <SelectTrigger className="w-28 h-14 border-2 border-gray-600 bg-gray-800 text-white focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="max-h-60">
+                        <SelectContent className="max-h-60 bg-gray-800 border-gray-600">
                           {internationalCountryCodes.map((country) => (
-                            <SelectItem key={country.id} value={country.code}>
+                            <SelectItem key={country.id} value={country.code} className="text-white hover:bg-gray-700">
                               <div className="flex items-center gap-2">
                                 <span>{country.flag}</span>
                                 <span className="font-medium">{country.code}</span>
@@ -856,35 +849,35 @@ export default function AuthScreen({
                         type="tel"
                         value={formData.phoneNumber}
                         onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-                        className="flex-1 h-14 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg"
+                        className="flex-1 h-14 border-2 border-gray-600 bg-gray-800 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg"
                         required
                       />
                     </div>
                   </div>
                   
-                  {/* Email with enhanced styling */}
+                  {/* Email with dark styling */}
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Email Address</Label>
+                    <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Email Address</Label>
                     <Input
-                      placeholder="Enter your email address"
                       type="email"
+                      placeholder="Enter your email address"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="h-14 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg"
+                      className="h-14 border-2 border-gray-600 bg-gray-800 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg"
                       required
                     />
                   </div>
                   
-                  {/* Password with enhanced styling */}
+                  {/* Password with dark styling */}
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Password</Label>
+                    <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Password</Label>
                     <div className="relative">
                       <Input
                         type={showPassword ? "text" : "password"}
                         placeholder="Create a strong password"
                         value={formData.password}
                         onChange={(e) => handleInputChange('password', e.target.value)}
-                        className="h-14 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg pr-12"
+                        className="h-14 border-2 border-gray-600 bg-gray-800 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg pr-12"
                         required
                       />
                       <Button
@@ -892,27 +885,27 @@ export default function AuthScreen({
                         variant="ghost"
                         size="sm"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 hover:bg-slate-100"
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 hover:bg-gray-700"
                       >
                         {showPassword ? (
-                          <EyeOff className="h-4 w-4 text-slate-500" />
+                          <EyeOff className="h-4 w-4 text-gray-400" />
                         ) : (
-                          <Eye className="h-4 w-4 text-slate-500" />
+                          <Eye className="h-4 w-4 text-gray-400" />
                         )}
                       </Button>
                     </div>
                   </div>
                   
-                  {/* Confirm Password with enhanced styling */}
+                  {/* Confirm Password with dark styling */}
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Confirm Password</Label>
+                    <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Confirm Password</Label>
                     <div className="relative">
                       <Input
                         type={showConfirmPassword ? "text" : "password"}
                         placeholder="Confirm your password"
                         value={formData.confirmPassword}
                         onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                        className="h-14 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg pr-12"
+                        className="h-14 border-2 border-gray-600 bg-gray-800 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg pr-12"
                         required
                       />
                       <Button
@@ -920,21 +913,21 @@ export default function AuthScreen({
                         variant="ghost"
                         size="sm"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 hover:bg-slate-100"
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 hover:bg-gray-700"
                       >
                         {showConfirmPassword ? (
-                          <EyeOff className="h-4 w-4 text-slate-500" />
+                          <EyeOff className="h-4 w-4 text-gray-400" />
                         ) : (
-                          <Eye className="h-4 w-4 text-slate-500" />
+                          <Eye className="h-4 w-4 text-gray-400" />
                         )}
                       </Button>
                     </div>
                   </div>
                   
-                  {/* User Type Selection with enhanced styling */}
+                  {/* User Type Selection with dark styling */}
                   {view === 'signup' && (
                     <div className="space-y-3">
-                      <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">I want to:</Label>
+                      <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">I want to:</Label>
                       <div className="grid grid-cols-2 gap-4">
                         <Button
                           type="button"
@@ -942,7 +935,7 @@ export default function AuthScreen({
                           className={`h-16 text-base font-semibold rounded-xl transition-all duration-300 ${
                             formData.userType === 'client' 
                               ? 'bg-gradient-to-r from-green-600 to-yellow-500 text-white shadow-lg transform scale-105' 
-                              : 'bg-white border-2 border-slate-200 text-slate-700 hover:border-green-500 hover:bg-green-50 hover:scale-105'
+                              : 'bg-gray-800 border-2 border-gray-600 text-gray-200 hover:border-green-500 hover:bg-gray-700 hover:scale-105'
                           }`}
                           onClick={() => handleInputChange('userType', 'client')}
                         >
@@ -957,7 +950,7 @@ export default function AuthScreen({
                           className={`h-16 text-base font-semibold rounded-xl transition-all duration-300 ${
                             formData.userType === 'provider' 
                               ? 'bg-gradient-to-r from-green-600 to-yellow-500 text-white shadow-lg transform scale-105' 
-                              : 'bg-white border-2 border-slate-200 text-slate-700 hover:border-green-500 hover:bg-green-50 hover:scale-105'
+                              : 'bg-gray-800 border-2 border-gray-600 text-gray-200 hover:border-green-500 hover:bg-gray-700 hover:scale-105'
                           }`}
                           onClick={() => handleInputChange('userType', 'provider')}
                         >
@@ -970,10 +963,10 @@ export default function AuthScreen({
                     </div>
                   )}
 
-                  {/* Profile Picture Upload for Providers */}
+                  {/* Profile Picture Upload for Providers with dark styling */}
                   {(view === 'signup-provider' || (view === 'signup' && formData.userType === 'provider')) && (
                     <div className="space-y-2">
-                      <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Profile Picture</Label>
+                      <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Profile Picture</Label>
                       <div className="relative">
                         <input
                           type="file"
@@ -989,24 +982,24 @@ export default function AuthScreen({
                         />
                         <label
                           htmlFor="profile-picture"
-                          className="flex items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all duration-300"
+                          className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-600 bg-gray-800 rounded-xl cursor-pointer hover:border-green-500 hover:bg-gray-700 transition-all duration-300"
                         >
                           <div className="text-center">
-                            <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
-                            <p className="text-sm text-slate-600">Click to upload profile picture</p>
-                            <p className="text-xs text-slate-400">PNG, JPG up to 5MB</p>
+                            <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                            <p className="text-sm text-gray-300">Click to upload profile picture</p>
+                            <p className="text-xs text-gray-400">PNG, JPG up to 5MB</p>
                           </div>
                         </label>
                       </div>
                     </div>
                   )}
 
-                  {/* Provider-Specific Fields */}
+                  {/* Provider-Specific Fields with dark styling */}
                   {(view === 'signup-provider' || (view === 'signup' && formData.userType === 'provider')) && (
                     <>
-                      {/* CV Upload */}
+                      {/* CV Upload with dark styling */}
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">CV/Resume</Label>
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">CV/Resume</Label>
                         <div className="relative">
                           <input
                             type="file"
@@ -1022,32 +1015,32 @@ export default function AuthScreen({
                           />
                           <label
                             htmlFor="cv-upload"
-                            className="flex items-center justify-center w-full h-20 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all duration-300"
+                            className="flex items-center justify-center w-full h-20 border-2 border-dashed border-gray-600 bg-gray-800 rounded-xl cursor-pointer hover:border-green-500 hover:bg-gray-700 transition-all duration-300"
                           >
                             <div className="text-center">
-                              <FileText className="h-6 w-6 text-slate-400 mx-auto mb-1" />
-                              <p className="text-sm text-slate-600">Upload your CV/Resume</p>
-                              <p className="text-xs text-slate-400">PDF, DOC, DOCX up to 10MB</p>
+                              <FileText className="h-6 w-6 text-gray-400 mx-auto mb-1" />
+                              <p className="text-sm text-gray-300">Upload your CV/Resume</p>
+                              <p className="text-xs text-gray-400">PDF, DOC, DOCX up to 10MB</p>
                             </div>
                           </label>
                         </div>
                       </div>
 
-                      {/* Residential Address */}
+                      {/* Residential Address with dark styling */}
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Residential Address</Label>
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Residential Address</Label>
                         <Textarea
                           placeholder="Enter your full residential address"
                           value={formData.residentialAddress || ''}
                           onChange={(e) => handleInputChange('residentialAddress', e.target.value)}
-                          className="h-20 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-base resize-none"
+                          className="h-20 border-2 border-gray-600 bg-gray-800 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-base resize-none"
                           required
                         />
                       </div>
 
-                      {/* Proof of Residential Address */}
+                      {/* Proof of Residential Address with dark styling */}
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Proof of Residential Address (Optional)</Label>
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Proof of Residential Address (Optional)</Label>
                         <div className="relative">
                           <input
                             type="file"
@@ -1063,20 +1056,20 @@ export default function AuthScreen({
                           />
                           <label
                             htmlFor="address-proof"
-                            className="flex items-center justify-center w-full h-20 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all duration-300"
+                            className="flex items-center justify-center w-full h-20 border-2 border-dashed border-gray-600 bg-gray-800 rounded-xl cursor-pointer hover:border-green-500 hover:bg-gray-700 transition-all duration-300"
                           >
                             <div className="text-center">
-                              <Home className="h-6 w-6 text-slate-400 mx-auto mb-1" />
-                              <p className="text-sm text-slate-600">Upload proof of address</p>
-                              <p className="text-xs text-slate-400">PDF, JPG, PNG up to 5MB (Optional)</p>
+                              <Home className="h-6 w-6 text-gray-400 mx-auto mb-1" />
+                              <p className="text-sm text-gray-300">Upload proof of address</p>
+                              <p className="text-xs text-gray-400">PDF, JPG, PNG up to 5MB (Optional)</p>
                             </div>
                           </label>
                         </div>
                       </div>
 
-                      {/* Trade Certificate or Company Certificate */}
+                      {/* Trade Certificate with dark styling */}
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Trade Certificate / Company Certificate (Optional)</Label>
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Trade Certificate / Company Certificate (Optional)</Label>
                         <div className="relative">
                           <input
                             type="file"
@@ -1092,208 +1085,55 @@ export default function AuthScreen({
                           />
                           <label
                             htmlFor="trade-certificate"
-                            className="flex items-center justify-center w-full h-20 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all duration-300"
+                            className="flex items-center justify-center w-full h-20 border-2 border-dashed border-gray-600 bg-gray-800 rounded-xl cursor-pointer hover:border-green-500 hover:bg-gray-700 transition-all duration-300"
                           >
                             <div className="text-center">
-                              <Award className="h-6 w-6 text-slate-400 mx-auto mb-1" />
-                              <p className="text-sm text-slate-600">Upload trade/company certificate</p>
-                              <p className="text-xs text-slate-400">PDF, JPG, PNG up to 5MB (Optional)</p>
+                              <Award className="h-6 w-6 text-gray-400 mx-auto mb-1" />
+                              <p className="text-sm text-gray-300">Upload trade/company certificate</p>
+                              <p className="text-xs text-gray-400">PDF, JPG, PNG up to 5MB (Optional)</p>
                             </div>
                           </label>
                         </div>
                       </div>
 
-                      {/* Years of Experience */}
+                      {/* Years of Experience with dark styling */}
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Years of Experience</Label>
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Years of Experience</Label>
                         <Select value={formData.yearsExperience || ''} onValueChange={(value) => handleInputChange('yearsExperience', value)}>
-                          <SelectTrigger className="h-14 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg">
+                          <SelectTrigger className="h-14 border-2 border-gray-600 bg-gray-800 text-white focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg">
                             <SelectValue placeholder="Select years of experience" />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="0-1">0-1 years</SelectItem>
-                            <SelectItem value="1-3">1-3 years</SelectItem>
-                            <SelectItem value="3-5">3-5 years</SelectItem>
-                            <SelectItem value="5-10">5-10 years</SelectItem>
-                            <SelectItem value="10+">10+ years</SelectItem>
+                          <SelectContent className="bg-gray-800 border-gray-600">
+                            <SelectItem value="0-1" className="text-white hover:bg-gray-700">0-1 years</SelectItem>
+                            <SelectItem value="1-3" className="text-white hover:bg-gray-700">1-3 years</SelectItem>
+                            <SelectItem value="3-5" className="text-white hover:bg-gray-700">3-5 years</SelectItem>
+                            <SelectItem value="5-10" className="text-white hover:bg-gray-700">5-10 years</SelectItem>
+                            <SelectItem value="10+" className="text-white hover:bg-gray-700">10+ years</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
 
-                      {/* Services Offered */}
+                      {/* Services Offered with dark styling */}
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Services You Offer</Label>
+                        <Label className="text-gray-200 font-semibold text-sm uppercase tracking-wide">Services You Offer</Label>
                         <Textarea
                           placeholder="Describe the services you provide (e.g., Plumbing, Electrical, Cleaning, etc.)"
                           value={formData.servicesOffered || ''}
                           onChange={(e) => handleInputChange('servicesOffered', e.target.value)}
-                          className="h-20 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-base resize-none"
+                          className="h-20 border-2 border-gray-600 bg-gray-800 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-base resize-none"
                           required
                         />
                       </div>
                     </>
                   )}
                   
-                  {/* Submit Button with enhanced styling */}
-                  <button 
-                    type="submit" 
-                    className="w-full h-16 bg-gradient-to-r from-green-600 to-yellow-500 hover:from-green-700 hover:to-yellow-600 text-white font-bold text-lg rounded-xl shadow-xl transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" 
-                    disabled={loading || !formData.fullName || !formData.phoneNumber || !formData.email || !formData.password || !formData.confirmPassword}
-                  >
-                    {loading ? (
-                      <div className="flex items-center justify-center gap-3">
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Processing...
-                      </div>
-                    ) : (
-                      'Create Account & Send Verification'
-                    )}
-                  </button>
-                  
-                  {/* Sign In Link with enhanced styling */}
-                  <div className="text-center pt-4">
-                    <Button variant="link" onClick={() => onNavigate('login')} className="text-slate-600 hover:text-slate-800 font-medium">
-                      Already have an account? Sign in
-                    </Button>
-                  </div>
-                </form>
-              )}
-
-              {/* Email Verification */}
-              {currentStep === 'email-verification' && (
-                <form onSubmit={handleEmailVerification} className="space-y-6">
-                  {error && (
-                    <Alert variant="destructive" className="border-red-200 bg-red-50">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription className="text-red-800">{error}</AlertDescription>
-                    </Alert>
-                  )}
-                  {success && (
-                    <Alert className="border-green-200 bg-green-50">
-                      <CheckCircle className="h-4 w-4" />
-                      <AlertDescription className="text-green-800">{success}</AlertDescription>
-                    </Alert>
-                  )}
-                  
-                  <div className="text-center mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-red-600 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                      <Mail className="h-8 w-8 text-white" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-slate-900 mb-2">Verify Your Email</h3>
-                    <p className="text-slate-600">We've sent a verification code to your email address</p>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <Label className="text-slate-700 font-medium">Verification Code</Label>
-                      <Input
-                        placeholder="Enter 6-digit code"
-                        value={emailOtp}
-                        onChange={(e) => setEmailOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                        className="text-center tracking-widest text-lg h-12 border border-slate-200 focus:border-red-500 focus:ring-red-500/20 rounded-lg transition-all duration-200"
-                        required
-                        maxLength={6}
-                      />
-                    </div>
-                    
-                    <div className="text-center">
-                      <Button
-                        type="button"
-                        variant="link"
-                        onClick={async () => {
-                          setLoading(true);
-                          try {
-                            await apiClient.auth.resendEmailVerification({ email: formData.email });
-                            setSuccess('Verification email resent');
-                          } catch (err) {
-                            setError('Failed to resend email');
-                          } finally {
-                            setLoading(false);
-                          }
-                        }}
-                        disabled={loading}
-                        className="text-red-600 hover:text-red-700 font-medium"
-                      >
-                        Resend Email
-                      </Button>
-                    </div>
-                  </div>
-                  
+                  {/* Submit Button with dark styling */}
                   <Button 
                     type="submit" 
-                    className="w-full h-12 bg-gradient-to-r from-red-600 to-blue-600 hover:from-red-700 hover:to-blue-700 text-white font-medium rounded-lg shadow-lg transform hover:scale-[1.02] transition-all duration-200" 
-                    disabled={loading || !emailOtp}
+                    className="w-full h-14 bg-gradient-to-r from-green-600 to-yellow-500 hover:from-green-700 hover:to-yellow-600 text-white font-semibold text-lg rounded-xl shadow-lg transform hover:scale-[1.02] transition-all duration-200" 
+                    disabled={loading}
                   >
-                    {loading ? 'Verifying...' : 'Complete Registration'}
-                  </Button>
-                </form>
-              )}
-
-              {/* OTP Verification */}
-              {currentStep === 'otp-verification' && (
-                <form onSubmit={handleOtpVerification} className="space-y-6">
-                  {error && (
-                    <Alert variant="destructive" className="border-red-200 bg-red-50">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription className="text-red-800">{error}</AlertDescription>
-                    </Alert>
-                  )}
-                  {success && (
-                    <Alert className="border-green-200 bg-green-50">
-                      <CheckCircle className="h-4 w-4" />
-                      <AlertDescription className="text-green-800">{success}</AlertDescription>
-                    </Alert>
-                  )}
-                  
-                  <div className="text-center mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                      <Phone className="h-8 w-8 text-white" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-slate-900 mb-2">Verify Your Phone Number</h3>
-                    <p className="text-slate-600">We've sent a 6-digit code to your phone number</p>
-                    <p className="text-sm text-slate-500 mt-2">
-                      {formData.countryCode}{formData.phoneNumber}
-                    </p>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <Label className="text-slate-700 font-medium">Verification Code</Label>
-                      <Input
-                        placeholder="Enter 6-digit code"
-                        value={phoneOtp}
-                        onChange={(e) => setPhoneOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                        className="text-center tracking-widest text-lg h-12 border border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-lg transition-all duration-200"
-                        required
-                        maxLength={6}
-                      />
-                    </div>
-                    
-                    <div className="text-center space-y-2">
-                      {otpTimer > 0 ? (
-                        <div className="text-sm text-slate-500">
-                          Resend available in {otpTimer} seconds
-                        </div>
-                      ) : (
-                        <Button
-                          type="button"
-                          variant="link"
-                          onClick={handleResendOtp}
-                          disabled={loading || !canResendOtp}
-                          className="text-green-600 hover:text-green-700 font-medium"
-                        >
-                          Resend Code
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <Button 
-                    type="submit" 
-                    className="w-full h-12 bg-gradient-to-r from-green-600 to-yellow-500 hover:from-green-700 hover:to-yellow-600 text-white font-medium rounded-lg shadow-lg transform hover:scale-[1.02] transition-all duration-200" 
-                    disabled={loading || !phoneOtp || phoneOtp.length !== 6}
-                  >
-                    {loading ? 'Verifying...' : 'Verify Phone Number'}
+                    {loading ? 'Creating Account...' : 'Create Account'}
                   </Button>
                 </form>
               )}
