@@ -3,10 +3,16 @@ import { API_BASE_URL } from './constants.js';
 // Production-ready API client - NO MOCK RESPONSES - Latest deployment
 const silentFetch = async (url, options = {}) => {
   try {
+    console.log('🌐 Making API request to:', url);
+    console.log('📋 Request options:', { method: options.method, headers: options.headers });
+    
     // Check if AbortController is available
     if (typeof AbortController !== 'undefined') {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout for production
+      const timeoutId = setTimeout(() => {
+        console.log('⏰ Request timeout - aborting');
+        controller.abort();
+      }, 15000); // 15 second timeout for production
       
       const response = await fetch(url, {
         ...options,
@@ -14,38 +20,68 @@ const silentFetch = async (url, options = {}) => {
       });
       
       clearTimeout(timeoutId);
+      console.log('✅ API request successful:', response.status, response.statusText);
       return response;
     } else {
       // Fallback for environments without AbortController
+      console.log('⚠️ AbortController not available, using fallback');
       const response = await fetch(url, {
         ...options
       });
+      console.log('✅ API request successful (fallback):', response.status, response.statusText);
       return response;
     }
   } catch (error) {
-    console.error('API request failed:', error);
+    console.error('❌ API request failed:', {
+      url,
+      error: error.message,
+      type: error.name,
+      stack: error.stack
+    });
+    
     // Return a proper error response instead of throwing
     return {
       ok: false,
       status: 0,
-      statusText: 'Network Error',
-      json: async () => ({ error: error.message || 'Network error occurred' })
+      statusText: error.name === 'AbortError' ? 'Request Timeout' : 'Network Error',
+      json: async () => ({ 
+        error: error.message || 'Network error occurred',
+        details: {
+          url,
+          errorType: error.name,
+          timestamp: new Date().toISOString()
+        }
+      })
     };
   }
 };
 
 export const apiClient = {
-  // Connection testing
+  // Connection testing with detailed logging
   testConnection: async () => {
+    console.log('🔍 Testing API connection...');
+    console.log('🌐 API Base URL:', API_BASE_URL);
+    
     try {
-      const response = await silentFetch(`${API_BASE_URL.replace('/api', '')}/health`, {
+      const healthUrl = `${API_BASE_URL.replace('/api', '')}/health`;
+      console.log('🏥 Health check URL:', healthUrl);
+      
+      const response = await silentFetch(healthUrl, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
+      
+      console.log('🏥 Health check response:', {
+        ok: response.ok,
+        status: response.status,
+        statusText: response.statusText
+      });
+      
       return response.ok;
     } catch (error) {
+      console.error('❌ Connection test failed:', error);
       return false;
     }
   },
