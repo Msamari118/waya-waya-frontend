@@ -182,7 +182,17 @@ export default function AuthScreen({
         return;
       }
       
-      const response = await apiClient.auth.register(registrationData);
+      // Step 1: Request OTP using the new improved flow
+      const response = await apiClient.auth.requestPhoneOtp({
+        phoneNumber: `${formData.countryCode}${formData.phoneNumber}`,
+        userData: {
+          email: formData.email,
+          fullName: formData.fullName,
+          password: formData.password,
+          userType: formData.userType,
+          profilePictureUrl: formData.profilePicture ? 'pending-upload' : null
+        }
+      });
       
       if (response.ok) {
         // Account created successfully, now send OTP for verification
@@ -237,11 +247,10 @@ export default function AuthScreen({
     try {
       const fullPhoneNumber = `${formData.countryCode}${formData.phoneNumber}`;
       
-      // Use the standardized backend API endpoint
-      const response = await apiClient.auth.verifyOtp({
-        otp: phoneOtp,
-        type: 'phone',
-        identifier: fullPhoneNumber
+      // Step 2: Verify OTP using the new improved flow
+      const response = await apiClient.auth.verifyPhoneOtp({
+        phoneNumber: fullPhoneNumber,
+        otp: phoneOtp
       });
       
       let data;
@@ -251,26 +260,18 @@ export default function AuthScreen({
         data = { success: response.ok };
       }
       
-      // Check for successful verification according to backend specs
-      if (response.ok || data.verified || data.message) {
-        setSuccess('Phone number verified successfully!');
+      // Check for successful verification with new flow
+      if (response.ok && data.success) {
+        setSuccess('Phone number verified successfully! Account created!');
         setPhoneOtp(''); // Clear OTP for security
         
-        // Navigate to appropriate registration flow
-        setTimeout(() => {
-          if (formData.userType === 'client') {
-            onNavigate('client-registration');
-          } else if (formData.userType === 'provider') {
-            onNavigate('registration');
-          } else {
-            onAuthSuccess(data.token, {
-              email: formData.email,
-              phoneNumber: fullPhoneNumber,
-              fullName: formData.fullName,
-              userType: formData.userType
-            });
-          }
-        }, 1500);
+        // Store authentication data
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.removeItem('pendingPhoneNumber'); // Clean up
+        
+        // Call success callback
+        onAuthSuccess(data.token, data.user);
       } else {
         setError(data.error || 'Invalid OTP. Please try again.');
         setPhoneOtp(''); // Clear invalid OTP
@@ -331,10 +332,9 @@ export default function AuthScreen({
       
       console.log('Resending OTP to:', fullPhoneNumber);
       
-      // Use the standardized backend API endpoint
-      const response = await apiClient.auth.sendOtp({
-        type: 'phone',
-        identifier: fullPhoneNumber
+      // Use the new improved OTP flow
+      const response = await apiClient.auth.resendPhoneOtp({
+        phoneNumber: fullPhoneNumber
       });
       
       console.log('Resend OTP response:', response);
