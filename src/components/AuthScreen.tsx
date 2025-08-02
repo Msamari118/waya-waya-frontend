@@ -518,8 +518,8 @@ export default function AuthScreen({
             <CardContent className="p-8">
               {/* Header with South African colors */}
               <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 via-green-400 to-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <span className="text-white font-bold text-2xl">W</span>
+                <div className="flex justify-center mb-4">
+                  <WayaWayaLogo size="md" showText={false} />
                 </div>
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 bg-clip-text text-transparent mb-2">
                   {view === 'login' ? 'Welcome Back!' : 'Join Waya Waya!'}
