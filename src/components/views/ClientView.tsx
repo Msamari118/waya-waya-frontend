@@ -90,6 +90,40 @@ export const ClientView: React.FC<ClientViewProps> = ({
       location: 'Cape Town, Western Cape',
       createdAt: '2024-01-20',
       provider: 'Spark Electric'
+    },
+    {
+      id: '3',
+      title: 'Car Engine Repair',
+      description: 'Engine making strange noises, needs diagnosis',
+      category: 'Mechanic',
+      status: 'pending',
+      budget: 800,
+      location: 'Cape Town, Western Cape',
+      createdAt: '2024-01-25',
+      provider: "Mike's Auto Repair"
+    },
+    {
+      id: '4',
+      title: 'House Cleaning',
+      description: 'Deep cleaning of 3-bedroom house',
+      category: 'Cleaning',
+      status: 'completed',
+      budget: 280,
+      location: 'Cape Town, Western Cape',
+      createdAt: '2024-01-18',
+      provider: 'Clean Pro Services',
+      rating: 4
+    },
+    {
+      id: '5',
+      title: 'Garden Maintenance',
+      description: 'Monthly garden maintenance and pruning',
+      category: 'Gardening',
+      status: 'in-progress',
+      budget: 150,
+      location: 'Cape Town, Western Cape',
+      createdAt: '2024-01-22',
+      provider: 'Green Thumb Gardening'
     }
   ]);
 
@@ -126,6 +160,42 @@ export const ClientView: React.FC<ClientViewProps> = ({
       name: 'Green Thumb Gardening',
       service: 'Gardening',
       rating: 4.7,
+      location: 'Cape Town, Western Cape',
+      isOnline: true,
+      avatar: undefined
+    },
+    {
+      id: 'provider-5',
+      name: 'Mike\'s Auto Repair',
+      service: 'Mechanic',
+      rating: 4.5,
+      location: 'Cape Town, Western Cape',
+      isOnline: true,
+      avatar: undefined
+    },
+    {
+      id: 'provider-6',
+      name: 'Carpentry Masters',
+      service: 'Carpentry',
+      rating: 4.4,
+      location: 'Cape Town, Western Cape',
+      isOnline: true,
+      avatar: undefined
+    },
+    {
+      id: 'provider-7',
+      name: 'Paint Pro Services',
+      service: 'Painting',
+      rating: 4.3,
+      location: 'Cape Town, Western Cape',
+      isOnline: false,
+      avatar: undefined
+    },
+    {
+      id: 'provider-8',
+      name: 'Security Solutions',
+      service: 'Security',
+      rating: 4.8,
       location: 'Cape Town, Western Cape',
       isOnline: true,
       avatar: undefined
@@ -189,6 +259,9 @@ export const ClientView: React.FC<ClientViewProps> = ({
       case 'cleaning': return <Sparkles className="h-4 w-4" />;
       case 'gardening': return <Heart className="h-4 w-4" />;
       case 'carpentry': return <Wrench className="h-4 w-4" />;
+      case 'mechanic': return <Car className="h-4 w-4" />;
+      case 'security': return <Shield className="h-4 w-4" />;
+      case 'painting': return <Award className="h-4 w-4" />;
       default: return <Target className="h-4 w-4" />;
     }
   };
@@ -203,307 +276,361 @@ export const ClientView: React.FC<ClientViewProps> = ({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-500 via-yellow-500 to-red-600">
-      <div className="max-w-4xl mx-auto p-4">
-        <div className="space-y-6">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
+      {/* Modern Header */}
+      <div className="bg-black/20 backdrop-blur-md border-b border-white/20">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
               <Button 
                 variant="ghost" 
                 onClick={() => setCurrentView('home')}
-                className="text-white hover:text-yellow-200 hover:bg-white/20"
+                className="text-white hover:text-yellow-200 hover:bg-white/20 rounded-full p-2"
               >
                 ← Back
               </Button>
-              <WayaWayaLogo size="sm" />
-              <h1 className="text-2xl font-bold text-white">
-                Client Dashboard
-              </h1>
+              <div className="flex items-center gap-3">
+                <WayaWayaLogo size="sm" />
+                <div>
+                  <h1 className="text-2xl font-bold text-white">Client Dashboard</h1>
+                  <p className="text-white/70 text-sm">Manage your service requests</p>
+                </div>
+              </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-3">
               <Button
                 onClick={() => setShowFilterDialog(true)}
                 variant="outline"
-                className="border-white/40 bg-white/20 text-white hover:bg-white/30"
+                className="border-white/40 bg-white/10 text-white hover:bg-white/20 rounded-full"
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Filter
               </Button>
               <Button
                 onClick={() => setShowNewRequestDialog(true)}
-                className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white"
+                className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white rounded-full"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 New Request
               </Button>
               <Button
                 onClick={() => setShowChatDialog(true)}
-                className="bg-gradient-to-r from-purple-400 to-pink-500 hover:from-purple-500 hover:to-pink-600 text-white"
+                className="bg-gradient-to-r from-purple-400 to-pink-500 hover:from-purple-500 hover:to-pink-600 text-white rounded-full"
               >
                 <MessageSquare className="h-4 w-4 mr-2" />
-                Chat with Providers
+                Chat
               </Button>
             </div>
           </div>
+        </div>
+      </div>
 
-          {!isConnected && (
-            <Alert className="bg-white/20 border-white/30 backdrop-blur-sm">
-              <AlertCircle className="h-4 w-4 text-yellow-200" />
-              <AlertDescription className="text-white">
-                Connecting to WAYA WAYA services...
-              </AlertDescription>
-            </Alert>
-          )}
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          {/* Left Column - Stats & Quick Actions */}
+          <div className="lg:col-span-1 space-y-6">
+            
+            {/* Connection Status */}
+            {!isConnected && (
+              <Alert className="bg-white/20 border-white/30 backdrop-blur-sm rounded-xl">
+                <AlertCircle className="h-4 w-4 text-yellow-200" />
+                <AlertDescription className="text-white">
+                  Connecting to WAYA WAYA services...
+                </AlertDescription>
+              </Alert>
+            )}
 
-          {/* Welcome Section */}
-          <Card className="bg-gradient-to-r from-purple-900/80 to-pink-900/80 backdrop-blur-md border border-white/30 shadow-2xl">
-            <CardContent className="p-6">
-              <div className="text-center">
-                <h2 className="text-xl font-semibold text-white mb-2">Welcome back!</h2>
-                <p className="text-white/90">
-                  Find trusted service providers for all your needs
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="bg-gradient-to-r from-blue-900/80 to-cyan-900/80 border-white/30 backdrop-blur-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-cyan-200 text-sm">
-                  <Clock className="h-4 w-4" />
-                  Active Requests
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-white">{activeRequests}</div>
-                <p className="text-sm text-white/80">In progress</p>
+            {/* Welcome Card */}
+            <Card className="bg-gradient-to-r from-purple-900/80 to-pink-900/80 backdrop-blur-md border border-white/30 shadow-2xl rounded-2xl">
+              <CardContent className="p-6">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <User className="h-8 w-8 text-white" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-white mb-2">Welcome back!</h2>
+                  <p className="text-white/90 text-sm">
+                    Find trusted service providers for all your needs
+                  </p>
+                </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-r from-green-900/80 to-emerald-900/80 border-white/30 backdrop-blur-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-emerald-200 text-sm">
-                  <CreditCard className="h-4 w-4" />
-                  Total Spent
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-white">R{totalSpent.toFixed(2)}</div>
-                <p className="text-sm text-white/80">This month</p>
-              </CardContent>
-            </Card>
+            {/* Stats Cards */}
+            <div className="space-y-4">
+              <Card className="bg-gradient-to-r from-blue-900/80 to-cyan-900/80 border-white/30 backdrop-blur-sm rounded-xl">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-cyan-200 text-sm font-medium">Active Requests</p>
+                      <p className="text-2xl font-bold text-white">{activeRequests}</p>
+                    </div>
+                    <div className="w-12 h-12 bg-cyan-500/20 rounded-full flex items-center justify-center">
+                      <Clock className="h-6 w-6 text-cyan-200" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
-            <Card className="bg-gradient-to-r from-yellow-900/80 to-orange-900/80 border-white/30 backdrop-blur-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-orange-200 text-sm">
-                  <Star className="h-4 w-4" />
-                  Average Rating
-                </CardTitle>
+              <Card className="bg-gradient-to-r from-green-900/80 to-emerald-900/80 border-white/30 backdrop-blur-sm rounded-xl">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-emerald-200 text-sm font-medium">Total Spent</p>
+                      <p className="text-2xl font-bold text-white">R{totalSpent.toFixed(2)}</p>
+                    </div>
+                    <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center">
+                      <CreditCard className="h-6 w-6 text-emerald-200" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gradient-to-r from-yellow-900/80 to-orange-900/80 border-white/30 backdrop-blur-sm rounded-xl">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-orange-200 text-sm font-medium">Average Rating</p>
+                      <p className="text-2xl font-bold text-white">{averageRating}</p>
+                    </div>
+                    <div className="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center">
+                      <Star className="h-6 w-6 text-orange-200" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Quick Actions */}
+            <Card className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80 backdrop-blur-md border border-white/30 shadow-2xl rounded-2xl">
+              <CardHeader>
+                <CardTitle className="text-white text-lg">Quick Actions</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-white">{averageRating}</div>
-                <p className="text-sm text-white/80">From your reviews</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    className="h-14 flex-col bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white shadow-lg rounded-xl"
+                    onClick={() => setCurrentView('service-selection')}
+                  >
+                    <Search className="h-5 w-5 mb-1" />
+                    <span className="text-xs">Find Services</span>
+                  </Button>
+                  <Button
+                    className="h-14 flex-col bg-gradient-to-r from-blue-400 to-cyan-500 hover:from-blue-500 hover:to-cyan-600 text-white shadow-lg rounded-xl"
+                    onClick={() => setCurrentView('bookings')}
+                  >
+                    <Calendar className="h-5 w-5 mb-1" />
+                    <span className="text-xs">My Bookings</span>
+                  </Button>
+                  <Button
+                    className="h-14 flex-col bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 text-white shadow-lg rounded-xl"
+                    onClick={() => setCurrentView('profile')}
+                  >
+                    <User className="h-5 w-5 mb-1" />
+                    <span className="text-xs">My Profile</span>
+                  </Button>
+                  <Button
+                    className="h-14 flex-col bg-gradient-to-r from-purple-400 to-pink-500 hover:from-purple-500 hover:to-pink-600 text-white shadow-lg rounded-xl"
+                    onClick={() => setShowChatDialog(true)}
+                  >
+                    <MessageCircle className="h-5 w-5 mb-1" />
+                    <span className="text-xs">Messages</span>
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Available Service Providers */}
-          <Card className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80 backdrop-blur-md border border-white/30 shadow-2xl">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between">
-                Available Service Providers
-                <Badge variant="secondary" className="bg-white/20 text-white">
-                  {availableProviders.filter(p => p.isOnline).length} online
-                </Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {availableProviders.map((provider) => (
-                                     <div key={provider.id} className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-white/30 hover:bg-black/50 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full flex items-center justify-center text-white font-semibold">
-                          {provider.name.charAt(0)}
+          {/* Right Column - Main Content */}
+          <div className="lg:col-span-2 space-y-6">
+            
+            {/* Available Service Providers */}
+            <Card className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80 backdrop-blur-md border border-white/30 shadow-2xl rounded-2xl">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between">
+                  <span>Available Service Providers</span>
+                  <Badge variant="secondary" className="bg-white/20 text-white rounded-full">
+                    {availableProviders.filter(p => p.isOnline).length} online
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {availableProviders.map((provider) => (
+                    <div key={provider.id} className="flex items-center justify-between p-4 bg-black/40 rounded-xl border border-white/30 hover:bg-black/50 transition-all duration-200 hover:scale-105">
+                      <div className="flex items-center gap-3">
+                        <div className="relative">
+                          <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full flex items-center justify-center text-white font-semibold">
+                            {provider.name.charAt(0)}
+                          </div>
+                          <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
+                            provider.isOnline ? 'bg-green-500' : 'bg-gray-400'
+                          }`} />
                         </div>
-                        <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
-                          provider.isOnline ? 'bg-green-500' : 'bg-gray-400'
-                        }`} />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-medium">{provider.name}</h3>
-                        <p className="text-sm text-white/80">{provider.service}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Star className="h-3 w-3 text-yellow-400 fill-current" />
-                          <span className="text-xs text-white/80">{provider.rating}</span>
-                          <span className="text-xs text-white/60">•</span>
-                          <span className="text-xs text-white/60">{provider.location}</span>
+                        <div>
+                          <h3 className="text-white font-medium">{provider.name}</h3>
+                          <p className="text-sm text-white/80">{provider.service}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <Star className="h-3 w-3 text-yellow-400 fill-current" />
+                            <span className="text-xs text-white/80">{provider.rating}</span>
+                            <span className="text-xs text-white/60">•</span>
+                            <span className="text-xs text-white/60">{provider.location}</span>
+                          </div>
                         </div>
                       </div>
+                      <Button
+                        onClick={() => handleStartChat(provider)}
+                        className="bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 text-white rounded-full"
+                        size="sm"
+                      >
+                        <MessageSquare className="h-4 w-4 mr-2" />
+                        Chat
+                      </Button>
                     </div>
-                    <Button
-                      onClick={() => handleStartChat(provider)}
-                      className="bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 text-white"
-                      size="sm"
-                    >
-                      <MessageSquare className="h-4 w-4 mr-2" />
-                      Chat
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* Quick Actions */}
-          <Card className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80 backdrop-blur-md border border-white/30 shadow-2xl">
-            <CardHeader>
-              <CardTitle className="text-white">Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Button
-                  className="h-16 flex-col bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white shadow-lg"
-                  onClick={() => setCurrentView('service-selection')}
-                >
-                  <Search className="h-6 w-6 mb-2" />
-                  Find Services
-                </Button>
-                <Button
-                  className="h-16 flex-col bg-gradient-to-r from-blue-400 to-cyan-500 hover:from-blue-500 hover:to-cyan-600 text-white shadow-lg"
-                  onClick={() => setCurrentView('bookings')}
-                >
-                  <Calendar className="h-6 w-6 mb-2" />
-                  My Bookings
-                </Button>
-                <Button
-                  className="h-16 flex-col bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 text-white shadow-lg"
-                  onClick={() => setCurrentView('profile')}
-                >
-                  <User className="h-6 w-6 mb-2" />
-                  My Profile
-                </Button>
-                <Button
-                  className="h-16 flex-col bg-gradient-to-r from-purple-400 to-pink-500 hover:from-purple-500 hover:to-pink-600 text-white shadow-lg"
-                  onClick={() => setShowChatDialog(true)}
-                >
-                  <MessageCircle className="h-6 w-6 mb-2" />
-                  Messages
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Service Requests */}
-          <Card className="bg-gradient-to-r from-slate-900/80 to-gray-900/80 backdrop-blur-md border border-white/30 shadow-2xl">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between">
-                Service Requests
-                <Badge variant="secondary" className="bg-white/20 text-white">
-                  {filteredRequests.length} requests
-                </Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {filteredRequests.length === 0 ? (
-                  <div className="text-center py-8 text-white/70">
-                    <Target className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No service requests found</p>
-                    <p className="text-sm">Create your first service request to get started</p>
-                  </div>
-                ) : (
-                  filteredRequests.map((request) => (
-                                         <div key={request.id} className="flex items-center gap-4 p-4 bg-black/40 rounded-lg border border-white/30 hover:bg-black/50 transition-colors">
-                      <div className="flex-shrink-0">
-                        {getCategoryIcon(request.category)}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-white font-medium">{request.title}</h3>
-                          <Badge className={getStatusColor(request.status)}>
-                            {request.status}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-white/80 mb-2">{request.description}</p>
-                        <div className="flex items-center gap-4 text-xs text-white/60">
-                          <span className="flex items-center gap-1">
-                            <LocationIcon className="h-3 w-3" />
-                            {request.location}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <CreditCard className="h-3 w-3" />
-                            R{request.budget}
-                          </span>
-                          {request.provider && (
-                            <span className="flex items-center gap-1">
-                              <User className="h-3 w-3" />
-                              {request.provider}
-                            </span>
-                          )}
-                          {request.rating && (
-                            <span className="flex items-center gap-1">
-                              <Star className="h-3 w-3" />
-                              {request.rating}/5
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="outline" className="border-white/40 bg-white/20 text-white hover:bg-white/30">
-                          <Edit className="h-3 w-3" />
-                        </Button>
-                        <Button size="sm" variant="outline" className="border-red-400/40 bg-red-500/20 text-red-200 hover:bg-red-500/30">
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                      </div>
+            {/* Service Requests */}
+            <Card className="bg-gradient-to-r from-slate-900/80 to-gray-900/80 backdrop-blur-md border border-white/30 shadow-2xl rounded-2xl">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center justify-between">
+                  <span>Service Requests</span>
+                  <Badge variant="secondary" className="bg-white/20 text-white rounded-full">
+                    {filteredRequests.length} requests
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {filteredRequests.length === 0 ? (
+                    <div className="text-center py-12 text-white/70">
+                      <Target className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                      <h3 className="text-lg font-semibold mb-2">No service requests found</h3>
+                      <p className="text-sm">Create your first service request to get started</p>
                     </div>
-                  ))
-                )}
-              </div>
-            </CardContent>
-          </Card>
+                  ) : (
+                    filteredRequests.map((request) => (
+                      <div key={request.id} className="flex items-center gap-4 p-4 bg-black/40 rounded-xl border border-white/30 hover:bg-black/50 transition-all duration-200">
+                        <div className="flex-shrink-0">
+                          <div className="w-10 h-10 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full flex items-center justify-center">
+                            {getCategoryIcon(request.category)}
+                          </div>
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="text-white font-medium">{request.title}</h3>
+                            <Badge className={`${getStatusColor(request.status)} rounded-full text-xs`}>
+                              {request.status}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-white/80 mb-2">{request.description}</p>
+                          <div className="flex items-center gap-4 text-xs text-white/60">
+                            <span className="flex items-center gap-1">
+                              <LocationIcon className="h-3 w-3" />
+                              {request.location}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <CreditCard className="h-3 w-3" />
+                              R{request.budget}
+                            </span>
+                            {request.provider && (
+                              <span className="flex items-center gap-1">
+                                <User className="h-3 w-3" />
+                                {request.provider}
+                              </span>
+                            )}
+                            {request.rating && (
+                              <span className="flex items-center gap-1">
+                                <Star className="h-3 w-3" />
+                                {request.rating}/5
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button size="sm" variant="outline" className="border-white/40 bg-white/20 text-white hover:bg-white/30 rounded-full">
+                            <Edit className="h-3 w-3" />
+                          </Button>
+                          <Button size="sm" variant="outline" className="border-red-400/40 bg-red-500/20 text-red-200 hover:bg-red-500/30 rounded-full">
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* Service Categories */}
-          <Card className="bg-gradient-to-r from-teal-900/80 to-cyan-900/80 backdrop-blur-md border border-white/30 shadow-2xl">
-            <CardHeader>
-              <CardTitle className="text-white">Popular Services</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <Button
-                  className="h-12 bg-gradient-to-r from-blue-400 to-cyan-500 hover:from-blue-500 hover:to-cyan-600 text-white shadow-lg"
-                  onClick={() => setCurrentView('service-selection')}
-                >
-                  <Wrench className="h-4 w-4 mr-2" />
-                  Plumbing
-                </Button>
-                <Button
-                  className="h-12 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white shadow-lg"
-                  onClick={() => setCurrentView('service-selection')}
-                >
-                  <Zap className="h-4 w-4 mr-2" />
-                  Electrical
-                </Button>
-                <Button
-                  className="h-12 bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 text-white shadow-lg"
-                  onClick={() => setCurrentView('service-selection')}
-                >
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  Cleaning
-                </Button>
-                <Button
-                  className="h-12 bg-gradient-to-r from-purple-400 to-pink-500 hover:from-purple-500 hover:to-pink-600 text-white shadow-lg"
-                  onClick={() => setCurrentView('service-selection')}
-                >
-                  <Heart className="h-4 w-4 mr-2" />
-                  Gardening
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+            {/* Service Categories */}
+            <Card className="bg-gradient-to-r from-teal-900/80 to-cyan-900/80 backdrop-blur-md border border-white/30 shadow-2xl rounded-2xl">
+              <CardHeader>
+                <CardTitle className="text-white">Popular Services</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <Button
+                    className="h-12 bg-gradient-to-r from-blue-400 to-cyan-500 hover:from-blue-500 hover:to-cyan-600 text-white shadow-lg rounded-xl"
+                    onClick={() => setCurrentView('service-selection')}
+                  >
+                    <Wrench className="h-4 w-4 mr-2" />
+                    Plumbing
+                  </Button>
+                  <Button
+                    className="h-12 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white shadow-lg rounded-xl"
+                    onClick={() => setCurrentView('service-selection')}
+                  >
+                    <Zap className="h-4 w-4 mr-2" />
+                    Electrical
+                  </Button>
+                  <Button
+                    className="h-12 bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 text-white shadow-lg rounded-xl"
+                    onClick={() => setCurrentView('service-selection')}
+                  >
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Cleaning
+                  </Button>
+                  <Button
+                    className="h-12 bg-gradient-to-r from-purple-400 to-pink-500 hover:from-purple-500 hover:to-pink-600 text-white shadow-lg rounded-xl"
+                    onClick={() => setCurrentView('service-selection')}
+                  >
+                    <Heart className="h-4 w-4 mr-2" />
+                    Gardening
+                  </Button>
+                  <Button
+                    className="h-12 bg-gradient-to-r from-red-400 to-orange-500 hover:from-red-500 hover:to-orange-600 text-white shadow-lg rounded-xl"
+                    onClick={() => setCurrentView('service-selection')}
+                  >
+                    <Car className="h-4 w-4 mr-2" />
+                    Mechanic
+                  </Button>
+                  <Button
+                    className="h-12 bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-white shadow-lg rounded-xl"
+                    onClick={() => setCurrentView('service-selection')}
+                  >
+                    <Wrench className="h-4 w-4 mr-2" />
+                    Carpentry
+                  </Button>
+                  <Button
+                    className="h-12 bg-gradient-to-r from-indigo-400 to-purple-500 hover:from-indigo-500 hover:to-purple-600 text-white shadow-lg rounded-xl"
+                    onClick={() => setCurrentView('service-selection')}
+                  >
+                    <Shield className="h-4 w-4 mr-2" />
+                    Security
+                  </Button>
+                  <Button
+                    className="h-12 bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-500 hover:to-cyan-600 text-white shadow-lg rounded-xl"
+                    onClick={() => setCurrentView('service-selection')}
+                  >
+                    <Award className="h-4 w-4 mr-2" />
+                    Painting
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
 
@@ -682,4 +809,4 @@ export const ClientView: React.FC<ClientViewProps> = ({
       />
     </div>
   );
-}; 
+};
