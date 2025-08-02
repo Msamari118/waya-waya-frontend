@@ -6,8 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Alert, AlertDescription } from './ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { CheckCircle, Clock, Mail, Phone, ArrowLeft, AlertCircle, Eye, EyeOff, Upload } from 'lucide-react';
+import { CheckCircle, Clock, Mail, Phone, ArrowLeft, AlertCircle, Eye, EyeOff, Upload, FileText, Home, Award } from 'lucide-react';
 import { Label } from './ui/label';
+import { Textarea } from './ui/textarea';
 
 interface AuthScreenProps {
   view: string;
@@ -37,7 +38,13 @@ export default function AuthScreen({
     phoneNumber: '',
     email: '',
     userType: 'client',
-    profilePicture: null as File | null
+    profilePicture: null as File | null,
+    cv: null as File | null,
+    residentialAddress: '',
+    addressProof: null as File | null,
+    tradeCertificate: null as File | null,
+    yearsExperience: '',
+    servicesOffered: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -147,6 +154,25 @@ export default function AuthScreen({
       return;
     }
     
+    // Provider-specific validation
+    if (formData.userType === 'provider') {
+      if (!formData.residentialAddress) {
+        setError('Please enter your residential address');
+        setLoading(false);
+        return;
+      }
+      if (!formData.servicesOffered) {
+        setError('Please describe the services you offer');
+        setLoading(false);
+        return;
+      }
+      if (!formData.yearsExperience) {
+        setError('Please select your years of experience');
+        setLoading(false);
+        return;
+      }
+    }
+    
     try {
       const fullPhoneNumber = `${formData.countryCode}${formData.phoneNumber}`;
       
@@ -155,7 +181,16 @@ export default function AuthScreen({
       onAuthSuccess('temp-token', { 
         email: formData.email, 
         phone: fullPhoneNumber,
-        userType: formData.userType || 'client'
+        userType: formData.userType || 'client',
+        // Provider-specific data
+        ...(formData.userType === 'provider' && {
+          residentialAddress: formData.residentialAddress,
+          yearsExperience: formData.yearsExperience,
+          servicesOffered: formData.servicesOffered,
+          hasCv: !!formData.cv,
+          hasAddressProof: !!formData.addressProof,
+          hasTradeCertificate: !!formData.tradeCertificate
+        })
       });
       
       /* COMMENTED OUT OTP FLOW
@@ -950,32 +985,153 @@ export default function AuthScreen({
                             }
                           }}
                           className="hidden"
-                          id="profile-picture-upload"
+                          id="profile-picture"
                         />
-                        <label htmlFor="profile-picture-upload" className="cursor-pointer">
-                          <div className="h-14 border-2 border-slate-200 focus-within:border-green-500 focus-within:ring-green-500/20 rounded-xl transition-all duration-300 flex items-center justify-between px-4 hover:border-green-500 hover:bg-green-50/50">
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-yellow-500 rounded-lg flex items-center justify-center">
-                                <Upload className="h-4 w-4 text-white" />
-                              </div>
-                              <div className="text-left">
-                                <p className="text-slate-700 font-medium text-sm">Upload profile picture</p>
-                                <p className="text-slate-500 text-xs">JPG, PNG or GIF (max 5MB)</p>
-                              </div>
-                            </div>
-                            <div className="text-slate-400">
-                              <Upload className="h-4 w-4" />
-                            </div>
+                        <label
+                          htmlFor="profile-picture"
+                          className="flex items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all duration-300"
+                        >
+                          <div className="text-center">
+                            <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
+                            <p className="text-sm text-slate-600">Click to upload profile picture</p>
+                            <p className="text-xs text-slate-400">PNG, JPG up to 5MB</p>
                           </div>
                         </label>
-                        {formData.profilePicture && (
-                          <div className="mt-2 flex items-center gap-2 text-green-600 text-sm">
-                            <CheckCircle className="h-4 w-4" />
-                            <span className="font-medium">{formData.profilePicture.name}</span>
-                          </div>
-                        )}
                       </div>
                     </div>
+                  )}
+
+                  {/* Provider-Specific Fields */}
+                  {(view === 'signup-provider' || (view === 'signup' && formData.userType === 'provider')) && (
+                    <>
+                      {/* CV Upload */}
+                      <div className="space-y-2">
+                        <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">CV/Resume</Label>
+                        <div className="relative">
+                          <input
+                            type="file"
+                            accept=".pdf,.doc,.docx"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                handleInputChange('cv', file);
+                              }
+                            }}
+                            className="hidden"
+                            id="cv-upload"
+                          />
+                          <label
+                            htmlFor="cv-upload"
+                            className="flex items-center justify-center w-full h-20 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all duration-300"
+                          >
+                            <div className="text-center">
+                              <FileText className="h-6 w-6 text-slate-400 mx-auto mb-1" />
+                              <p className="text-sm text-slate-600">Upload your CV/Resume</p>
+                              <p className="text-xs text-slate-400">PDF, DOC, DOCX up to 10MB</p>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Residential Address */}
+                      <div className="space-y-2">
+                        <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Residential Address</Label>
+                        <Textarea
+                          placeholder="Enter your full residential address"
+                          value={formData.residentialAddress || ''}
+                          onChange={(e) => handleInputChange('residentialAddress', e.target.value)}
+                          className="h-20 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-base resize-none"
+                          required
+                        />
+                      </div>
+
+                      {/* Proof of Residential Address */}
+                      <div className="space-y-2">
+                        <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Proof of Residential Address (Optional)</Label>
+                        <div className="relative">
+                          <input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                handleInputChange('addressProof', file);
+                              }
+                            }}
+                            className="hidden"
+                            id="address-proof"
+                          />
+                          <label
+                            htmlFor="address-proof"
+                            className="flex items-center justify-center w-full h-20 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all duration-300"
+                          >
+                            <div className="text-center">
+                              <Home className="h-6 w-6 text-slate-400 mx-auto mb-1" />
+                              <p className="text-sm text-slate-600">Upload proof of address</p>
+                              <p className="text-xs text-slate-400">PDF, JPG, PNG up to 5MB (Optional)</p>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Trade Certificate or Company Certificate */}
+                      <div className="space-y-2">
+                        <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Trade Certificate / Company Certificate (Optional)</Label>
+                        <div className="relative">
+                          <input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                handleInputChange('tradeCertificate', file);
+                              }
+                            }}
+                            className="hidden"
+                            id="trade-certificate"
+                          />
+                          <label
+                            htmlFor="trade-certificate"
+                            className="flex items-center justify-center w-full h-20 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all duration-300"
+                          >
+                            <div className="text-center">
+                              <Award className="h-6 w-6 text-slate-400 mx-auto mb-1" />
+                              <p className="text-sm text-slate-600">Upload trade/company certificate</p>
+                              <p className="text-xs text-slate-400">PDF, JPG, PNG up to 5MB (Optional)</p>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Years of Experience */}
+                      <div className="space-y-2">
+                        <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Years of Experience</Label>
+                        <Select value={formData.yearsExperience || ''} onValueChange={(value) => handleInputChange('yearsExperience', value)}>
+                          <SelectTrigger className="h-14 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-lg">
+                            <SelectValue placeholder="Select years of experience" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="0-1">0-1 years</SelectItem>
+                            <SelectItem value="1-3">1-3 years</SelectItem>
+                            <SelectItem value="3-5">3-5 years</SelectItem>
+                            <SelectItem value="5-10">5-10 years</SelectItem>
+                            <SelectItem value="10+">10+ years</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Services Offered */}
+                      <div className="space-y-2">
+                        <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Services You Offer</Label>
+                        <Textarea
+                          placeholder="Describe the services you provide (e.g., Plumbing, Electrical, Cleaning, etc.)"
+                          value={formData.servicesOffered || ''}
+                          onChange={(e) => handleInputChange('servicesOffered', e.target.value)}
+                          className="h-20 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300 text-base resize-none"
+                          required
+                        />
+                      </div>
+                    </>
                   )}
                   
                   {/* Submit Button with enhanced styling */}
