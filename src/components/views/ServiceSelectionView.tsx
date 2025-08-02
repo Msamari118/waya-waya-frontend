@@ -224,7 +224,7 @@ export const ServiceSelectionView: React.FC<ServiceSelectionViewProps> = ({
             <Button
               variant="outline"
               className="border-yellow-500/30 bg-black/40 text-gray-200 hover:bg-yellow-500/20 backdrop-blur-sm"
-              onClick={() => setCurrentView('service-request')}
+              onClick={() => setCurrentView('custom-service-request')}
             >
               <Award className="h-4 w-4 mr-2" />
               Custom Request

@@ -7,7 +7,6 @@ import MatchingEngine from './components/MatchingEngine';
 import RatingsReviews from './components/RatingsReviews';
 import { AdminInterface } from './components/AdminInterface';
 import { ProviderRegistration } from './components/ProviderRegistration';
-import { ClientRegistration } from './components/ClientRegistration';
 import { PaymentManagement } from './components/admin/PaymentManagement';
 import { ClientManagement } from './components/admin/ClientManagement';
 import { TrialManagement } from './components/admin/TrialManagement';
@@ -17,6 +16,7 @@ import { ProviderView } from './components/views/ProviderView';
 import { ClientView } from './components/views/ClientView';
 import { ServiceSelectionView } from './components/views/ServiceSelectionView';
 import { ProviderListView } from './components/views/ProviderListView';
+import { CustomServiceRequestView } from './components/views/CustomServiceRequestView';
 import { SecureAdminLogin } from './components/admin/SecureAdminLogin';
 import { WayaWayaLogo } from './components/shared/WayaWayaLogo';
 import { BookingDialog } from './components/BookingDialog';
@@ -326,7 +326,25 @@ export default function App() {
   }
 
   if (currentView === 'client-registration') {
-    return <ClientRegistration onNavigate={handleNavigation} authToken={authToken || undefined} />;
+    return <CustomServiceRequestView 
+      isConnected={isConnected}
+      authToken={authToken}
+      setCurrentView={setCurrentView}
+    />;
+  }
+
+  if (currentView === 'custom-service-request') {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="max-w-md mx-auto p-4">
+          <CustomServiceRequestView
+            isConnected={isConnected}
+            authToken={authToken}
+            setCurrentView={setCurrentView}
+          />
+        </div>
+      </div>
+    );
   }
 
   if (currentView === 'provider') {
