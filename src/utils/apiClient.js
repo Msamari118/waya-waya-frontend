@@ -62,6 +62,41 @@ export const apiClient = {
       return response;
     },
 
+    // NEW: Improved OTP flow endpoints
+    requestPhoneOtp: async (data) => {
+      const response = await silentFetch(`${API_BASE_URL}/auth/request-phone-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
+    },
+
+    verifyPhoneOtp: async (data) => {
+      const response = await silentFetch(`${API_BASE_URL}/auth/verify-phone-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
+    },
+
+    resendPhoneOtp: async (data) => {
+      const response = await silentFetch(`${API_BASE_URL}/auth/resend-phone-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return response;
+    },
+
+    // Legacy endpoint (keeping for backward compatibility)
     sendPhoneOtp: async (userData) => {
       const response = await silentFetch(`${API_BASE_URL}/auth/send-otp`, {
         method: 'POST',

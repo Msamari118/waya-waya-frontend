@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Alert, AlertDescription } from './ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { CheckCircle, Clock, Mail, Phone, ArrowLeft, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { CheckCircle, Clock, Mail, Phone, ArrowLeft, AlertCircle, Eye, EyeOff, Upload } from 'lucide-react';
 import { Label } from './ui/label';
 
 interface AuthScreenProps {
@@ -36,7 +36,8 @@ export default function AuthScreen({
     countryCode: '+27',
     phoneNumber: '',
     email: '',
-    userType: 'client'
+    userType: 'client',
+    profilePicture: null as File | null
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -86,7 +87,7 @@ export default function AuthScreen({
     }
   }, [formData.password, validatePassword]);
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: string, value: string | File) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     setError('');
     setSuccess('');
@@ -947,6 +948,49 @@ export default function AuthScreen({
                             <div className="text-xs opacity-80">Offer services</div>
                           </div>
                         </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Profile Picture Upload for Providers */}
+                  {(view === 'signup-provider' || (view === 'signup' && formData.userType === 'provider')) && (
+                    <div className="space-y-2">
+                      <Label className="text-slate-700 font-semibold text-sm uppercase tracking-wide">Profile Picture</Label>
+                      <div className="relative">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              handleInputChange('profilePicture', file);
+                            }
+                          }}
+                          className="hidden"
+                          id="profile-picture-upload"
+                        />
+                        <label htmlFor="profile-picture-upload" className="cursor-pointer">
+                          <div className="h-14 border-2 border-slate-200 focus-within:border-green-500 focus-within:ring-green-500/20 rounded-xl transition-all duration-300 flex items-center justify-between px-4 hover:border-green-500 hover:bg-green-50/50">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-yellow-500 rounded-lg flex items-center justify-center">
+                                <Upload className="h-4 w-4 text-white" />
+                              </div>
+                              <div className="text-left">
+                                <p className="text-slate-700 font-medium text-sm">Upload profile picture</p>
+                                <p className="text-slate-500 text-xs">JPG, PNG or GIF (max 5MB)</p>
+                              </div>
+                            </div>
+                            <div className="text-slate-400">
+                              <Upload className="h-4 w-4" />
+                            </div>
+                          </div>
+                        </label>
+                        {formData.profilePicture && (
+                          <div className="mt-2 flex items-center gap-2 text-green-600 text-sm">
+                            <CheckCircle className="h-4 w-4" />
+                            <span className="font-medium">{formData.profilePicture.name}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
