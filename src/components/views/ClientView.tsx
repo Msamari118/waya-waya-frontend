@@ -6,7 +6,7 @@ import { Alert, AlertDescription } from '../ui/alert';
 import {
   Search, Calendar, Star, User, BarChart3, MessageCircle, CreditCard,
   Clock, MapPin, CheckCircle, AlertCircle, TrendingUp, Award, Zap,
-  Shield, Wrench, Sparkles, Car, Heart, Crown, Target, Rocket
+  Shield, Wrench, Sparkles, Car, Heart, Target
 } from 'lucide-react';
 import { apiClient } from '../../utils/apiClient.js';
 
@@ -53,37 +53,15 @@ export const ClientView: React.FC<ClientViewProps> = ({
             </Alert>
           )}
 
-          {/* Hero Welcome Section */}
+          {/* Welcome Section */}
           <Card className="bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80 backdrop-blur-md border border-yellow-500/30 shadow-2xl overflow-hidden">
             <div className="bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 p-1">
               <div className="bg-black/90 p-6">
                 <div className="text-center">
-                  <div className="flex items-center justify-center gap-3 mb-4">
-                    <div className="w-16 h-16 bg-gradient-to-r from-yellow-400 to-green-400 rounded-full flex items-center justify-center">
-                      <Crown className="h-8 w-8 text-black" />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-white mb-1">Welcome back!</h2>
-                      <p className="text-yellow-400 font-medium">Premium Client</p>
-                    </div>
-                  </div>
-                  <p className="text-gray-300 mb-4">
+                  <h2 className="text-2xl font-bold text-white mb-2">Welcome back!</h2>
+                  <p className="text-gray-300">
                     Find trusted service providers for all your needs
                   </p>
-                  <div className="flex items-center justify-center gap-6 text-sm">
-                    <div className="flex items-center gap-2 text-green-400">
-                      <CheckCircle className="h-4 w-4" />
-                      <span>Verified</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-blue-400">
-                      <Shield className="h-4 w-4" />
-                      <span>Protected</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-yellow-400">
-                      <Star className="h-4 w-4" />
-                      <span>Premium</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -270,30 +248,6 @@ export const ClientView: React.FC<ClientViewProps> = ({
                   <Heart className="h-4 w-4 mr-2" />
                   Gardening
                 </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Premium Features */}
-          <Card className="bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80 backdrop-blur-md border border-yellow-500/30 shadow-2xl overflow-hidden">
-            <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-4">
-              <CardTitle className="text-white flex items-center gap-2">
-                <Rocket className="h-5 w-5" />
-                Premium Features
-              </CardTitle>
-            </div>
-            <CardContent className="p-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-4 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-lg border border-yellow-500/30">
-                  <Crown className="h-8 w-8 text-yellow-400 mx-auto mb-2" />
-                  <p className="text-white font-semibold">Priority Booking</p>
-                  <p className="text-xs text-gray-300">Skip the queue</p>
-                </div>
-                <div className="text-center p-4 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-lg border border-green-500/30">
-                  <Shield className="h-8 w-8 text-green-400 mx-auto mb-2" />
-                  <p className="text-white font-semibold">Insurance</p>
-                  <p className="text-xs text-gray-300">Fully protected</p>
-                </div>
               </div>
             </CardContent>
           </Card>
