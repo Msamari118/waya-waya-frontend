@@ -336,7 +336,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
         </div>
 
         {/* Main Content */}
-        <div className="bg-gradient-to-br from-slate-200 via-blue-300 to-slate-400 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
+        <div className="bg-gradient-to-br from-slate-400 via-blue-500 to-slate-600 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
           <div className="p-8">
             <div className="max-w-6xl mx-auto">
               {/* Header */}
@@ -397,7 +397,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-white/90 text-sm font-medium uppercase tracking-wide">Total Spent</p>
-                        <p className="text-white text-3xl font-bold mt-1">$2,450</p>
+                        <p className="text-white text-3xl font-bold mt-1">R2,450</p>
                         <p className="text-white/70 text-xs mt-1">This month</p>
                       </div>
                       <div className="bg-white/20 p-3 rounded-full">
