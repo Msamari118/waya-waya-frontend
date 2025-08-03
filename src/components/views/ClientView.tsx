@@ -312,43 +312,43 @@ export const ClientView: React.FC<ClientViewProps> = ({
 
               {/* Stats Row */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <Card className="bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg rounded-xl">
+                <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-600 text-sm font-medium">Active Requests</p>
-                        <p className="text-2xl font-bold text-gray-900">{activeRequests}</p>
+                        <p className="text-white/90 text-sm font-medium">Active Requests</p>
+                        <p className="text-2xl font-bold text-white">{activeRequests}</p>
                       </div>
-                      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <Clock className="h-6 w-6 text-blue-600" />
+                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                        <Clock className="h-6 w-6 text-white" />
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg rounded-xl">
+                <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-600 text-sm font-medium">Total Spent</p>
-                        <p className="text-2xl font-bold text-gray-900">R{totalSpent.toFixed(2)}</p>
+                        <p className="text-white/90 text-sm font-medium">Total Spent</p>
+                        <p className="text-2xl font-bold text-white">R{totalSpent.toFixed(2)}</p>
                       </div>
-                      <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                        <CreditCard className="h-6 w-6 text-green-600" />
+                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                        <CreditCard className="h-6 w-6 text-white" />
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg rounded-xl">
+                <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-gray-600 text-sm font-medium">Average Rating</p>
-                        <p className="text-2xl font-bold text-gray-900">{averageRating}</p>
+                        <p className="text-white/90 text-sm font-medium">Average Rating</p>
+                        <p className="text-2xl font-bold text-white">{averageRating}</p>
                       </div>
-                      <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
-                        <Star className="h-6 w-6 text-yellow-600" />
+                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                        <Star className="h-6 w-6 text-white" />
                       </div>
                     </div>
                   </CardContent>
@@ -360,7 +360,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                 <Button
                   onClick={() => setShowFilterDialog(true)}
                   variant="outline"
-                  className="border-2 border-gray-200 bg-white/80 hover:bg-white text-gray-700 hover:border-green-500 rounded-xl px-6 py-3"
+                  className="border-2 border-gray-300 bg-white/80 hover:bg-white text-gray-700 hover:border-blue-500 rounded-xl px-6 py-3"
                 >
                   <Filter className="h-4 w-4 mr-2" />
                   Filter Requests
@@ -382,22 +382,22 @@ export const ClientView: React.FC<ClientViewProps> = ({
               </div>
 
               {/* Service Providers */}
-              <Card className="bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg rounded-xl mb-8">
+              <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl mb-8">
                 <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
+                  <CardTitle className="flex items-center justify-between text-white">
                     <span>Available Service Providers</span>
-                    <Badge variant="secondary" className="bg-green-100 text-green-800 rounded-full">
+                    <Badge variant="secondary" className="bg-white/20 text-white rounded-full">
                       {availableProviders.filter(p => p.isOnline).length} online
                     </Badge>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {availableProviders.map((provider) => (
-                      <div key={provider.id} className="flex items-center justify-between p-4 bg-white/60 rounded-xl border border-gray-200 hover:bg-white/80 transition-all duration-200">
+                    {availableProviders.slice(0, 4).map((provider) => (
+                      <div key={provider.id} className="flex items-center justify-between p-4 bg-white/10 rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-200">
                         <div className="flex items-center gap-3">
                           <div className="relative">
-                            <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center text-white font-semibold">
+                            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-white font-semibold">
                               {provider.name.charAt(0)}
                             </div>
                             <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
@@ -405,19 +405,19 @@ export const ClientView: React.FC<ClientViewProps> = ({
                             }`} />
                           </div>
                           <div>
-                            <h3 className="text-gray-900 font-medium">{provider.name}</h3>
-                            <p className="text-gray-600 text-sm">{provider.service}</p>
+                            <h3 className="text-white font-medium">{provider.name}</h3>
+                            <p className="text-white/80 text-sm">{provider.service}</p>
                             <div className="flex items-center gap-2 mt-1">
                               <Star className="h-3 w-3 text-yellow-400 fill-current" />
-                              <span className="text-xs text-gray-600">{provider.rating}</span>
-                              <span className="text-xs text-gray-500">•</span>
-                              <span className="text-xs text-gray-600">{provider.location}</span>
+                              <span className="text-xs text-white/80">{provider.rating}</span>
+                              <span className="text-xs text-white/60">•</span>
+                              <span className="text-xs text-white/80">{provider.location}</span>
                             </div>
                           </div>
                         </div>
                         <Button
                           onClick={() => handleStartChat(provider)}
-                          className="bg-gradient-to-r from-green-600 to-yellow-500 hover:from-green-700 hover:to-yellow-600 text-white rounded-xl"
+                          className="bg-white/20 hover:bg-white/30 text-white border-white/30 rounded-xl"
                           size="sm"
                         >
                           <MessageSquare className="h-4 w-4 mr-2" />
@@ -430,11 +430,11 @@ export const ClientView: React.FC<ClientViewProps> = ({
               </Card>
 
               {/* Service Requests */}
-              <Card className="bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg rounded-xl mb-8">
+              <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl mb-8">
                 <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
+                  <CardTitle className="flex items-center justify-between text-white">
                     <span>Service Requests</span>
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-800 rounded-full">
+                    <Badge variant="secondary" className="bg-white/20 text-white rounded-full">
                       {filteredRequests.length} requests
                     </Badge>
                   </CardTitle>
@@ -442,28 +442,28 @@ export const ClientView: React.FC<ClientViewProps> = ({
                 <CardContent>
                   <div className="space-y-4">
                     {filteredRequests.length === 0 ? (
-                      <div className="text-center py-12 text-gray-500">
+                      <div className="text-center py-12 text-white/70">
                         <Target className="h-16 w-16 mx-auto mb-4 opacity-50" />
                         <h3 className="text-lg font-semibold mb-2">No service requests found</h3>
                         <p className="text-sm">Create your first service request to get started</p>
                       </div>
                     ) : (
-                      filteredRequests.map((request) => (
-                        <div key={request.id} className="flex items-center gap-4 p-4 bg-white/60 rounded-xl border border-gray-200 hover:bg-white/80 transition-all duration-200">
+                      filteredRequests.slice(0, 3).map((request) => (
+                        <div key={request.id} className="flex items-center gap-4 p-4 bg-white/10 rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-200">
                           <div className="flex-shrink-0">
-                            <div className="w-10 h-10 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center">
+                            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
                               {getCategoryIcon(request.category)}
                             </div>
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <h3 className="text-gray-900 font-medium">{request.title}</h3>
+                              <h3 className="text-white font-medium">{request.title}</h3>
                               <Badge className={`${getStatusColor(request.status)} rounded-full text-xs`}>
                                 {request.status}
                               </Badge>
                             </div>
-                            <p className="text-gray-600 text-sm mb-2">{request.description}</p>
-                            <div className="flex items-center gap-4 text-xs text-gray-500">
+                            <p className="text-white/80 text-sm mb-2">{request.description}</p>
+                            <div className="flex items-center gap-4 text-xs text-white/60">
                               <span className="flex items-center gap-1">
                                 <LocationIcon className="h-3 w-3" />
                                 {request.location}
@@ -487,10 +487,10 @@ export const ClientView: React.FC<ClientViewProps> = ({
                             </div>
                           </div>
                           <div className="flex gap-2">
-                            <Button size="sm" variant="outline" className="border-gray-300 bg-white/80 text-gray-700 hover:bg-white rounded-xl">
+                            <Button size="sm" variant="outline" className="border-white/30 bg-white/20 text-white hover:bg-white/30 rounded-xl">
                               <Edit className="h-3 w-3" />
                             </Button>
-                            <Button size="sm" variant="outline" className="border-red-300 bg-red-50 text-red-700 hover:bg-red-100 rounded-xl">
+                            <Button size="sm" variant="outline" className="border-red-300 bg-red-500/20 text-red-200 hover:bg-red-500/30 rounded-xl">
                               <Trash2 className="h-3 w-3" />
                             </Button>
                           </div>
@@ -502,67 +502,39 @@ export const ClientView: React.FC<ClientViewProps> = ({
               </Card>
 
               {/* Service Categories */}
-              <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600    backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+              <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
                 <CardHeader>
-                  <CardTitle>Popular Services</CardTitle>
+                  <CardTitle className="text-white">Popular Services</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <Button
-                      className="h-12 bg-gradient-to-r from-blue-400 to-cyan-500 hover:from-blue-500 hover:to-cyan-600 text-white shadow-lg rounded-xl"
+                      className="h-12 bg-white/20 hover:bg-white/30 text-white border-white/30 rounded-xl"
                       onClick={() => setCurrentView('service-selection')}
                     >
                       <Wrench className="h-4 w-4 mr-2" />
                       Plumbing
                     </Button>
                     <Button
-                      className="h-12 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white shadow-lg rounded-xl"
+                      className="h-12 bg-white/20 hover:bg-white/30 text-white border-white/30 rounded-xl"
                       onClick={() => setCurrentView('service-selection')}
                     >
                       <Zap className="h-4 w-4 mr-2" />
                       Electrical
                     </Button>
                     <Button
-                      className="h-12 bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 text-white shadow-lg rounded-xl"
+                      className="h-12 bg-white/20 hover:bg-white/30 text-white border-white/30 rounded-xl"
                       onClick={() => setCurrentView('service-selection')}
                     >
                       <Sparkles className="h-4 w-4 mr-2" />
                       Cleaning
                     </Button>
                     <Button
-                      className="h-12 bg-gradient-to-r from-purple-400 to-pink-500 hover:from-purple-500 hover:to-pink-600 text-white shadow-lg rounded-xl"
+                      className="h-12 bg-white/20 hover:bg-white/30 text-white border-white/30 rounded-xl"
                       onClick={() => setCurrentView('service-selection')}
                     >
                       <Heart className="h-4 w-4 mr-2" />
                       Gardening
-                    </Button>
-                    <Button
-                      className="h-12 bg-gradient-to-r from-red-400 to-orange-500 hover:from-red-500 hover:to-orange-600 text-white shadow-lg rounded-xl"
-                      onClick={() => setCurrentView('service-selection')}
-                    >
-                      <Car className="h-4 w-4 mr-2" />
-                      Mechanic
-                    </Button>
-                    <Button
-                      className="h-12 bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-white shadow-lg rounded-xl"
-                      onClick={() => setCurrentView('service-selection')}
-                    >
-                      <Wrench className="h-4 w-4 mr-2" />
-                      Carpentry
-                    </Button>
-                    <Button
-                      className="h-12 bg-gradient-to-r from-indigo-400 to-purple-500 hover:from-indigo-500 hover:to-purple-600 text-white shadow-lg rounded-xl"
-                      onClick={() => setCurrentView('service-selection')}
-                    >
-                      <Shield className="h-4 w-4 mr-2" />
-                      Security
-                    </Button>
-                    <Button
-                      className="h-12 bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-500 hover:to-cyan-600 text-white shadow-lg rounded-xl"
-                      onClick={() => setCurrentView('service-selection')}
-                    >
-                      <Award className="h-4 w-4 mr-2" />
-                      Painting
                     </Button>
                   </div>
                 </CardContent>
