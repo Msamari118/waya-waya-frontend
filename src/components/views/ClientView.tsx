@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { WayaWayaLogo } from '../shared/WayaWayaLogo';
 import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { Alert, AlertDescription } from '../ui/alert';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
@@ -15,9 +15,10 @@ import {
   Search, Calendar, Star, User, BarChart3, MessageCircle, CreditCard,
   Clock, MapPin, CheckCircle, AlertCircle, TrendingUp, Award, Zap,
   Shield, Wrench, Sparkles, Car, Heart, Target, Plus, Filter,
-  X, Edit, Trash2, Phone, Mail, MapPin as LocationIcon, MessageSquare
+  X, Edit, Trash2, Phone, Mail, MapPin as LocationIcon, MessageSquare, FileText, Users, DollarSign
 } from 'lucide-react';
 import { apiClient } from '../../utils/apiClient.js';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 interface ClientViewProps {
   isConnected: boolean;
@@ -36,6 +37,8 @@ interface ServiceRequest {
   createdAt: string;
   provider?: string;
   rating?: number;
+  date?: string; // Added for new code
+  reviews?: number; // Added for new code
 }
 
 interface ServiceProvider {
@@ -46,6 +49,7 @@ interface ServiceProvider {
   location: string;
   isOnline: boolean;
   avatar?: string;
+  reviews?: number; // Added for new code
 }
 
 export const ClientView: React.FC<ClientViewProps> = ({
@@ -78,7 +82,9 @@ export const ClientView: React.FC<ClientViewProps> = ({
       location: 'Cape Town, Western Cape',
       createdAt: '2024-01-15',
       provider: "John's Plumbing",
-      rating: 5
+      rating: 5,
+      date: '2024-01-15',
+      reviews: 10
     },
     {
       id: '2',
@@ -89,7 +95,9 @@ export const ClientView: React.FC<ClientViewProps> = ({
       budget: 320,
       location: 'Cape Town, Western Cape',
       createdAt: '2024-01-20',
-      provider: 'Spark Electric'
+      provider: 'Spark Electric',
+      date: '2024-01-20',
+      reviews: 5
     },
     {
       id: '3',
@@ -100,7 +108,9 @@ export const ClientView: React.FC<ClientViewProps> = ({
       budget: 800,
       location: 'Cape Town, Western Cape',
       createdAt: '2024-01-25',
-      provider: "Mike's Auto Repair"
+      provider: "Mike's Auto Repair",
+      date: '2024-01-25',
+      reviews: 2
     },
     {
       id: '4',
@@ -112,7 +122,9 @@ export const ClientView: React.FC<ClientViewProps> = ({
       location: 'Cape Town, Western Cape',
       createdAt: '2024-01-18',
       provider: 'Clean Pro Services',
-      rating: 4
+      rating: 4,
+      date: '2024-01-18',
+      reviews: 8
     },
     {
       id: '5',
@@ -123,7 +135,9 @@ export const ClientView: React.FC<ClientViewProps> = ({
       budget: 150,
       location: 'Cape Town, Western Cape',
       createdAt: '2024-01-22',
-      provider: 'Green Thumb Gardening'
+      provider: 'Green Thumb Gardening',
+      date: '2024-01-22',
+      reviews: 3
     }
   ]);
 
@@ -135,7 +149,8 @@ export const ClientView: React.FC<ClientViewProps> = ({
       rating: 4.8,
       location: 'Cape Town, Western Cape',
       isOnline: true,
-      avatar: undefined
+      avatar: undefined,
+      reviews: 15
     },
     {
       id: 'provider-2',
@@ -144,7 +159,8 @@ export const ClientView: React.FC<ClientViewProps> = ({
       rating: 4.6,
       location: 'Cape Town, Western Cape',
       isOnline: true,
-      avatar: undefined
+      avatar: undefined,
+      reviews: 10
     },
     {
       id: 'provider-3',
@@ -153,7 +169,8 @@ export const ClientView: React.FC<ClientViewProps> = ({
       rating: 4.9,
       location: 'Cape Town, Western Cape',
       isOnline: false,
-      avatar: undefined
+      avatar: undefined,
+      reviews: 20
     },
     {
       id: 'provider-4',
@@ -162,7 +179,8 @@ export const ClientView: React.FC<ClientViewProps> = ({
       rating: 4.7,
       location: 'Cape Town, Western Cape',
       isOnline: true,
-      avatar: undefined
+      avatar: undefined,
+      reviews: 12
     },
     {
       id: 'provider-5',
@@ -171,7 +189,8 @@ export const ClientView: React.FC<ClientViewProps> = ({
       rating: 4.5,
       location: 'Cape Town, Western Cape',
       isOnline: true,
-      avatar: undefined
+      avatar: undefined,
+      reviews: 8
     },
     {
       id: 'provider-6',
@@ -180,7 +199,8 @@ export const ClientView: React.FC<ClientViewProps> = ({
       rating: 4.4,
       location: 'Cape Town, Western Cape',
       isOnline: true,
-      avatar: undefined
+      avatar: undefined,
+      reviews: 10
     },
     {
       id: 'provider-7',
@@ -189,7 +209,8 @@ export const ClientView: React.FC<ClientViewProps> = ({
       rating: 4.3,
       location: 'Cape Town, Western Cape',
       isOnline: false,
-      avatar: undefined
+      avatar: undefined,
+      reviews: 15
     },
     {
       id: 'provider-8',
@@ -198,7 +219,8 @@ export const ClientView: React.FC<ClientViewProps> = ({
       rating: 4.8,
       location: 'Cape Town, Western Cape',
       isOnline: true,
-      avatar: undefined
+      avatar: undefined,
+      reviews: 25
     }
   ]);
 
@@ -227,7 +249,9 @@ export const ClientView: React.FC<ClientViewProps> = ({
         status: 'pending',
         budget: parseFloat(newRequest.budget),
         location: newRequest.location,
-        createdAt: new Date().toISOString().split('T')[0]
+        createdAt: new Date().toISOString().split('T')[0],
+        date: new Date().toISOString().split('T')[0], // Added for new code
+        reviews: 0 // Added for new code
       };
       
       setServiceRequests([request, ...serviceRequests]);
@@ -240,6 +264,22 @@ export const ClientView: React.FC<ClientViewProps> = ({
   const handleStartChat = (provider: ServiceProvider) => {
     setSelectedProvider(provider);
     setShowChatDialog(true);
+  };
+
+  const handleProviderClick = (provider: ServiceProvider) => {
+    setSelectedProvider(provider);
+    setShowChatDialog(true);
+  };
+
+  const handleRequestClick = (request: ServiceRequest) => {
+    // Logic to view request details
+    console.log('Viewing request:', request);
+  };
+
+  const handleCategoryClick = (category: string) => {
+    // Logic to navigate to service selection based on category
+    console.log('Navigating to service selection for category:', category);
+    setCurrentView('service-selection');
   };
 
   const getStatusColor = (status: string) => {
@@ -296,31 +336,27 @@ export const ClientView: React.FC<ClientViewProps> = ({
         </div>
 
         {/* Main Content */}
-        <div className="bg-gradient-to-br from-slate-200 via-red-300 to-slate-400 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
+        <div className="bg-gradient-to-br from-slate-200 via-blue-300 to-slate-400 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
           <div className="p-8">
             <div className="max-w-6xl mx-auto">
-              
-              {/* Connection Status */}
-              {!isConnected && (
-                <Alert className="bg-yellow-50 border-yellow-200 text-yellow-800 mb-6">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    Connecting to WAYA WAYA services...
-                  </AlertDescription>
-                </Alert>
-              )}
+              {/* Header */}
+              <div className="mb-8">
+                <h1 className="text-4xl font-bold text-white mb-2">Welcome back, {currentUser.name}!</h1>
+                <p className="text-white/80 text-lg">Manage your service requests and connect with providers</p>
+              </div>
 
-              {/* Stats Row */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-white/90 text-sm font-medium">Active Requests</p>
-                        <p className="text-2xl font-bold text-white">{activeRequests}</p>
+                        <p className="text-white/90 text-sm font-medium uppercase tracking-wide">Active Requests</p>
+                        <p className="text-white text-3xl font-bold mt-1">{serviceRequests.length}</p>
+                        <p className="text-white/70 text-xs mt-1">In progress</p>
                       </div>
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                        <Clock className="h-6 w-6 text-white" />
+                      <div className="bg-white/20 p-3 rounded-full">
+                        <FileText className="h-8 w-8 text-white" />
                       </div>
                     </div>
                   </CardContent>
@@ -330,11 +366,12 @@ export const ClientView: React.FC<ClientViewProps> = ({
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-white/90 text-sm font-medium">Total Spent</p>
-                        <p className="text-2xl font-bold text-white">R{totalSpent.toFixed(2)}</p>
+                        <p className="text-white/90 text-sm font-medium uppercase tracking-wide">Available Providers</p>
+                        <p className="text-white text-3xl font-bold mt-1">{availableProviders.length}</p>
+                        <p className="text-white/70 text-xs mt-1">Ready to help</p>
                       </div>
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                        <CreditCard className="h-6 w-6 text-white" />
+                      <div className="bg-white/20 p-3 rounded-full">
+                        <Users className="h-8 w-8 text-white" />
                       </div>
                     </div>
                   </CardContent>
@@ -344,201 +381,155 @@ export const ClientView: React.FC<ClientViewProps> = ({
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-white/90 text-sm font-medium">Average Rating</p>
-                        <p className="text-2xl font-bold text-white">{averageRating}</p>
+                        <p className="text-white/90 text-sm font-medium uppercase tracking-wide">Completed</p>
+                        <p className="text-white text-3xl font-bold mt-1">12</p>
+                        <p className="text-white/70 text-xs mt-1">This month</p>
                       </div>
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                        <Star className="h-6 w-6 text-white" />
+                      <div className="bg-white/20 p-3 rounded-full">
+                        <CheckCircle className="h-8 w-8 text-white" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-white/90 text-sm font-medium uppercase tracking-wide">Total Spent</p>
+                        <p className="text-white text-3xl font-bold mt-1">$2,450</p>
+                        <p className="text-white/70 text-xs mt-1">This month</p>
+                      </div>
+                      <div className="bg-white/20 p-3 rounded-full">
+                        <DollarSign className="h-8 w-8 text-white" />
                       </div>
                     </div>
                   </CardContent>
                 </Card>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-4 mb-8">
-                <Button
-                  onClick={() => setShowFilterDialog(true)}
-                  variant="outline"
-                  className="border-2 border-gray-300 bg-white/80 hover:bg-white text-gray-700 hover:border-blue-500 rounded-xl px-6 py-3"
-                >
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filter Requests
-                </Button>
-                <Button
-                  onClick={() => setShowNewRequestDialog(true)}
-                  className="bg-gradient-to-r from-green-600 to-yellow-500 hover:from-green-700 hover:to-yellow-600 text-white rounded-xl px-6 py-3 shadow-lg"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  New Request
-                </Button>
-                <Button
-                  onClick={() => setShowChatDialog(true)}
-                  className="bg-gradient-to-r from-green-600 to-yellow-500 hover:from-green-700 hover:to-yellow-600 text-white rounded-xl px-6 py-3 shadow-lg"
-                >
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Chat with Providers
-                </Button>
+              {/* Main Content Grid */}
+              <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+                {/* Available Providers */}
+                <div className="xl:col-span-2">
+                  <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <CardHeader>
+                      <CardTitle className="text-white text-xl font-semibold">Available Service Providers</CardTitle>
+                      <CardDescription className="text-white/80">Connect with trusted professionals</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {availableProviders.slice(0, 4).map((provider) => (
+                          <div key={provider.id} className="bg-white/10 border border-white/20 rounded-xl p-4 hover:bg-white/20 transition-all duration-200">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-4">
+                                <Avatar className="h-12 w-12">
+                                  <AvatarImage src={provider.avatar} />
+                                  <AvatarFallback className="bg-white/20 text-white">
+                                    {provider.name.split(' ').map(n => n[0]).join('')}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div>
+                                  <h3 className="text-white font-semibold text-lg">{provider.name}</h3>
+                                  <p className="text-white/80 text-sm">{provider.service}</p>
+                                  <div className="flex items-center mt-1">
+                                    <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                                    <span className="text-white/80 text-sm ml-1">{provider.rating}</span>
+                                    <span className="text-white/60 text-xs ml-2">({provider.reviews} reviews)</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <Button 
+                                size="sm" 
+                                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                onClick={() => handleProviderClick(provider)}
+                              >
+                                Contact
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Service Requests */}
+                <div className="xl:col-span-2">
+                  <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <CardHeader>
+                      <CardTitle className="text-white text-xl font-semibold">Your Service Requests</CardTitle>
+                      <CardDescription className="text-white/80">Track your ongoing projects</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {filteredRequests.slice(0, 3).map((request) => (
+                          <div key={request.id} className="bg-white/10 border border-white/20 rounded-xl p-4 hover:bg-white/20 transition-all duration-200">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-4">
+                                <div className="bg-white/20 p-2 rounded-lg">
+                                  {getCategoryIcon(request.category)}
+                                </div>
+                                <div>
+                                  <h3 className="text-white font-semibold text-lg">{request.title}</h3>
+                                  <p className="text-white/80 text-sm">{request.description}</p>
+                                  <div className="flex items-center mt-2 space-x-4">
+                                    <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
+                                      {request.status}
+                                    </Badge>
+                                    <span className="text-white/60 text-xs">{request.date}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <Button 
+                                size="sm" 
+                                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                onClick={() => handleRequestClick(request)}
+                              >
+                                View
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                        {filteredRequests.length === 0 && (
+                          <div className="text-center py-8">
+                            <FileText className="h-12 w-12 text-white/40 mx-auto mb-4" />
+                            <h3 className="text-white font-semibold mb-2">No service requests yet</h3>
+                            <p className="text-white/60 mb-4">Start by creating your first service request</p>
+                            <Button className="bg-white/20 hover:bg-white/30 text-white border-white/30">
+                              Create Request
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
-
-              {/* Service Providers */}
-              <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl mb-8">
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between text-white">
-                    <span>Available Service Providers</span>
-                    <Badge variant="secondary" className="bg-white/20 text-white rounded-full">
-                      {availableProviders.filter(p => p.isOnline).length} online
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {availableProviders.slice(0, 4).map((provider) => (
-                      <div key={provider.id} className="flex items-center justify-between p-4 bg-white/10 rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-200">
-                        <div className="flex items-center gap-3">
-                          <div className="relative">
-                            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-white font-semibold">
-                              {provider.name.charAt(0)}
-                            </div>
-                            <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
-                              provider.isOnline ? 'bg-green-500' : 'bg-gray-400'
-                            }`} />
-                          </div>
-                          <div>
-                            <h3 className="text-white font-medium">{provider.name}</h3>
-                            <p className="text-white/80 text-sm">{provider.service}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                              <Star className="h-3 w-3 text-yellow-400 fill-current" />
-                              <span className="text-xs text-white/80">{provider.rating}</span>
-                              <span className="text-xs text-white/60">•</span>
-                              <span className="text-xs text-white/80">{provider.location}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <Button
-                          onClick={() => handleStartChat(provider)}
-                          className="bg-white/20 hover:bg-white/30 text-white border-white/30 rounded-xl"
-                          size="sm"
-                        >
-                          <MessageSquare className="h-4 w-4 mr-2" />
-                          Chat
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Service Requests */}
-              <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl mb-8">
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between text-white">
-                    <span>Service Requests</span>
-                    <Badge variant="secondary" className="bg-white/20 text-white rounded-full">
-                      {filteredRequests.length} requests
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {filteredRequests.length === 0 ? (
-                      <div className="text-center py-12 text-white/70">
-                        <Target className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                        <h3 className="text-lg font-semibold mb-2">No service requests found</h3>
-                        <p className="text-sm">Create your first service request to get started</p>
-                      </div>
-                    ) : (
-                      filteredRequests.slice(0, 3).map((request) => (
-                        <div key={request.id} className="flex items-center gap-4 p-4 bg-white/10 rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-200">
-                          <div className="flex-shrink-0">
-                            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                              {getCategoryIcon(request.category)}
-                            </div>
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="text-white font-medium">{request.title}</h3>
-                              <Badge className={`${getStatusColor(request.status)} rounded-full text-xs`}>
-                                {request.status}
-                              </Badge>
-                            </div>
-                            <p className="text-white/80 text-sm mb-2">{request.description}</p>
-                            <div className="flex items-center gap-4 text-xs text-white/60">
-                              <span className="flex items-center gap-1">
-                                <LocationIcon className="h-3 w-3" />
-                                {request.location}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <CreditCard className="h-3 w-3" />
-                                R{request.budget}
-                              </span>
-                              {request.provider && (
-                                <span className="flex items-center gap-1">
-                                  <User className="h-3 w-3" />
-                                  {request.provider}
-                                </span>
-                              )}
-                              {request.rating && (
-                                <span className="flex items-center gap-1">
-                                  <Star className="h-3 w-3" />
-                                  {request.rating}/5
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex gap-2">
-                            <Button size="sm" variant="outline" className="border-white/30 bg-white/20 text-white hover:bg-white/30 rounded-xl">
-                              <Edit className="h-3 w-3" />
-                            </Button>
-                            <Button size="sm" variant="outline" className="border-red-300 bg-red-500/20 text-red-200 hover:bg-red-500/30 rounded-xl">
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
 
               {/* Service Categories */}
-              <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
-                <CardHeader>
-                  <CardTitle className="text-white">Popular Services</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <Button
-                      className="h-12 bg-white/20 hover:bg-white/30 text-white border-white/30 rounded-xl"
-                      onClick={() => setCurrentView('service-selection')}
-                    >
-                      <Wrench className="h-4 w-4 mr-2" />
-                      Plumbing
-                    </Button>
-                    <Button
-                      className="h-12 bg-white/20 hover:bg-white/30 text-white border-white/30 rounded-xl"
-                      onClick={() => setCurrentView('service-selection')}
-                    >
-                      <Zap className="h-4 w-4 mr-2" />
-                      Electrical
-                    </Button>
-                    <Button
-                      className="h-12 bg-white/20 hover:bg-white/30 text-white border-white/30 rounded-xl"
-                      onClick={() => setCurrentView('service-selection')}
-                    >
-                      <Sparkles className="h-4 w-4 mr-2" />
-                      Cleaning
-                    </Button>
-                    <Button
-                      className="h-12 bg-white/20 hover:bg-white/30 text-white border-white/30 rounded-xl"
-                      onClick={() => setCurrentView('service-selection')}
-                    >
-                      <Heart className="h-4 w-4 mr-2" />
-                      Gardening
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              <div className="mt-8">
+                <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                  <CardHeader>
+                    <CardTitle className="text-white text-xl font-semibold">Popular Service Categories</CardTitle>
+                    <CardDescription className="text-white/80">Find the right service for your needs</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {['Plumbing', 'Electrical', 'Cleaning', 'Carpentry'].map((category) => (
+                        <Button
+                          key={category}
+                          variant="outline"
+                          className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-16 text-sm font-medium"
+                          onClick={() => handleCategoryClick(category)}
+                        >
+                          {category}
+                        </Button>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </div>
