@@ -432,10 +432,10 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
           </Avatar>
         )}
         
-        <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+        <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg shadow-sm ${
           isOwn 
-            ? 'bg-blue-500 text-white' 
-            : 'bg-gray-100 text-gray-900'
+            ? 'bg-gradient-to-r from-green-500 to-blue-500 text-white' 
+            : 'bg-white text-gray-900 border border-gray-200'
         }`}>
           {isFile ? (
             <div className="space-y-2">
@@ -485,17 +485,17 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent side="right" className="w-full sm:w-96 p-0">
+      <SheetContent side="right" className="w-full sm:w-96 p-0 bg-gradient-to-br from-green-50 to-blue-50">
         <div className="flex flex-col h-full">
           {/* Header */}
-          <SheetHeader className="p-4 border-b">
+          <SheetHeader className="p-4 border-b bg-gradient-to-r from-green-600 to-yellow-500 text-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <WayaWayaLogo size="sm" />
                 <div>
-                  <SheetTitle className="text-lg">Chat</SheetTitle>
+                  <SheetTitle className="text-lg text-white">Chat</SheetTitle>
                   {selectedProvider && (
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-white/80">
                       {selectedProvider.name} - {selectedProvider.service}
                     </p>
                   )}
@@ -504,13 +504,13 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
               
               <div className="flex items-center space-x-2">
                 <div className={`w-2 h-2 rounded-full ${
-                  isConnected ? 'bg-green-500' : 'bg-red-500'
+                  isConnected ? 'bg-green-400' : 'bg-red-400'
                 }`} />
-                <Button variant="ghost" size="sm" onClick={() => setShowSearch(!showSearch)}>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-white/20" onClick={() => setShowSearch(!showSearch)}>
                   <Search className="h-4 w-4" />
                 </Button>
                 {activeChat && (
-                  <Button variant="ghost" size="sm" onClick={() => setShowChatInfo(true)}>
+                  <Button variant="ghost" size="sm" className="text-white hover:bg-white/20" onClick={() => setShowChatInfo(true)}>
                     <Info className="h-4 w-4" />
                   </Button>
                 )}
@@ -519,9 +519,9 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
             
             {/* Connection Status */}
             {!isConnected && (
-              <Alert className="mt-2">
-                <WifiOff className="h-4 w-4" />
-                <AlertDescription>
+              <Alert className="mt-2 bg-red-50 border-red-200">
+                <WifiOff className="h-4 w-4 text-red-500" />
+                <AlertDescription className="text-red-700">
                   {error || 'Connecting to chat service...'}
                 </AlertDescription>
               </Alert>
@@ -537,6 +537,7 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
                     setSearchQuery(e.target.value);
                     searchMessages(e.target.value);
                   }}
+                  className="bg-white/90 border-white/30"
                 />
               </div>
             )}
@@ -569,10 +570,10 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
               </ScrollArea>
 
               {/* Message Input */}
-              <div className="p-4 border-t">
+              <div className="p-4 border-t bg-white/50 backdrop-blur-sm">
                 {uploading && (
                   <div className="mb-2">
-                    <Progress value={uploadProgress} className="h-2" />
+                    <Progress value={uploadProgress} className="h-2 bg-gray-200" />
                   </div>
                 )}
                 
@@ -580,6 +581,7 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
                   <Button
                     variant="ghost"
                     size="sm"
+                    className="text-gray-600 hover:text-green-600 hover:bg-green-50"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploading}
                   >
@@ -603,17 +605,23 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
                       onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                       placeholder="Type a message..."
                       disabled={!isConnected || uploading}
+                      className="bg-white border-gray-300 focus:border-green-500 focus:ring-green-500"
                     />
                   </div>
                   
                   {newMessage.trim() ? (
-                    <Button onClick={sendMessage} disabled={!isConnected || uploading}>
+                    <Button 
+                      onClick={sendMessage} 
+                      disabled={!isConnected || uploading}
+                      className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white"
+                    >
                       <Send className="h-4 w-4" />
                     </Button>
                   ) : (
                     <Button
                       variant="ghost"
                       size="sm"
+                      className="text-gray-600 hover:text-red-600 hover:bg-red-50"
                       onClick={recording ? stopVoiceRecording : startVoiceRecording}
                       disabled={!isConnected || uploading}
                     >

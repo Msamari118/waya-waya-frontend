@@ -10,12 +10,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Badge } from '../ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import ChatSystem from '../ChatSystem';
+import { BookingDialog } from '../BookingDialog';
 import {
   Search, Calendar, Star, User, BarChart3, MessageCircle, CreditCard,
   Clock, MapPin, CheckCircle, AlertCircle, TrendingUp, Award, Zap,
   Shield, Wrench, Sparkles, Car, Heart, Target, Plus, Filter,
-  X, Edit, Trash2, Phone, Mail, MapPin as LocationIcon, MessageSquare, FileText, Users, DollarSign
+  X, Edit, Trash2, Phone, Mail, MapPin as LocationIcon, MessageSquare, FileText, Users, DollarSign,
+  BookOpen, CalendarDays, Clock as TimeIcon, MapPin as LocationPin
 } from 'lucide-react';
 import { apiClient } from '../../utils/apiClient.js';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
@@ -37,8 +40,8 @@ interface ServiceRequest {
   createdAt: string;
   provider?: string;
   rating?: number;
-  date?: string; // Added for new code
-  reviews?: number; // Added for new code
+  date?: string;
+  reviews?: number;
 }
 
 interface ServiceProvider {
@@ -49,7 +52,23 @@ interface ServiceProvider {
   location: string;
   isOnline: boolean;
   avatar?: string;
-  reviews?: number; // Added for new code
+  reviews?: number;
+  hourlyRate?: number;
+  availability?: string[];
+}
+
+interface Booking {
+  id: string;
+  providerId: string;
+  providerName: string;
+  service: string;
+  date: string;
+  time: string;
+  status: 'pending' | 'confirmed' | 'in-progress' | 'completed' | 'cancelled';
+  description: string;
+  location: string;
+  estimatedHours: number;
+  totalCost: number;
 }
 
 export const ClientView: React.FC<ClientViewProps> = ({
@@ -57,13 +76,17 @@ export const ClientView: React.FC<ClientViewProps> = ({
   authToken,
   setCurrentView
 }) => {
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [activeRequests, setActiveRequests] = useState(2);
   const [totalSpent, setTotalSpent] = useState(1250.75);
   const [averageRating, setAverageRating] = useState(4.6);
   const [showNewRequestDialog, setShowNewRequestDialog] = useState(false);
   const [showFilterDialog, setShowFilterDialog] = useState(false);
   const [showChatDialog, setShowChatDialog] = useState(false);
+  const [showBookingDialog, setShowBookingDialog] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<ServiceProvider | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentUser, setCurrentUser] = useState({
     id: 'client-1',
     name: 'John Doe',
@@ -111,33 +134,35 @@ export const ClientView: React.FC<ClientViewProps> = ({
       provider: "Mike's Auto Repair",
       date: '2024-01-25',
       reviews: 2
+    }
+  ]);
+
+  const [bookings, setBookings] = useState<Booking[]>([
+    {
+      id: 'booking-1',
+      providerId: 'provider-1',
+      providerName: "John's Plumbing",
+      service: 'Plumbing Repair',
+      date: '2024-02-15',
+      time: '09:00',
+      status: 'confirmed',
+      description: 'Fix leaky kitchen faucet',
+      location: 'Cape Town, Western Cape',
+      estimatedHours: 2,
+      totalCost: 450
     },
     {
-      id: '4',
-      title: 'House Cleaning',
-      description: 'Deep cleaning of 3-bedroom house',
-      category: 'Cleaning',
-      status: 'completed',
-      budget: 280,
+      id: 'booking-2',
+      providerId: 'provider-2',
+      providerName: 'Spark Electric',
+      service: 'Electrical Installation',
+      date: '2024-02-20',
+      time: '14:00',
+      status: 'pending',
+      description: 'Install new ceiling fan',
       location: 'Cape Town, Western Cape',
-      createdAt: '2024-01-18',
-      provider: 'Clean Pro Services',
-      rating: 4,
-      date: '2024-01-18',
-      reviews: 8
-    },
-    {
-      id: '5',
-      title: 'Garden Maintenance',
-      description: 'Monthly garden maintenance and pruning',
-      category: 'Gardening',
-      status: 'in-progress',
-      budget: 150,
-      location: 'Cape Town, Western Cape',
-      createdAt: '2024-01-22',
-      provider: 'Green Thumb Gardening',
-      date: '2024-01-22',
-      reviews: 3
+      estimatedHours: 3,
+      totalCost: 320
     }
   ]);
 
@@ -150,7 +175,9 @@ export const ClientView: React.FC<ClientViewProps> = ({
       location: 'Cape Town, Western Cape',
       isOnline: true,
       avatar: undefined,
-      reviews: 15
+      reviews: 15,
+      hourlyRate: 225,
+      availability: ['09:00', '10:00', '11:00', '14:00', '15:00']
     },
     {
       id: 'provider-2',
@@ -160,7 +187,9 @@ export const ClientView: React.FC<ClientViewProps> = ({
       location: 'Cape Town, Western Cape',
       isOnline: true,
       avatar: undefined,
-      reviews: 10
+      reviews: 10,
+      hourlyRate: 280,
+      availability: ['08:00', '09:00', '13:00', '14:00', '16:00']
     },
     {
       id: 'provider-3',
@@ -170,7 +199,9 @@ export const ClientView: React.FC<ClientViewProps> = ({
       location: 'Cape Town, Western Cape',
       isOnline: false,
       avatar: undefined,
-      reviews: 20
+      reviews: 20,
+      hourlyRate: 180,
+      availability: ['08:00', '09:00', '10:00', '14:00', '15:00']
     },
     {
       id: 'provider-4',
@@ -180,7 +211,9 @@ export const ClientView: React.FC<ClientViewProps> = ({
       location: 'Cape Town, Western Cape',
       isOnline: true,
       avatar: undefined,
-      reviews: 12
+      reviews: 12,
+      hourlyRate: 150,
+      availability: ['07:00', '08:00', '09:00', '15:00', '16:00']
     },
     {
       id: 'provider-5',
@@ -190,37 +223,9 @@ export const ClientView: React.FC<ClientViewProps> = ({
       location: 'Cape Town, Western Cape',
       isOnline: true,
       avatar: undefined,
-      reviews: 8
-    },
-    {
-      id: 'provider-6',
-      name: 'Carpentry Masters',
-      service: 'Carpentry',
-      rating: 4.4,
-      location: 'Cape Town, Western Cape',
-      isOnline: true,
-      avatar: undefined,
-      reviews: 10
-    },
-    {
-      id: 'provider-7',
-      name: 'Paint Pro Services',
-      service: 'Painting',
-      rating: 4.3,
-      location: 'Cape Town, Western Cape',
-      isOnline: false,
-      avatar: undefined,
-      reviews: 15
-    },
-    {
-      id: 'provider-8',
-      name: 'Security Solutions',
-      service: 'Security',
-      rating: 4.8,
-      location: 'Cape Town, Western Cape',
-      isOnline: true,
-      avatar: undefined,
-      reviews: 25
+      reviews: 8,
+      hourlyRate: 300,
+      availability: ['08:00', '09:00', '10:00', '14:00', '15:00']
     }
   ]);
 
@@ -232,11 +237,28 @@ export const ClientView: React.FC<ClientViewProps> = ({
     location: ''
   });
 
+  const [bookingDetails, setBookingDetails] = useState({
+    date: '',
+    time: '',
+    description: '',
+    location: '',
+    urgency: 'normal',
+    estimatedHours: 2
+  });
+
   const [filters, setFilters] = useState({
     status: 'all',
     category: 'all',
     minBudget: '',
     maxBudget: ''
+  });
+
+  // Search and filter providers
+  const filteredProviders = availableProviders.filter(provider => {
+    const matchesSearch = provider.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         provider.service.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || provider.service.toLowerCase() === selectedCategory.toLowerCase();
+    return matchesSearch && matchesCategory;
   });
 
   const handleCreateRequest = () => {
@@ -250,8 +272,8 @@ export const ClientView: React.FC<ClientViewProps> = ({
         budget: parseFloat(newRequest.budget),
         location: newRequest.location,
         createdAt: new Date().toISOString().split('T')[0],
-        date: new Date().toISOString().split('T')[0], // Added for new code
-        reviews: 0 // Added for new code
+        date: new Date().toISOString().split('T')[0],
+        reviews: 0
       };
       
       setServiceRequests([request, ...serviceRequests]);
@@ -266,20 +288,53 @@ export const ClientView: React.FC<ClientViewProps> = ({
     setShowChatDialog(true);
   };
 
+  const handleBookProvider = (provider: ServiceProvider) => {
+    setSelectedProvider(provider);
+    setBookingDetails({
+      date: '',
+      time: '',
+      description: '',
+      location: '',
+      urgency: 'normal',
+      estimatedHours: 2
+    });
+    setShowBookingDialog(true);
+  };
+
+  const handleBookingSubmit = () => {
+    if (selectedProvider && bookingDetails.date && bookingDetails.time && bookingDetails.description && bookingDetails.location) {
+      const booking: Booking = {
+        id: `booking-${Date.now()}`,
+        providerId: selectedProvider.id,
+        providerName: selectedProvider.name,
+        service: selectedProvider.service,
+        date: bookingDetails.date,
+        time: bookingDetails.time,
+        status: 'pending',
+        description: bookingDetails.description,
+        location: bookingDetails.location,
+        estimatedHours: bookingDetails.estimatedHours,
+        totalCost: (selectedProvider.hourlyRate || 200) * bookingDetails.estimatedHours
+      };
+      
+      setBookings([booking, ...bookings]);
+      setShowBookingDialog(false);
+      setSelectedProvider(null);
+    }
+  };
+
   const handleProviderClick = (provider: ServiceProvider) => {
     setSelectedProvider(provider);
     setShowChatDialog(true);
   };
 
   const handleRequestClick = (request: ServiceRequest) => {
-    // Logic to view request details
     console.log('Viewing request:', request);
   };
 
   const handleCategoryClick = (category: string) => {
-    // Logic to navigate to service selection based on category
-    console.log('Navigating to service selection for category:', category);
-    setCurrentView('service-selection');
+    setSelectedCategory(category.toLowerCase());
+    setActiveTab('search');
   };
 
   const getStatusColor = (status: string) => {
@@ -288,6 +343,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
       case 'in-progress': return 'bg-blue-500 text-blue-900';
       case 'completed': return 'bg-green-500 text-green-900';
       case 'cancelled': return 'bg-red-500 text-red-900';
+      case 'confirmed': return 'bg-green-500 text-green-900';
       default: return 'bg-gray-500 text-gray-900';
     }
   };
@@ -316,7 +372,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-500 via-yellow-500 to-red-600">
-      {/* Simple Header */}
+      {/* Header */}
       <div className="max-w-4xl mx-auto p-6">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
@@ -331,7 +387,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
           </div>
           <div className="text-right text-white">
             <div className="text-lg font-bold">Client Dashboard</div>
-            <div className="text-sm opacity-80">Manage your service requests</div>
+            <div className="text-sm opacity-80">Manage your services</div>
           </div>
         </div>
 
@@ -339,90 +395,193 @@ export const ClientView: React.FC<ClientViewProps> = ({
         <div className="bg-gradient-to-br from-slate-400 via-blue-500 to-slate-600 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
           <div className="p-8">
             <div className="max-w-6xl mx-auto">
-              {/* Header */}
-              <div className="mb-8">
-                <h1 className="text-4xl font-bold text-white mb-2">Welcome back, {currentUser.name}!</h1>
-                <p className="text-white/80 text-lg">Manage your service requests and connect with providers</p>
-              </div>
+              {/* Tabs */}
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <TabsList className="grid w-full grid-cols-4 bg-white/20 backdrop-blur-sm">
+                  <TabsTrigger value="dashboard" className="text-white data-[state=active]:bg-white/30">
+                    Dashboard
+                  </TabsTrigger>
+                  <TabsTrigger value="search" className="text-white data-[state=active]:bg-white/30">
+                    Search Services
+                  </TabsTrigger>
+                  <TabsTrigger value="bookings" className="text-white data-[state=active]:bg-white/30">
+                    My Bookings
+                  </TabsTrigger>
+                  <TabsTrigger value="requests" className="text-white data-[state=active]:bg-white/30">
+                    Service Requests
+                  </TabsTrigger>
+                </TabsList>
 
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-white/90 text-sm font-medium uppercase tracking-wide">Active Requests</p>
-                        <p className="text-white text-3xl font-bold mt-1">{serviceRequests.length}</p>
-                        <p className="text-white/70 text-xs mt-1">In progress</p>
+                {/* Dashboard Tab */}
+                <TabsContent value="dashboard" className="mt-6">
+                  <div className="mb-8">
+                    <h1 className="text-4xl font-bold text-white mb-2">Welcome back, {currentUser.name}!</h1>
+                    <p className="text-white/80 text-lg">Manage your service requests and connect with providers</p>
+                  </div>
+
+                  {/* Stats Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-white/90 text-sm font-medium uppercase tracking-wide">Active Requests</p>
+                            <p className="text-white text-3xl font-bold mt-1">{serviceRequests.length}</p>
+                            <p className="text-white/70 text-xs mt-1">In progress</p>
+                          </div>
+                          <div className="bg-white/20 p-3 rounded-full">
+                            <FileText className="h-8 w-8 text-white" />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-white/90 text-sm font-medium uppercase tracking-wide">My Bookings</p>
+                            <p className="text-white text-3xl font-bold mt-1">{bookings.length}</p>
+                            <p className="text-white/70 text-xs mt-1">Scheduled</p>
+                          </div>
+                          <div className="bg-white/20 p-3 rounded-full">
+                            <Calendar className="h-8 w-8 text-white" />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-white/90 text-sm font-medium uppercase tracking-wide">Available Providers</p>
+                            <p className="text-white text-3xl font-bold mt-1">{availableProviders.length}</p>
+                            <p className="text-white/70 text-xs mt-1">Ready to help</p>
+                          </div>
+                          <div className="bg-white/20 p-3 rounded-full">
+                            <Users className="h-8 w-8 text-white" />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-white/90 text-sm font-medium uppercase tracking-wide">Total Spent</p>
+                            <p className="text-white text-3xl font-bold mt-1">R2,450</p>
+                            <p className="text-white/70 text-xs mt-1">This month</p>
+                          </div>
+                          <div className="bg-white/20 p-3 rounded-full">
+                            <DollarSign className="h-8 w-8 text-white" />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {/* Quick Actions */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                      <CardHeader>
+                        <CardTitle className="text-white text-xl font-semibold">Quick Actions</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-2 gap-4">
+                          <Button 
+                            onClick={() => setActiveTab('search')}
+                            className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-12"
+                          >
+                            <Search className="h-4 w-4 mr-2" />
+                            Find Services
+                          </Button>
+                          <Button 
+                            onClick={() => setShowNewRequestDialog(true)}
+                            className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-12"
+                          >
+                            <Plus className="h-4 w-4 mr-2" />
+                            New Request
+                          </Button>
+                          <Button 
+                            onClick={() => setActiveTab('bookings')}
+                            className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-12"
+                          >
+                            <Calendar className="h-4 w-4 mr-2" />
+                            View Bookings
+                          </Button>
+                          <Button 
+                            onClick={() => setActiveTab('requests')}
+                            className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-12"
+                          >
+                            <FileText className="h-4 w-4 mr-2" />
+                            My Requests
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                      <CardHeader>
+                        <CardTitle className="text-white text-xl font-semibold">Popular Services</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-2 gap-3">
+                          {['Plumbing', 'Electrical', 'Cleaning', 'Carpentry'].map((category) => (
+                            <Button
+                              key={category}
+                              variant="outline"
+                              className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-10 text-sm"
+                              onClick={() => handleCategoryClick(category)}
+                            >
+                              {category}
+                            </Button>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+
+                {/* Search Services Tab */}
+                <TabsContent value="search" className="mt-6">
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-bold text-white mb-4">Find Service Providers</h2>
+                    
+                    {/* Search Bar */}
+                    <div className="flex gap-4 mb-6">
+                      <div className="flex-1 relative">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-4 w-4" />
+                        <Input
+                          placeholder="Search for services or providers..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-white/60"
+                        />
                       </div>
-                      <div className="bg-white/20 p-3 rounded-full">
-                        <FileText className="h-8 w-8 text-white" />
-                      </div>
+                      <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                        <SelectTrigger className="w-48 bg-white/20 border-white/30 text-white">
+                          <SelectValue placeholder="All Categories" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Categories</SelectItem>
+                          <SelectItem value="plumbing">Plumbing</SelectItem>
+                          <SelectItem value="electrical">Electrical</SelectItem>
+                          <SelectItem value="cleaning">Cleaning</SelectItem>
+                          <SelectItem value="gardening">Gardening</SelectItem>
+                          <SelectItem value="mechanic">Mechanic</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-                  </CardContent>
-                </Card>
 
-                <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-white/90 text-sm font-medium uppercase tracking-wide">Available Providers</p>
-                        <p className="text-white text-3xl font-bold mt-1">{availableProviders.length}</p>
-                        <p className="text-white/70 text-xs mt-1">Ready to help</p>
-                      </div>
-                      <div className="bg-white/20 p-3 rounded-full">
-                        <Users className="h-8 w-8 text-white" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-white/90 text-sm font-medium uppercase tracking-wide">Completed</p>
-                        <p className="text-white text-3xl font-bold mt-1">12</p>
-                        <p className="text-white/70 text-xs mt-1">This month</p>
-                      </div>
-                      <div className="bg-white/20 p-3 rounded-full">
-                        <CheckCircle className="h-8 w-8 text-white" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-white/90 text-sm font-medium uppercase tracking-wide">Total Spent</p>
-                        <p className="text-white text-3xl font-bold mt-1">R2,450</p>
-                        <p className="text-white/70 text-xs mt-1">This month</p>
-                      </div>
-                      <div className="bg-white/20 p-3 rounded-full">
-                        <DollarSign className="h-8 w-8 text-white" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Main Content Grid */}
-              <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-                {/* Available Providers */}
-                <div className="xl:col-span-2">
-                  <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
-                    <CardHeader>
-                      <CardTitle className="text-white text-xl font-semibold">Available Service Providers</CardTitle>
-                      <CardDescription className="text-white/80">Connect with trusted professionals</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {availableProviders.slice(0, 4).map((provider) => (
-                          <div key={provider.id} className="bg-white/10 border border-white/20 rounded-xl p-4 hover:bg-white/20 transition-all duration-200">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center space-x-4">
+                    {/* Service Providers Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {filteredProviders.map((provider) => (
+                        <Card key={provider.id} className="bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200">
+                          <CardContent className="p-6">
+                            <div className="flex items-start justify-between mb-4">
+                              <div className="flex items-center space-x-3">
                                 <Avatar className="h-12 w-12">
                                   <AvatarImage src={provider.avatar} />
                                   <AvatarFallback className="bg-white/20 text-white">
@@ -439,97 +598,167 @@ export const ClientView: React.FC<ClientViewProps> = ({
                                   </div>
                                 </div>
                               </div>
+                              <div className={`w-3 h-3 rounded-full ${provider.isOnline ? 'bg-green-400' : 'bg-gray-400'}`} />
+                            </div>
+                            
+                            <div className="space-y-3 mb-4">
+                              <div className="flex items-center text-white/80 text-sm">
+                                <MapPin className="h-4 w-4 mr-2" />
+                                {provider.location}
+                              </div>
+                              <div className="flex items-center text-white/80 text-sm">
+                                <DollarSign className="h-4 w-4 mr-2" />
+                                R{provider.hourlyRate}/hour
+                              </div>
+                            </div>
+
+                            <div className="flex gap-2">
                               <Button 
                                 size="sm" 
-                                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
-                                onClick={() => handleProviderClick(provider)}
+                                className="flex-1 bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                onClick={() => handleBookProvider(provider)}
                               >
-                                Contact
+                                <BookOpen className="h-4 w-4 mr-2" />
+                                Book Now
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                onClick={() => handleStartChat(provider)}
+                              >
+                                <MessageCircle className="h-4 w-4" />
                               </Button>
                             </div>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
 
-                {/* Service Requests */}
-                <div className="xl:col-span-2">
-                  <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
-                    <CardHeader>
-                      <CardTitle className="text-white text-xl font-semibold">Your Service Requests</CardTitle>
-                      <CardDescription className="text-white/80">Track your ongoing projects</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {filteredRequests.slice(0, 3).map((request) => (
-                          <div key={request.id} className="bg-white/10 border border-white/20 rounded-xl p-4 hover:bg-white/20 transition-all duration-200">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center space-x-4">
+                {/* Bookings Tab */}
+                <TabsContent value="bookings" className="mt-6">
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-bold text-white mb-4">My Bookings</h2>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {bookings.map((booking) => (
+                        <Card key={booking.id} className="bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200">
+                          <CardContent className="p-6">
+                            <div className="flex items-start justify-between mb-4">
+                              <div>
+                                <h3 className="text-white font-semibold text-lg">{booking.providerName}</h3>
+                                <p className="text-white/80 text-sm">{booking.service}</p>
+                                <Badge className={`mt-2 ${getStatusColor(booking.status)}`}>
+                                  {booking.status}
+                                </Badge>
+                              </div>
+                              <div className="text-right text-white/80">
+                                <div className="text-sm">R{booking.totalCost}</div>
+                                <div className="text-xs">{booking.estimatedHours}h</div>
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-2 mb-4">
+                              <div className="flex items-center text-white/80 text-sm">
+                                <CalendarDays className="h-4 w-4 mr-2" />
+                                {booking.date}
+                              </div>
+                              <div className="flex items-center text-white/80 text-sm">
+                                <TimeIcon className="h-4 w-4 mr-2" />
+                                {booking.time}
+                              </div>
+                              <div className="flex items-center text-white/80 text-sm">
+                                <LocationPin className="h-4 w-4 mr-2" />
+                                {booking.location}
+                              </div>
+                            </div>
+
+                            <div className="flex gap-2">
+                              <Button 
+                                size="sm" 
+                                className="flex-1 bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                onClick={() => handleStartChat({ id: booking.providerId, name: booking.providerName } as ServiceProvider)}
+                              >
+                                <MessageCircle className="h-4 w-4 mr-2" />
+                                Chat
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Service Requests Tab */}
+                <TabsContent value="requests" className="mt-6">
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-2xl font-bold text-white">Service Requests</h2>
+                      <Button 
+                        onClick={() => setShowNewRequestDialog(true)}
+                        className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        New Request
+                      </Button>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {filteredRequests.map((request) => (
+                        <Card key={request.id} className="bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200">
+                          <CardContent className="p-6">
+                            <div className="flex items-start justify-between mb-4">
+                              <div className="flex items-center space-x-3">
                                 <div className="bg-white/20 p-2 rounded-lg">
                                   {getCategoryIcon(request.category)}
                                 </div>
                                 <div>
                                   <h3 className="text-white font-semibold text-lg">{request.title}</h3>
                                   <p className="text-white/80 text-sm">{request.description}</p>
-                                  <div className="flex items-center mt-2 space-x-4">
-                                    <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
-                                      {request.status}
-                                    </Badge>
-                                    <span className="text-white/60 text-xs">{request.date}</span>
-                                  </div>
+                                  <Badge className={`mt-2 ${getStatusColor(request.status)}`}>
+                                    {request.status}
+                                  </Badge>
                                 </div>
                               </div>
+                              <div className="text-right text-white/80">
+                                <div className="text-sm">R{request.budget}</div>
+                                <div className="text-xs">{request.date}</div>
+                              </div>
+                            </div>
+                            
+                            <div className="flex gap-2">
                               <Button 
                                 size="sm" 
-                                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                className="flex-1 bg-white/20 hover:bg-white/30 text-white border-white/30"
                                 onClick={() => handleRequestClick(request)}
                               >
-                                View
+                                View Details
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                              >
+                                <Edit className="h-4 w-4" />
                               </Button>
                             </div>
-                          </div>
-                        ))}
-                        {filteredRequests.length === 0 && (
-                          <div className="text-center py-8">
-                            <FileText className="h-12 w-12 text-white/40 mx-auto mb-4" />
-                            <h3 className="text-white font-semibold mb-2">No service requests yet</h3>
-                            <p className="text-white/60 mb-4">Start by creating your first service request</p>
-                            <Button className="bg-white/20 hover:bg-white/30 text-white border-white/30">
-                              Create Request
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-
-              {/* Service Categories */}
-              <div className="mt-8">
-                <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
-                  <CardHeader>
-                    <CardTitle className="text-white text-xl font-semibold">Popular Service Categories</CardTitle>
-                    <CardDescription className="text-white/80">Find the right service for your needs</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {['Plumbing', 'Electrical', 'Cleaning', 'Carpentry'].map((category) => (
-                        <Button
-                          key={category}
-                          variant="outline"
-                          className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-16 text-sm font-medium"
-                          onClick={() => handleCategoryClick(category)}
-                        >
-                          {category}
-                        </Button>
+                          </CardContent>
+                        </Card>
                       ))}
                     </div>
-                  </CardContent>
-                </Card>
-              </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
           </div>
         </div>
@@ -617,86 +846,16 @@ export const ClientView: React.FC<ClientViewProps> = ({
         </DialogContent>
       </Dialog>
 
-      {/* Filter Dialog */}
-      <Dialog open={showFilterDialog} onOpenChange={setShowFilterDialog}>
-        <DialogContent className="bg-white/95 backdrop-blur-md border border-white/30">
-          <DialogHeader>
-            <DialogTitle className="text-gray-800">Filter Requests</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="status" className="text-gray-700">Status</Label>
-              <Select value={filters.status} onValueChange={(value) => setFilters({...filters, status: value})}>
-                <SelectTrigger className="mt-1">
-                  <SelectValue placeholder="All statuses" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="in-progress">In Progress</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="cancelled">Cancelled</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="category" className="text-gray-700">Category</Label>
-              <Select value={filters.category} onValueChange={(value) => setFilters({...filters, category: value})}>
-                <SelectTrigger className="mt-1">
-                  <SelectValue placeholder="All categories" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  <SelectItem value="Plumbing">Plumbing</SelectItem>
-                  <SelectItem value="Electrical">Electrical</SelectItem>
-                  <SelectItem value="Cleaning">Cleaning</SelectItem>
-                  <SelectItem value="Gardening">Gardening</SelectItem>
-                  <SelectItem value="Carpentry">Carpentry</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="minBudget" className="text-gray-700">Min Budget</Label>
-                <Input
-                  id="minBudget"
-                  type="number"
-                  value={filters.minBudget}
-                  onChange={(e) => setFilters({...filters, minBudget: e.target.value})}
-                  placeholder="0"
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <Label htmlFor="maxBudget" className="text-gray-700">Max Budget</Label>
-                <Input
-                  id="maxBudget"
-                  type="number"
-                  value={filters.maxBudget}
-                  onChange={(e) => setFilters({...filters, maxBudget: e.target.value})}
-                  placeholder="1000"
-                  className="mt-1"
-                />
-              </div>
-            </div>
-            <div className="flex gap-2 pt-4">
-              <Button
-                onClick={() => setFilters({status: 'all', category: 'all', minBudget: '', maxBudget: ''})}
-                variant="outline"
-                className="flex-1"
-              >
-                Clear Filters
-              </Button>
-              <Button
-                onClick={() => setShowFilterDialog(false)}
-                className="flex-1 bg-gradient-to-r from-blue-400 to-cyan-500 hover:from-blue-500 hover:to-cyan-600 text-white"
-              >
-                Apply Filters
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* Booking Dialog */}
+      <BookingDialog
+        showBookingDialog={showBookingDialog}
+        setShowBookingDialog={setShowBookingDialog}
+        selectedProvider={selectedProvider}
+        bookingDetails={bookingDetails}
+        setBookingDetails={setBookingDetails}
+        handleBookingSubmit={handleBookingSubmit}
+        isConnected={isConnected}
+      />
 
       {/* Chat System */}
       <ChatSystem

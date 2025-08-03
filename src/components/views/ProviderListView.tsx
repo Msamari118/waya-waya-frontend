@@ -83,116 +83,120 @@ export const ProviderListView: React.FC<ProviderListViewProps> = ({
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" onClick={() => setCurrentView('service-selection')}>
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
-        </Button>
-        <WayaWayaLogo size="sm" />
-        <div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 bg-clip-text text-transparent">
-            Available Providers
-          </h1>
-          <p className="text-gray-300 text-sm">
-            {filteredProviders.length} providers found for {selectedService}
-          </p>
-        </div>
-      </div>
-
-      <Card className="bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80 backdrop-blur-md border border-yellow-500/30 shadow-2xl">
-        <CardContent className="p-4 space-y-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input
-              placeholder="Search providers..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500 backdrop-blur-sm"
-            />
+    <div className="min-h-screen bg-gradient-to-br from-green-500 via-yellow-500 to-red-600">
+      {/* Header */}
+      <div className="max-w-4xl mx-auto p-6">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              onClick={() => setCurrentView('service-selection')}
+              className="text-white hover:text-white hover:bg-white/20 rounded-xl p-3 transition-all duration-300"
+            >
+              ← Back
+            </Button>
+            <WayaWayaLogo size="sm" />
           </div>
-        </CardContent>
-      </Card>
+          <div className="text-right text-white">
+            <div className="text-lg font-bold">Available Providers</div>
+            <div className="text-sm opacity-80">{filteredProviders.length} providers found for {selectedService}</div>
+          </div>
+        </div>
 
-      <div className="space-y-4">
-        {filteredProviders.map((provider) => (
-          <Card
-            key={provider.id}
-            className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 hover:border-green-500/50 transition-all duration-200 cursor-pointer backdrop-blur-sm"
-            onClick={() => handleProviderSelect(provider)}
-          >
-            <CardContent className="p-4">
-              <div className="flex items-start gap-4">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-lg bg-gradient-to-r from-yellow-400 to-green-400 flex items-center justify-center">
-                    <Wrench className="h-8 w-8 text-white" />
-                  </div>
-                  {provider.verified && (
-                    <div className="absolute -top-1 -right-1 bg-green-500 rounded-full p-1">
-                      <CheckCircle className="h-3 w-3 text-white" />
-                    </div>
-                  )}
+        {/* Main Content */}
+        <div className="bg-gradient-to-br from-slate-400 via-blue-500 to-slate-600 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
+          <div className="p-8">
+            <div className="max-w-6xl mx-auto">
+              
+              {/* Search and Filter */}
+              <div className="flex gap-4 mb-6">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-4 w-4" />
+                  <Input
+                    placeholder="Search providers..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-white/60"
+                  />
                 </div>
-
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-medium text-white">{provider.name}</h3>
-                    {provider.available ? (
-                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">
-                        Available
-                      </Badge>
-                    ) : (
-                      <Badge className="bg-red-500/20 text-red-400 border-red-500/30 text-xs">
-                        Busy
-                      </Badge>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-4 text-sm text-gray-300 mb-2">
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-yellow-400" />
-                      <span>{provider.rating}</span>
-                      <span className="text-gray-400">({provider.reviews})</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <MapPin className="h-4 w-4" />
-                      <span>{provider.distance}km away</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      <span>{provider.responseTime}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4 text-sm text-gray-300 mb-3">
-                    <div className="flex items-center gap-1">
-                      <DollarSign className="h-4 w-4" />
-                      <span>R{provider.hourlyRate}/hr</span>
-                    </div>
-                    <span>• {provider.experience}</span>
-                    <span>• {provider.location}</span>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      className="bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white"
-                    >
-                      View Profile
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="border-yellow-500/30 bg-black/40 text-gray-200 hover:bg-yellow-500/20 backdrop-blur-sm"
-                    >
-                      <MessageCircle className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-48 bg-white/20 border-white/30 text-white">
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rating">Rating</SelectItem>
+                    <SelectItem value="distance">Distance</SelectItem>
+                    <SelectItem value="price">Price</SelectItem>
+                    <SelectItem value="response">Response Time</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-            </CardContent>
-          </Card>
-        ))}
+
+              {/* Providers Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProviders.map((provider) => (
+                  <Card key={provider.id} className="bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200">
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="bg-white/20 p-2 rounded-lg">
+                            {provider.service === 'plumbing' && <Wrench className="h-4 w-4 text-white" />}
+                            {provider.service === 'electrical' && <Zap className="h-4 w-4 text-white" />}
+                            {provider.service === 'cleaning' && <Sparkles className="h-4 w-4 text-white" />}
+                            {provider.service === 'mechanic' && <Car className="h-4 w-4 text-white" />}
+                          </div>
+                          <div>
+                            <h3 className="text-white font-semibold text-lg">{provider.name}</h3>
+                            <p className="text-white/80 text-sm capitalize">{provider.service}</p>
+                            <div className="flex items-center mt-1">
+                              <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                              <span className="text-white/80 text-sm ml-1">{provider.rating}</span>
+                              <span className="text-white/60 text-xs ml-2">({provider.reviews} reviews)</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className={`w-3 h-3 rounded-full ${provider.available ? 'bg-green-400' : 'bg-gray-400'}`} />
+                      </div>
+                      
+                      <div className="space-y-3 mb-4">
+                        <div className="flex items-center text-white/80 text-sm">
+                          <MapPin className="h-4 w-4 mr-2" />
+                          {provider.location}
+                        </div>
+                        <div className="flex items-center text-white/80 text-sm">
+                          <DollarSign className="h-4 w-4 mr-2" />
+                          R{provider.hourlyRate}/hour
+                        </div>
+                        <div className="flex items-center text-white/80 text-sm">
+                          <Clock className="h-4 w-4 mr-2" />
+                          {provider.responseTime} response
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button 
+                          size="sm" 
+                          className="flex-1 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white"
+                          onClick={() => handleProviderSelect(provider)}
+                        >
+                          <MessageCircle className="h-4 w-4 mr-2" />
+                          Contact
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                        >
+                          <CheckCircle className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
