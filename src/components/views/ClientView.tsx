@@ -296,7 +296,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
         </div>
 
         {/* Main Content */}
-        <div className="bg-white/95 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
+        <div className="bg-gradient-to-br from-slate-200 via-gray-300 to-slate-400 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
           <div className="p-8">
             <div className="max-w-6xl mx-auto">
               
