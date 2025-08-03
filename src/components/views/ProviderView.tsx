@@ -10,7 +10,8 @@ import ChatSystem from '../ChatSystem';
 import { 
   DollarSign, Calendar, Star, User, BarChart3, MessageCircle, Server,
   ToggleLeft, ToggleRight, CheckCircle, Clock, MapPin, FileText, Users,
-  TrendingUp, Award, Zap, Shield, Wrench, Sparkles, Car, Heart, Target
+  TrendingUp, Award, Zap, Shield, Wrench, Sparkles, Car, Heart, Target,
+  CalendarDays
 } from 'lucide-react';
 import { apiClient } from '../../utils/apiClient.js';
 
@@ -215,35 +216,31 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
             <Button 
               variant="ghost" 
               onClick={() => setCurrentView('home')}
-              className="text-white hover:text-white hover:bg-white/20 rounded-xl p-3 transition-all duration-300"
+              className="text-white hover:bg-white/20 rounded-xl p-3 transition-all duration-300"
             >
               ← Back
             </Button>
             <WayaWayaLogo size="sm" />
           </div>
-          <div className="text-right text-white">
-            <div className="text-lg font-bold">Provider Dashboard</div>
-            <div className="text-sm opacity-80">Manage your services</div>
-          </div>
         </div>
 
         {/* Main Content */}
-        <div className="bg-gradient-to-br from-slate-400 via-blue-500 to-slate-600 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
+        <div className="bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80 backdrop-blur-md border border-yellow-500/30 shadow-2xl rounded-2xl overflow-hidden">
           <div className="p-8">
             <div className="max-w-6xl mx-auto">
               {/* Tabs */}
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-4 bg-white/20 backdrop-blur-sm">
-                  <TabsTrigger value="dashboard" className="text-white data-[state=active]:bg-white/30">
+                <TabsList className="grid w-full grid-cols-4 bg-black/40 backdrop-blur-sm border border-yellow-500/30">
+                  <TabsTrigger value="dashboard" className="text-white data-[state=active]:bg-yellow-500/20 data-[state=active]:border-yellow-500/50">
                     Dashboard
                   </TabsTrigger>
-                  <TabsTrigger value="bookings" className="text-white data-[state=active]:bg-white/30">
+                  <TabsTrigger value="bookings" className="text-white data-[state=active]:bg-yellow-500/20 data-[state=active]:border-yellow-500/50">
                     My Bookings
                   </TabsTrigger>
-                  <TabsTrigger value="requests" className="text-white data-[state=active]:bg-white/30">
+                  <TabsTrigger value="requests" className="text-white data-[state=active]:bg-yellow-500/20 data-[state=active]:border-yellow-500/50">
                     Service Requests
                   </TabsTrigger>
-                  <TabsTrigger value="earnings" className="text-white data-[state=active]:bg-white/30">
+                  <TabsTrigger value="earnings" className="text-white data-[state=active]:bg-yellow-500/20 data-[state=active]:border-yellow-500/50">
                     Earnings
                   </TabsTrigger>
                 </TabsList>
@@ -256,7 +253,7 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                   </div>
 
                   {/* Availability Toggle */}
-                  <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl mb-8">
+                  <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl mb-8">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
@@ -269,8 +266,8 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                           onClick={handleToggleAvailability}
                           className={`flex items-center gap-2 ${
                             isAvailable 
-                              ? 'bg-green-500 hover:bg-green-600 text-white' 
-                              : 'bg-gray-500 hover:bg-gray-600 text-white'
+                              ? 'bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0' 
+                              : 'bg-gray-500 hover:bg-gray-600 text-white border-0'
                           }`}
                         >
                           {isAvailable ? <ToggleRight className="h-5 w-5" /> : <ToggleLeft className="h-5 w-5" />}
@@ -282,7 +279,7 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
 
                   {/* Stats Cards */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div>
@@ -290,14 +287,14 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                             <p className="text-white text-3xl font-bold mt-1">R{todaysEarnings.toFixed(2)}</p>
                             <p className="text-white/70 text-xs mt-1">From 3 completed jobs</p>
                           </div>
-                          <div className="bg-white/20 p-3 rounded-full">
-                            <DollarSign className="h-8 w-8 text-white" />
+                          <div className="bg-yellow-500/20 p-3 rounded-full">
+                            <DollarSign className="h-8 w-8 text-yellow-400" />
                           </div>
                         </div>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div>
@@ -305,14 +302,14 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                             <p className="text-white text-3xl font-bold mt-1">{pendingBookings}</p>
                             <p className="text-white/70 text-xs mt-1">Require confirmation</p>
                           </div>
-                          <div className="bg-white/20 p-3 rounded-full">
-                            <Calendar className="h-8 w-8 text-white" />
+                          <div className="bg-yellow-500/20 p-3 rounded-full">
+                            <Calendar className="h-8 w-8 text-yellow-400" />
                           </div>
                         </div>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div>
@@ -320,14 +317,14 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                             <p className="text-white text-3xl font-bold mt-1">{currentProvider.rating}</p>
                             <p className="text-white/70 text-xs mt-1">Based on 127 reviews</p>
                           </div>
-                          <div className="bg-white/20 p-3 rounded-full">
-                            <Star className="h-8 w-8 text-white" />
+                          <div className="bg-yellow-500/20 p-3 rounded-full">
+                            <Star className="h-8 w-8 text-yellow-400" />
                           </div>
                         </div>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div>
@@ -335,8 +332,8 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                             <p className="text-white text-3xl font-bold mt-1">R{totalEarnings.toFixed(2)}</p>
                             <p className="text-white/70 text-xs mt-1">This month</p>
                           </div>
-                          <div className="bg-white/20 p-3 rounded-full">
-                            <TrendingUp className="h-8 w-8 text-white" />
+                          <div className="bg-yellow-500/20 p-3 rounded-full">
+                            <TrendingUp className="h-8 w-8 text-yellow-400" />
                           </div>
                         </div>
                       </CardContent>
@@ -345,7 +342,7 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
 
                   {/* Quick Actions */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                       <CardHeader>
                         <CardTitle className="text-white text-xl font-semibold">Quick Actions</CardTitle>
                       </CardHeader>
@@ -353,28 +350,28 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                         <div className="grid grid-cols-2 gap-4">
                           <Button 
                             onClick={() => setActiveTab('bookings')}
-                            className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-12"
+                            className="h-12 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                           >
                             <Calendar className="h-4 w-4 mr-2" />
                             View Bookings
                           </Button>
                           <Button 
                             onClick={() => setActiveTab('requests')}
-                            className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-12"
+                            className="h-12 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                           >
                             <FileText className="h-4 w-4 mr-2" />
                             Service Requests
                           </Button>
                           <Button 
                             onClick={() => setActiveTab('earnings')}
-                            className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-12"
+                            className="h-12 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                           >
                             <BarChart3 className="h-4 w-4 mr-2" />
                             View Earnings
                           </Button>
                           <Button 
                             onClick={() => setShowChatDialog(true)}
-                            className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-12"
+                            className="h-12 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                           >
                             <MessageCircle className="h-4 w-4 mr-2" />
                             Messages
@@ -383,14 +380,14 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                       <CardHeader>
                         <CardTitle className="text-white text-xl font-semibold">Recent Activity</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-3">
                           {bookings.slice(0, 3).map((booking) => (
-                            <div key={booking.id} className="flex items-center justify-between bg-white/10 rounded-lg p-3">
+                            <div key={booking.id} className="flex items-center justify-between bg-black/20 rounded-lg p-3">
                               <div>
                                 <p className="text-white font-medium">{booking.clientName}</p>
                                 <p className="text-white/80 text-sm">{booking.service}</p>
@@ -413,7 +410,7 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {bookings.map((booking) => (
-                        <Card key={booking.id} className="bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200">
+                        <Card key={booking.id} className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 hover:border-green-500/50 transition-all duration-200 backdrop-blur-sm">
                           <CardContent className="p-6">
                             <div className="flex items-start justify-between mb-4">
                               <div>
@@ -431,17 +428,17 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                             
                             <div className="space-y-2 mb-4">
                               <div className="flex items-center text-white/80 text-sm">
-                                <Calendar className="h-4 w-4 mr-2" />
+                                <CalendarDays className="h-4 w-4 mr-2" />
                                 {booking.date}
                               </div>
-                              <div className="flex items-center text-white/80 text-sm">
-                                <Clock className="h-4 w-4 mr-2" />
-                                {booking.time}
-                              </div>
-                              <div className="flex items-center text-white/80 text-sm">
-                                <MapPin className="h-4 w-4 mr-2" />
-                                {booking.location}
-                              </div>
+                                                              <div className="flex items-center text-white/80 text-sm">
+                                  <Clock className="h-4 w-4 mr-2" />
+                                  {booking.time}
+                                </div>
+                                <div className="flex items-center text-white/80 text-sm">
+                                  <MapPin className="h-4 w-4 mr-2" />
+                                  {booking.location}
+                                </div>
                             </div>
 
                             <div className="flex gap-2">
@@ -449,7 +446,7 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                                 <>
                                   <Button 
                                     size="sm" 
-                                    className="flex-1 bg-green-500 hover:bg-green-600 text-white"
+                                    className="flex-1 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                                     onClick={() => handleBookingAction(booking.id, 'confirm')}
                                   >
                                     Confirm
@@ -467,7 +464,7 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                               {booking.status === 'confirmed' && (
                                 <Button 
                                   size="sm" 
-                                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
+                                  className="flex-1 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                                   onClick={() => handleBookingAction(booking.id, 'complete')}
                                 >
                                   Mark Complete
@@ -476,7 +473,7 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                               <Button 
                                 size="sm" 
                                 variant="outline"
-                                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                className="bg-black/40 border-yellow-500/30 text-white hover:bg-yellow-500/20"
                                 onClick={() => handleStartChat({ id: booking.clientId, name: booking.clientName })}
                               >
                                 <MessageCircle className="h-4 w-4" />
@@ -496,11 +493,11 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {serviceRequests.map((request) => (
-                        <Card key={request.id} className="bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200">
+                        <Card key={request.id} className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 hover:border-green-500/50 transition-all duration-200 backdrop-blur-sm">
                           <CardContent className="p-6">
                             <div className="flex items-start justify-between mb-4">
                               <div className="flex items-center space-x-3">
-                                <div className="bg-white/20 p-2 rounded-lg">
+                                <div className="bg-yellow-500/20 p-2 rounded-lg">
                                   {getCategoryIcon(request.category)}
                                 </div>
                                 <div>
@@ -520,14 +517,14 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                             <div className="flex gap-2">
                               <Button 
                                 size="sm" 
-                                className="flex-1 bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                className="flex-1 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                               >
                                 View Details
                               </Button>
                               <Button 
                                 size="sm" 
                                 variant="outline"
-                                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                className="bg-black/40 border-yellow-500/30 text-white hover:bg-yellow-500/20"
                               >
                                 <MessageCircle className="h-4 w-4" />
                               </Button>
@@ -545,7 +542,7 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                     <h2 className="text-2xl font-bold text-white mb-4">Earnings Overview</h2>
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                      <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                      <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                         <CardContent className="p-6">
                           <div className="flex items-center justify-between">
                             <div>
@@ -553,14 +550,14 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                               <p className="text-white text-3xl font-bold mt-1">R{totalEarnings.toFixed(2)}</p>
                               <p className="text-white/70 text-xs mt-1">From {completedBookings} jobs</p>
                             </div>
-                            <div className="bg-white/20 p-3 rounded-full">
-                              <DollarSign className="h-8 w-8 text-white" />
+                            <div className="bg-yellow-500/20 p-3 rounded-full">
+                              <DollarSign className="h-8 w-8 text-yellow-400" />
                             </div>
                           </div>
                         </CardContent>
                       </Card>
 
-                      <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                      <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                         <CardContent className="p-6">
                           <div className="flex items-center justify-between">
                             <div>
@@ -570,14 +567,14 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                               </p>
                               <p className="text-white/70 text-xs mt-1">Per completed job</p>
                             </div>
-                            <div className="bg-white/20 p-3 rounded-full">
-                              <TrendingUp className="h-8 w-8 text-white" />
+                            <div className="bg-yellow-500/20 p-3 rounded-full">
+                              <TrendingUp className="h-8 w-8 text-yellow-400" />
                             </div>
                           </div>
                         </CardContent>
                       </Card>
 
-                      <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                      <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                         <CardContent className="p-6">
                           <div className="flex items-center justify-between">
                             <div>
@@ -585,8 +582,8 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                               <p className="text-white text-3xl font-bold mt-1">{completedBookings}</p>
                               <p className="text-white/70 text-xs mt-1">This month</p>
                             </div>
-                            <div className="bg-white/20 p-3 rounded-full">
-                              <CheckCircle className="h-8 w-8 text-white" />
+                            <div className="bg-yellow-500/20 p-3 rounded-full">
+                              <CheckCircle className="h-8 w-8 text-yellow-400" />
                             </div>
                           </div>
                         </CardContent>
@@ -594,7 +591,7 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
                     </div>
 
                     {/* Earnings Chart Placeholder */}
-                    <Card className="bg-white/10 border border-white/20">
+                    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                       <CardHeader>
                         <CardTitle className="text-white">Earnings Trend</CardTitle>
                       </CardHeader>

@@ -17,8 +17,8 @@ import {
   Search, Calendar, Star, User, BarChart3, MessageCircle, CreditCard,
   Clock, MapPin, CheckCircle, AlertCircle, TrendingUp, Award, Zap,
   Shield, Wrench, Sparkles, Car, Heart, Target, Plus, Filter,
-  X, Edit, Trash2, Phone, Mail, MapPin as LocationIcon, MessageSquare, FileText, Users, DollarSign,
-  BookOpen, CalendarDays, Clock as TimeIcon, MapPin as LocationPin
+  X, Edit, Trash2, Phone, Mail, MessageSquare, FileText, Users, DollarSign,
+  BookOpen, CalendarDays
 } from 'lucide-react';
 import { apiClient } from '../../utils/apiClient.js';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
@@ -379,35 +379,31 @@ export const ClientView: React.FC<ClientViewProps> = ({
             <Button 
               variant="ghost" 
               onClick={() => setCurrentView('home')}
-              className="text-white hover:text-white hover:bg-white/20 rounded-xl p-3 transition-all duration-300"
+              className="text-white hover:bg-white/20 rounded-xl p-3 transition-all duration-300"
             >
               ← Back
             </Button>
             <WayaWayaLogo size="sm" />
           </div>
-          <div className="text-right text-white">
-            <div className="text-lg font-bold">Client Dashboard</div>
-            <div className="text-sm opacity-80">Manage your services</div>
-          </div>
         </div>
 
         {/* Main Content */}
-        <div className="bg-gradient-to-br from-slate-400 via-blue-500 to-slate-600 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
+        <div className="bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80 backdrop-blur-md border border-yellow-500/30 shadow-2xl rounded-2xl overflow-hidden">
           <div className="p-8">
             <div className="max-w-6xl mx-auto">
               {/* Tabs */}
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-4 bg-white/20 backdrop-blur-sm">
-                  <TabsTrigger value="dashboard" className="text-white data-[state=active]:bg-white/30">
+                <TabsList className="grid w-full grid-cols-4 bg-black/40 backdrop-blur-sm border border-yellow-500/30">
+                  <TabsTrigger value="dashboard" className="text-white data-[state=active]:bg-yellow-500/20 data-[state=active]:border-yellow-500/50">
                     Dashboard
                   </TabsTrigger>
-                  <TabsTrigger value="search" className="text-white data-[state=active]:bg-white/30">
+                  <TabsTrigger value="search" className="text-white data-[state=active]:bg-yellow-500/20 data-[state=active]:border-yellow-500/50">
                     Search Services
                   </TabsTrigger>
-                  <TabsTrigger value="bookings" className="text-white data-[state=active]:bg-white/30">
+                  <TabsTrigger value="bookings" className="text-white data-[state=active]:bg-yellow-500/20 data-[state=active]:border-yellow-500/50">
                     My Bookings
                   </TabsTrigger>
-                  <TabsTrigger value="requests" className="text-white data-[state=active]:bg-white/30">
+                  <TabsTrigger value="requests" className="text-white data-[state=active]:bg-yellow-500/20 data-[state=active]:border-yellow-500/50">
                     Service Requests
                   </TabsTrigger>
                 </TabsList>
@@ -421,7 +417,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
 
                   {/* Stats Cards */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div>
@@ -429,14 +425,14 @@ export const ClientView: React.FC<ClientViewProps> = ({
                             <p className="text-white text-3xl font-bold mt-1">{serviceRequests.length}</p>
                             <p className="text-white/70 text-xs mt-1">In progress</p>
                           </div>
-                          <div className="bg-white/20 p-3 rounded-full">
-                            <FileText className="h-8 w-8 text-white" />
+                          <div className="bg-yellow-500/20 p-3 rounded-full">
+                            <FileText className="h-8 w-8 text-yellow-400" />
                           </div>
                         </div>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div>
@@ -444,14 +440,14 @@ export const ClientView: React.FC<ClientViewProps> = ({
                             <p className="text-white text-3xl font-bold mt-1">{bookings.length}</p>
                             <p className="text-white/70 text-xs mt-1">Scheduled</p>
                           </div>
-                          <div className="bg-white/20 p-3 rounded-full">
-                            <Calendar className="h-8 w-8 text-white" />
+                          <div className="bg-yellow-500/20 p-3 rounded-full">
+                            <Calendar className="h-8 w-8 text-yellow-400" />
                           </div>
                         </div>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div>
@@ -459,14 +455,14 @@ export const ClientView: React.FC<ClientViewProps> = ({
                             <p className="text-white text-3xl font-bold mt-1">{availableProviders.length}</p>
                             <p className="text-white/70 text-xs mt-1">Ready to help</p>
                           </div>
-                          <div className="bg-white/20 p-3 rounded-full">
-                            <Users className="h-8 w-8 text-white" />
+                          <div className="bg-yellow-500/20 p-3 rounded-full">
+                            <Users className="h-8 w-8 text-yellow-400" />
                           </div>
                         </div>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between">
                           <div>
@@ -474,8 +470,8 @@ export const ClientView: React.FC<ClientViewProps> = ({
                             <p className="text-white text-3xl font-bold mt-1">R2,450</p>
                             <p className="text-white/70 text-xs mt-1">This month</p>
                           </div>
-                          <div className="bg-white/20 p-3 rounded-full">
-                            <DollarSign className="h-8 w-8 text-white" />
+                          <div className="bg-yellow-500/20 p-3 rounded-full">
+                            <DollarSign className="h-8 w-8 text-yellow-400" />
                           </div>
                         </div>
                       </CardContent>
@@ -484,7 +480,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
 
                   {/* Quick Actions */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                       <CardHeader>
                         <CardTitle className="text-white text-xl font-semibold">Quick Actions</CardTitle>
                       </CardHeader>
@@ -492,28 +488,28 @@ export const ClientView: React.FC<ClientViewProps> = ({
                         <div className="grid grid-cols-2 gap-4">
                           <Button 
                             onClick={() => setActiveTab('search')}
-                            className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-12"
+                            className="h-12 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                           >
                             <Search className="h-4 w-4 mr-2" />
                             Find Services
                           </Button>
                           <Button 
                             onClick={() => setShowNewRequestDialog(true)}
-                            className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-12"
+                            className="h-12 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                           >
                             <Plus className="h-4 w-4 mr-2" />
                             New Request
                           </Button>
                           <Button 
                             onClick={() => setActiveTab('bookings')}
-                            className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-12"
+                            className="h-12 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                           >
                             <Calendar className="h-4 w-4 mr-2" />
                             View Bookings
                           </Button>
                           <Button 
                             onClick={() => setActiveTab('requests')}
-                            className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-12"
+                            className="h-12 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                           >
                             <FileText className="h-4 w-4 mr-2" />
                             My Requests
@@ -522,7 +518,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600 backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+                    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
                       <CardHeader>
                         <CardTitle className="text-white text-xl font-semibold">Popular Services</CardTitle>
                       </CardHeader>
@@ -532,7 +528,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                             <Button
                               key={category}
                               variant="outline"
-                              className="bg-white/20 hover:bg-white/30 text-white border-white/30 h-10 text-sm"
+                              className="h-10 bg-black/40 border-yellow-500/30 text-white hover:bg-yellow-500/20 text-sm font-medium"
                               onClick={() => handleCategoryClick(category)}
                             >
                               {category}
@@ -557,11 +553,11 @@ export const ClientView: React.FC<ClientViewProps> = ({
                           placeholder="Search for services or providers..."
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-white/60"
+                          className="pl-10 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500"
                         />
                       </div>
                       <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                        <SelectTrigger className="w-48 bg-white/20 border-white/30 text-white">
+                        <SelectTrigger className="w-48 bg-black/40 border-yellow-500/30 text-white">
                           <SelectValue placeholder="All Categories" />
                         </SelectTrigger>
                         <SelectContent>
@@ -578,13 +574,13 @@ export const ClientView: React.FC<ClientViewProps> = ({
                     {/* Service Providers Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {filteredProviders.map((provider) => (
-                        <Card key={provider.id} className="bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200">
+                        <Card key={provider.id} className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 hover:border-green-500/50 transition-all duration-200 backdrop-blur-sm">
                           <CardContent className="p-6">
                             <div className="flex items-start justify-between mb-4">
                               <div className="flex items-center space-x-3">
                                 <Avatar className="h-12 w-12">
                                   <AvatarImage src={provider.avatar} />
-                                  <AvatarFallback className="bg-white/20 text-white">
+                                  <AvatarFallback className="bg-yellow-500/20 text-yellow-400">
                                     {provider.name.split(' ').map(n => n[0]).join('')}
                                   </AvatarFallback>
                                 </Avatar>
@@ -615,7 +611,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                             <div className="flex gap-2">
                               <Button 
                                 size="sm" 
-                                className="flex-1 bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                className="flex-1 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                                 onClick={() => handleBookProvider(provider)}
                               >
                                 <BookOpen className="h-4 w-4 mr-2" />
@@ -624,7 +620,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                               <Button 
                                 size="sm" 
                                 variant="outline"
-                                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                className="bg-black/40 border-yellow-500/30 text-white hover:bg-yellow-500/20"
                                 onClick={() => handleStartChat(provider)}
                               >
                                 <MessageCircle className="h-4 w-4" />
@@ -644,7 +640,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {bookings.map((booking) => (
-                        <Card key={booking.id} className="bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200">
+                        <Card key={booking.id} className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 hover:border-green-500/50 transition-all duration-200 backdrop-blur-sm">
                           <CardContent className="p-6">
                             <div className="flex items-start justify-between mb-4">
                               <div>
@@ -665,21 +661,28 @@ export const ClientView: React.FC<ClientViewProps> = ({
                                 <CalendarDays className="h-4 w-4 mr-2" />
                                 {booking.date}
                               </div>
-                              <div className="flex items-center text-white/80 text-sm">
-                                <TimeIcon className="h-4 w-4 mr-2" />
-                                {booking.time}
-                              </div>
-                              <div className="flex items-center text-white/80 text-sm">
-                                <LocationPin className="h-4 w-4 mr-2" />
-                                {booking.location}
-                              </div>
+                                                              <div className="flex items-center text-white/80 text-sm">
+                                  <Clock className="h-4 w-4 mr-2" />
+                                  {booking.time}
+                                </div>
+                                <div className="flex items-center text-white/80 text-sm">
+                                  <MapPin className="h-4 w-4 mr-2" />
+                                  {booking.location}
+                                </div>
                             </div>
 
                             <div className="flex gap-2">
                               <Button 
                                 size="sm" 
-                                className="flex-1 bg-white/20 hover:bg-white/30 text-white border-white/30"
-                                onClick={() => handleStartChat({ id: booking.providerId, name: booking.providerName } as ServiceProvider)}
+                                className="flex-1 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
+                                onClick={() => handleStartChat({ 
+                                  id: booking.providerId, 
+                                  name: booking.providerName,
+                                  service: booking.service,
+                                  rating: 4.5,
+                                  location: booking.location,
+                                  isOnline: true
+                                })}
                               >
                                 <MessageCircle className="h-4 w-4 mr-2" />
                                 Chat
@@ -687,7 +690,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                               <Button 
                                 size="sm" 
                                 variant="outline"
-                                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                className="bg-black/40 border-yellow-500/30 text-white hover:bg-yellow-500/20"
                               >
                                 <Edit className="h-4 w-4" />
                               </Button>
@@ -706,7 +709,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                       <h2 className="text-2xl font-bold text-white">Service Requests</h2>
                       <Button 
                         onClick={() => setShowNewRequestDialog(true)}
-                        className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                        className="bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                       >
                         <Plus className="h-4 w-4 mr-2" />
                         New Request
@@ -715,11 +718,11 @@ export const ClientView: React.FC<ClientViewProps> = ({
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {filteredRequests.map((request) => (
-                        <Card key={request.id} className="bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200">
+                        <Card key={request.id} className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 hover:border-green-500/50 transition-all duration-200 backdrop-blur-sm">
                           <CardContent className="p-6">
                             <div className="flex items-start justify-between mb-4">
                               <div className="flex items-center space-x-3">
-                                <div className="bg-white/20 p-2 rounded-lg">
+                                <div className="bg-yellow-500/20 p-2 rounded-lg">
                                   {getCategoryIcon(request.category)}
                                 </div>
                                 <div>
@@ -739,7 +742,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                             <div className="flex gap-2">
                               <Button 
                                 size="sm" 
-                                className="flex-1 bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                className="flex-1 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                                 onClick={() => handleRequestClick(request)}
                               >
                                 View Details
@@ -747,7 +750,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                               <Button 
                                 size="sm" 
                                 variant="outline"
-                                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                                className="bg-black/40 border-yellow-500/30 text-white hover:bg-yellow-500/20"
                               >
                                 <Edit className="h-4 w-4" />
                               </Button>
@@ -766,35 +769,35 @@ export const ClientView: React.FC<ClientViewProps> = ({
 
       {/* New Request Dialog */}
       <Dialog open={showNewRequestDialog} onOpenChange={setShowNewRequestDialog}>
-        <DialogContent className="bg-white/95 backdrop-blur-md border border-white/30">
+        <DialogContent className="bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80 backdrop-blur-md border border-yellow-500/30 shadow-2xl">
           <DialogHeader>
-            <DialogTitle className="text-gray-800">Create New Service Request</DialogTitle>
+            <DialogTitle className="text-white">Create New Service Request</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="title" className="text-gray-700">Service Title</Label>
+              <Label htmlFor="title" className="text-gray-200">Service Title</Label>
               <Input
                 id="title"
                 value={newRequest.title}
                 onChange={(e) => setNewRequest({...newRequest, title: e.target.value})}
                 placeholder="e.g., Plumbing Repair"
-                className="mt-1"
+                className="mt-1 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500"
               />
             </div>
             <div>
-              <Label htmlFor="description" className="text-gray-700">Description</Label>
+              <Label htmlFor="description" className="text-gray-200">Description</Label>
               <Textarea
                 id="description"
                 value={newRequest.description}
                 onChange={(e) => setNewRequest({...newRequest, description: e.target.value})}
                 placeholder="Describe your service need..."
-                className="mt-1"
+                className="mt-1 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500"
               />
             </div>
             <div>
-              <Label htmlFor="category" className="text-gray-700">Category</Label>
+              <Label htmlFor="category" className="text-gray-200">Category</Label>
               <Select value={newRequest.category} onValueChange={(value) => setNewRequest({...newRequest, category: value})}>
-                <SelectTrigger className="mt-1">
+                <SelectTrigger className="mt-1 bg-black/40 border-yellow-500/30 text-white">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -807,37 +810,37 @@ export const ClientView: React.FC<ClientViewProps> = ({
               </Select>
             </div>
             <div>
-              <Label htmlFor="budget" className="text-gray-700">Budget (R)</Label>
+              <Label htmlFor="budget" className="text-gray-200">Budget (R)</Label>
               <Input
                 id="budget"
                 type="number"
                 value={newRequest.budget}
                 onChange={(e) => setNewRequest({...newRequest, budget: e.target.value})}
                 placeholder="500"
-                className="mt-1"
+                className="mt-1 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500"
               />
             </div>
             <div>
-              <Label htmlFor="location" className="text-gray-700">Location</Label>
+              <Label htmlFor="location" className="text-gray-200">Location</Label>
               <Input
                 id="location"
                 value={newRequest.location}
                 onChange={(e) => setNewRequest({...newRequest, location: e.target.value})}
                 placeholder="e.g., Cape Town, Western Cape"
-                className="mt-1"
+                className="mt-1 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500"
               />
             </div>
             <div className="flex gap-2 pt-4">
               <Button
                 onClick={handleCreateRequest}
-                className="flex-1 bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white"
+                className="flex-1 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
               >
                 Create Request
               </Button>
               <Button
                 variant="outline"
                 onClick={() => setShowNewRequestDialog(false)}
-                className="flex-1"
+                className="flex-1 bg-black/40 border-yellow-500/30 text-white hover:bg-yellow-500/20"
               >
                 Cancel
               </Button>

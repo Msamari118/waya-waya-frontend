@@ -109,20 +109,16 @@ export const ServiceSelectionView: React.FC<ServiceSelectionViewProps> = ({
             <Button 
               variant="ghost" 
               onClick={() => setCurrentView('client')}
-              className="text-white hover:text-white hover:bg-white/20 rounded-xl p-3 transition-all duration-300"
+              className="text-white hover:bg-white/20 rounded-xl p-3 transition-all duration-300"
             >
               ← Back
             </Button>
             <WayaWayaLogo size="sm" />
           </div>
-          <div className="text-right text-white">
-            <div className="text-lg font-bold">What Service Do You Need?</div>
-            <div className="text-sm opacity-80">Choose from our trusted providers</div>
-          </div>
         </div>
 
         {/* Main Content */}
-        <div className="bg-gradient-to-br from-slate-400 via-blue-500 to-slate-600 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
+        <div className="bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80 backdrop-blur-md border border-yellow-500/30 shadow-2xl rounded-2xl overflow-hidden">
           <div className="p-8">
             <div className="max-w-6xl mx-auto">
               
@@ -134,7 +130,7 @@ export const ServiceSelectionView: React.FC<ServiceSelectionViewProps> = ({
                     placeholder="Search for services..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-white/60"
+                    className="pl-10 bg-black/40 border-yellow-500/30 text-white placeholder:text-white/60 focus:border-green-500"
                   />
                 </div>
               </div>
@@ -151,7 +147,7 @@ export const ServiceSelectionView: React.FC<ServiceSelectionViewProps> = ({
                       <Button
                         key={service.id}
                         onClick={() => handleServiceSelect(service.id)}
-                        className="h-20 flex-col bg-white/10 border border-white/20 hover:bg-white/20 text-white transition-all duration-200"
+                        className="h-20 flex-col bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 hover:border-green-500/50 text-white transition-all duration-200 backdrop-blur-sm"
                       >
                         <service.icon className="h-6 w-6 mb-2" />
                         <span className="font-medium">{service.title}</span>
@@ -171,7 +167,7 @@ export const ServiceSelectionView: React.FC<ServiceSelectionViewProps> = ({
                   {filteredServices.map((service) => (
                     <Card
                       key={service.id}
-                      className="bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200 cursor-pointer"
+                      className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 hover:border-green-500/50 transition-all duration-200 cursor-pointer backdrop-blur-sm"
                       onClick={() => handleServiceSelect(service.id)}
                     >
                       <CardContent className="p-4">
@@ -201,7 +197,7 @@ export const ServiceSelectionView: React.FC<ServiceSelectionViewProps> = ({
                     <Button
                       variant="outline"
                       onClick={() => setSearchTerm('')}
-                      className="mt-4 bg-white/20 hover:bg-white/30 text-white border-white/30"
+                      className="mt-4 bg-black/40 border-yellow-500/30 text-white hover:bg-yellow-500/20"
                     >
                       Clear Search
                     </Button>

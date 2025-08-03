@@ -91,20 +91,16 @@ export const ProviderListView: React.FC<ProviderListViewProps> = ({
             <Button 
               variant="ghost" 
               onClick={() => setCurrentView('service-selection')}
-              className="text-white hover:text-white hover:bg-white/20 rounded-xl p-3 transition-all duration-300"
+              className="text-white hover:bg-white/20 rounded-xl p-3 transition-all duration-300"
             >
               ← Back
             </Button>
             <WayaWayaLogo size="sm" />
           </div>
-          <div className="text-right text-white">
-            <div className="text-lg font-bold">Available Providers</div>
-            <div className="text-sm opacity-80">{filteredProviders.length} providers found for {selectedService}</div>
-          </div>
         </div>
 
         {/* Main Content */}
-        <div className="bg-gradient-to-br from-slate-400 via-blue-500 to-slate-600 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
+        <div className="bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80 backdrop-blur-md border border-yellow-500/30 shadow-2xl rounded-2xl overflow-hidden">
           <div className="p-8">
             <div className="max-w-6xl mx-auto">
               
@@ -116,11 +112,11 @@ export const ProviderListView: React.FC<ProviderListViewProps> = ({
                     placeholder="Search providers..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-white/60"
+                    className="pl-10 bg-black/40 border-yellow-500/30 text-white placeholder:text-white/60 focus:border-green-500"
                   />
                 </div>
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-48 bg-white/20 border-white/30 text-white">
+                  <SelectTrigger className="w-48 bg-black/40 border-yellow-500/30 text-white">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
@@ -135,15 +131,15 @@ export const ProviderListView: React.FC<ProviderListViewProps> = ({
               {/* Providers Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProviders.map((provider) => (
-                  <Card key={provider.id} className="bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200">
+                  <Card key={provider.id} className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 hover:border-green-500/50 transition-all duration-200 backdrop-blur-sm">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center space-x-3">
-                          <div className="bg-white/20 p-2 rounded-lg">
-                            {provider.service === 'plumbing' && <Wrench className="h-4 w-4 text-white" />}
-                            {provider.service === 'electrical' && <Zap className="h-4 w-4 text-white" />}
-                            {provider.service === 'cleaning' && <Sparkles className="h-4 w-4 text-white" />}
-                            {provider.service === 'mechanic' && <Car className="h-4 w-4 text-white" />}
+                          <div className="bg-yellow-500/20 p-2 rounded-lg">
+                            {provider.service === 'plumbing' && <Wrench className="h-4 w-4 text-yellow-400" />}
+                            {provider.service === 'electrical' && <Zap className="h-4 w-4 text-yellow-400" />}
+                            {provider.service === 'cleaning' && <Sparkles className="h-4 w-4 text-yellow-400" />}
+                            {provider.service === 'mechanic' && <Car className="h-4 w-4 text-yellow-400" />}
                           </div>
                           <div>
                             <h3 className="text-white font-semibold text-lg">{provider.name}</h3>
@@ -176,7 +172,7 @@ export const ProviderListView: React.FC<ProviderListViewProps> = ({
                       <div className="flex gap-2">
                         <Button 
                           size="sm" 
-                          className="flex-1 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white"
+                          className="flex-1 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                           onClick={() => handleProviderSelect(provider)}
                         >
                           <MessageCircle className="h-4 w-4 mr-2" />
@@ -185,7 +181,7 @@ export const ProviderListView: React.FC<ProviderListViewProps> = ({
                         <Button 
                           size="sm" 
                           variant="outline"
-                          className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                          className="bg-black/40 border-yellow-500/30 text-white hover:bg-yellow-500/20"
                         >
                           <CheckCircle className="h-4 w-4" />
                         </Button>
