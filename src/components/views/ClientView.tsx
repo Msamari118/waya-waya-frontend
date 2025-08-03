@@ -378,32 +378,36 @@ export const ClientView: React.FC<ClientViewProps> = ({
           <div className="flex items-center gap-4">
             <Button 
               variant="ghost" 
-              onClick={() => setCurrentView('home')}
-              className="text-white hover:bg-white/20 rounded-xl p-3 transition-all duration-300"
+              onClick={() => setCurrentView('landing')}
+              className="text-white hover:bg-white/20 rounded-xl p-3"
             >
               ← Back
             </Button>
             <WayaWayaLogo size="sm" />
           </div>
+          <div className="text-right text-white">
+            <div className="text-lg font-bold">Client Dashboard</div>
+            <div className="text-sm opacity-80">Manage your services</div>
+          </div>
         </div>
 
         {/* Main Content */}
-        <div className="bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80 backdrop-blur-md border border-yellow-500/30 shadow-2xl rounded-2xl overflow-hidden">
+        <div className="bg-gradient-to-br from-slate-400 via-blue-500 to-slate-600 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
           <div className="p-8">
             <div className="max-w-6xl mx-auto">
               {/* Tabs */}
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-4 bg-black/40 backdrop-blur-sm border border-yellow-500/30">
-                  <TabsTrigger value="dashboard" className="text-white data-[state=active]:bg-yellow-500/20 data-[state=active]:border-yellow-500/50">
+                <TabsList className="grid w-full grid-cols-4 bg-white/20 backdrop-blur-sm">
+                  <TabsTrigger value="dashboard" className="text-white data-[state=active]:bg-white/30">
                     Dashboard
                   </TabsTrigger>
-                  <TabsTrigger value="search" className="text-white data-[state=active]:bg-yellow-500/20 data-[state=active]:border-yellow-500/50">
+                  <TabsTrigger value="search" className="text-white data-[state=active]:bg-white/30">
                     Search Services
                   </TabsTrigger>
-                  <TabsTrigger value="bookings" className="text-white data-[state=active]:bg-yellow-500/20 data-[state=active]:border-yellow-500/50">
+                  <TabsTrigger value="bookings" className="text-white data-[state=active]:bg-white/30">
                     My Bookings
                   </TabsTrigger>
-                  <TabsTrigger value="requests" className="text-white data-[state=active]:bg-yellow-500/20 data-[state=active]:border-yellow-500/50">
+                  <TabsTrigger value="requests" className="text-white data-[state=active]:bg-white/30">
                     Service Requests
                   </TabsTrigger>
                 </TabsList>
@@ -781,7 +785,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                 value={newRequest.title}
                 onChange={(e) => setNewRequest({...newRequest, title: e.target.value})}
                 placeholder="e.g., Plumbing Repair"
-                className="mt-1 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500"
+                className="mt-1 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400"
               />
             </div>
             <div>
@@ -791,7 +795,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                 value={newRequest.description}
                 onChange={(e) => setNewRequest({...newRequest, description: e.target.value})}
                 placeholder="Describe your service need..."
-                className="mt-1 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500"
+                className="mt-1 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400"
               />
             </div>
             <div>
@@ -817,7 +821,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                 value={newRequest.budget}
                 onChange={(e) => setNewRequest({...newRequest, budget: e.target.value})}
                 placeholder="500"
-                className="mt-1 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500"
+                className="mt-1 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400"
               />
             </div>
             <div>
@@ -827,7 +831,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
                 value={newRequest.location}
                 onChange={(e) => setNewRequest({...newRequest, location: e.target.value})}
                 placeholder="e.g., Cape Town, Western Cape"
-                className="mt-1 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500"
+                className="mt-1 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400"
               />
             </div>
             <div className="flex gap-2 pt-4">
