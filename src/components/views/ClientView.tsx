@@ -502,7 +502,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
               </Card>
 
               {/* Service Categories */}
-              <Card className="bg-gradient-to-br from-blue-600 via-yellow-600 to-green-600    backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
+              <Card className="bg-gradient-to-br from-blue-600 via-grey-600 to-red-600    backdrop-blur-sm border border-gray-300 shadow-lg rounded-xl">
                 <CardHeader>
                   <CardTitle>Popular Services</CardTitle>
                 </CardHeader>
