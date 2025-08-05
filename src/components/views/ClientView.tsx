@@ -397,31 +397,31 @@ export const ClientView: React.FC<ClientViewProps> = ({
             <div className="max-w-6xl mx-auto">
               {/* Professional Navigation Tabs */}
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-black/60 via-gray-900/80 to-black/60 backdrop-blur-md border border-yellow-500/40 rounded-xl p-2 shadow-lg mb-8 gap-2">
+                <TabsList className="grid w-full grid-cols-4 bg-transparent border-0 rounded-xl p-2 mb-8 gap-2">
                   <TabsTrigger 
                     value="dashboard" 
-                    className="flex flex-col items-center justify-center px-3 py-4 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105 min-h-[60px]"
+                    className="flex flex-col items-center justify-center px-3 py-4 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105 min-h-[60px] bg-black/20 border border-yellow-500/30"
                   >
                     <LayoutDashboard className="h-5 w-5 mb-1" />
                     <span className="text-xs font-medium">Dashboard</span>
                   </TabsTrigger>
                   <TabsTrigger 
                     value="search" 
-                    className="flex flex-col items-center justify-center px-3 py-4 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105 min-h-[60px]"
+                    className="flex flex-col items-center justify-center px-3 py-4 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105 min-h-[60px] bg-black/20 border border-yellow-500/30"
                   >
                     <Search className="h-5 w-5 mb-1" />
                     <span className="text-xs font-medium">Search</span>
                   </TabsTrigger>
                   <TabsTrigger 
                     value="bookings" 
-                    className="flex flex-col items-center justify-center px-3 py-4 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105 min-h-[60px]"
+                    className="flex flex-col items-center justify-center px-3 py-4 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105 min-h-[60px] bg-black/20 border border-yellow-500/30"
                   >
                     <Calendar className="h-5 w-5 mb-1" />
                     <span className="text-xs font-medium">Bookings</span>
                   </TabsTrigger>
                   <TabsTrigger 
                     value="requests" 
-                    className="flex flex-col items-center justify-center px-3 py-4 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105 min-h-[60px]"
+                    className="flex flex-col items-center justify-center px-3 py-4 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105 min-h-[60px] bg-black/20 border border-yellow-500/30"
                   >
                     <FileText className="h-5 w-5 mb-1" />
                     <span className="text-xs font-medium">Requests</span>
