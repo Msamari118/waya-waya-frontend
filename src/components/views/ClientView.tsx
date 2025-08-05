@@ -18,7 +18,7 @@ import {
   Clock, MapPin, CheckCircle, AlertCircle, TrendingUp, Award, Zap,
   Shield, Wrench, Sparkles, Car, Heart, Target, Plus, Filter,
   X, Edit, Trash2, Phone, Mail, MessageSquare, FileText, Users, DollarSign,
-  BookOpen, CalendarDays
+  BookOpen, CalendarDays, LayoutDashboard
 } from 'lucide-react';
 import { apiClient } from '../../utils/apiClient.js';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
@@ -395,22 +395,38 @@ export const ClientView: React.FC<ClientViewProps> = ({
         <div className="bg-gradient-to-br from-black/40 via-gray-900/60 to-black/40 backdrop-blur-sm border border-yellow-500/30 shadow-2xl rounded-2xl overflow-hidden">
           <div className="p-8">
             <div className="max-w-6xl mx-auto">
-              {/* Tabs */}
+              {/* Professional Navigation Tabs */}
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                              <TabsList className="grid w-full grid-cols-4 bg-black/40 backdrop-blur-sm border border-yellow-500/30">
-                <TabsTrigger value="dashboard" className="text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:via-green-400 data-[state=active]:to-blue-400 data-[state=active]:text-white hover:bg-yellow-500/20 transition-all duration-200">
-                  Dashboard
-                </TabsTrigger>
-                <TabsTrigger value="search" className="text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:via-green-400 data-[state=active]:to-blue-400 data-[state=active]:text-white hover:bg-yellow-500/20 transition-all duration-200">
-                  Search Services
-                </TabsTrigger>
-                <TabsTrigger value="bookings" className="text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:via-green-400 data-[state=active]:to-blue-400 data-[state=active]:text-white hover:bg-yellow-500/20 transition-all duration-200">
-                  My Bookings
-                </TabsTrigger>
-                <TabsTrigger value="requests" className="text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:via-green-400 data-[state=active]:to-blue-400 data-[state=active]:text-white hover:bg-yellow-500/20 transition-all duration-200">
-                  Service Requests
-                </TabsTrigger>
-              </TabsList>
+                <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-black/60 via-gray-900/80 to-black/60 backdrop-blur-md border border-yellow-500/40 rounded-xl p-1 shadow-lg mb-8">
+                  <TabsTrigger 
+                    value="dashboard" 
+                    className="flex items-center justify-center px-6 py-3 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105"
+                  >
+                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                    Dashboard
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="search" 
+                    className="flex items-center justify-center px-6 py-3 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105"
+                  >
+                    <Search className="h-4 w-4 mr-2" />
+                    Search Services
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="bookings" 
+                    className="flex items-center justify-center px-6 py-3 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105"
+                  >
+                    <Calendar className="h-4 w-4 mr-2" />
+                    My Bookings
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="requests" 
+                    className="flex items-center justify-center px-6 py-3 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105"
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Service Requests
+                  </TabsTrigger>
+                </TabsList>
 
                 {/* Dashboard Tab */}
                 <TabsContent value="dashboard" className="mt-6">
