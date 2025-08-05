@@ -238,7 +238,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
   });
 
   const [bookingDetails, setBookingDetails] = useState({
-    date: '',
+    date: new Date().toISOString().split('T')[0],
     time: '',
     description: '',
     location: '',
@@ -291,7 +291,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
   const handleBookProvider = (provider: ServiceProvider) => {
     setSelectedProvider(provider);
     setBookingDetails({
-      date: '',
+      date: new Date().toISOString().split('T')[0],
       time: '',
       description: '',
       location: '',

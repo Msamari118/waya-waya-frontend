@@ -45,7 +45,7 @@ export const CustomServiceRequestView: React.FC<CustomServiceRequestViewProps> =
     serviceDescription: '',
     urgency: '',
     budget: '',
-    preferredDate: '',
+    preferredDate: new Date().toISOString().split('T')[0],
     preferredTime: '',
     location: '',
     contactPhone: '',
@@ -117,7 +117,7 @@ export const CustomServiceRequestView: React.FC<CustomServiceRequestViewProps> =
                       serviceDescription: '',
                       urgency: '',
                       budget: '',
-                      preferredDate: '',
+                      preferredDate: new Date().toISOString().split('T')[0],
                       preferredTime: '',
                       location: '',
                       contactPhone: '',
@@ -245,6 +245,7 @@ export const CustomServiceRequestView: React.FC<CustomServiceRequestViewProps> =
                     type="date"
                     value={formData.preferredDate}
                     onChange={(e) => handleInputChange('preferredDate', e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
                     className="bg-white/20 border-white/30 text-white focus:border-yellow-400 focus:ring-yellow-400"
                   />
                 </div>
