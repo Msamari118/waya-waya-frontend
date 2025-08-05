@@ -234,34 +234,34 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
             <div className="max-w-6xl mx-auto">
               {/* Professional Navigation Tabs */}
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-black/60 via-gray-900/80 to-black/60 backdrop-blur-md border border-yellow-500/40 rounded-xl p-1 shadow-lg mb-8">
+                <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-black/60 via-gray-900/80 to-black/60 backdrop-blur-md border border-yellow-500/40 rounded-xl p-2 shadow-lg mb-8 gap-2">
                   <TabsTrigger 
                     value="dashboard" 
-                    className="flex items-center justify-center px-6 py-3 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105"
+                    className="flex flex-col items-center justify-center px-3 py-4 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105 min-h-[60px]"
                   >
-                    <LayoutDashboard className="h-4 w-4 mr-2" />
-                    Dashboard
+                    <LayoutDashboard className="h-5 w-5 mb-1" />
+                    <span className="text-xs font-medium">Dashboard</span>
                   </TabsTrigger>
                   <TabsTrigger 
                     value="bookings" 
-                    className="flex items-center justify-center px-6 py-3 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105"
+                    className="flex flex-col items-center justify-center px-3 py-4 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105 min-h-[60px]"
                   >
-                    <Calendar className="h-4 w-4 mr-2" />
-                    My Bookings
+                    <Calendar className="h-5 w-5 mb-1" />
+                    <span className="text-xs font-medium">Bookings</span>
                   </TabsTrigger>
                   <TabsTrigger 
                     value="requests" 
-                    className="flex items-center justify-center px-6 py-3 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105"
+                    className="flex flex-col items-center justify-center px-3 py-4 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105 min-h-[60px]"
                   >
-                    <FileText className="h-4 w-4 mr-2" />
-                    Service Requests
+                    <FileText className="h-5 w-5 mb-1" />
+                    <span className="text-xs font-medium">Requests</span>
                   </TabsTrigger>
                   <TabsTrigger 
                     value="earnings" 
-                    className="flex items-center justify-center px-6 py-3 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105"
+                    className="flex flex-col items-center justify-center px-3 py-4 text-white font-medium rounded-lg transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:via-green-500 data-[state=active]:to-blue-500 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-yellow-500/20 hover:scale-105 min-h-[60px]"
                   >
-                    <DollarSign className="h-4 w-4 mr-2" />
-                    Earnings
+                    <DollarSign className="h-5 w-5 mb-1" />
+                    <span className="text-xs font-medium">Earnings</span>
                   </TabsTrigger>
                 </TabsList>
 
