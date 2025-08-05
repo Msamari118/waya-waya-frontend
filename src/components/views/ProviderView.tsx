@@ -208,7 +208,7 @@ export const ProviderView: React.FC<ProviderViewProps> = ({
   const totalEarnings = bookings.filter(b => b.status === 'completed').reduce((sum, b) => sum + b.totalCost, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
+    <div className="min-h-screen bg-gradient-to-br from-green-500 via-yellow-500 to-red-600">
       {/* Header */}
       <div className="max-w-4xl mx-auto p-6">
         <div className="flex items-center justify-between mb-8">
