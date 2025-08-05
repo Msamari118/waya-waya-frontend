@@ -183,10 +183,10 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
               <SelectTrigger>
                 <SelectValue placeholder="Select account type" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="savings">Savings Account</SelectItem>
-                <SelectItem value="current">Current Account</SelectItem>
-                <SelectItem value="business">Business Account</SelectItem>
+              <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-lg">
+                <SelectItem value="savings" className="text-gray-900 hover:bg-gray-100">Savings Account</SelectItem>
+                <SelectItem value="current" className="text-gray-900 hover:bg-gray-100">Current Account</SelectItem>
+                <SelectItem value="business" className="text-gray-900 hover:bg-gray-100">Business Account</SelectItem>
               </SelectContent>
             </Select>
             {errors.accountType && (

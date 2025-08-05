@@ -78,19 +78,19 @@ export default function ServiceRequestModule({ onNavigate, onRequestSubmit }: Se
                       <SelectTrigger>
                         <SelectValue placeholder="Select service type" />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="plumbing">Plumbing</SelectItem>
-                        <SelectItem value="electrical">Electrical</SelectItem>
-                        <SelectItem value="cleaning">Cleaning</SelectItem>
-                        <SelectItem value="beauty">Beauty & Personal Care</SelectItem>
-                        <SelectItem value="transport">Transport & Delivery</SelectItem>
-                        <SelectItem value="security">Security Services</SelectItem>
-                        <SelectItem value="tutoring">Tutoring & Education</SelectItem>
-                        <SelectItem value="garden">Gardening & Landscaping</SelectItem>
-                        <SelectItem value="handyman">General Handyman</SelectItem>
-                        <SelectItem value="appliance">Appliance Repair</SelectItem>
-                        <SelectItem value="catering">Catering & Events</SelectItem>
-                        <SelectItem value="fitness">Fitness & Personal Training</SelectItem>
+                      <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-lg">
+                        <SelectItem value="plumbing" className="text-gray-900 hover:bg-gray-100">Plumbing</SelectItem>
+                        <SelectItem value="electrical" className="text-gray-900 hover:bg-gray-100">Electrical</SelectItem>
+                        <SelectItem value="cleaning" className="text-gray-900 hover:bg-gray-100">Cleaning</SelectItem>
+                        <SelectItem value="beauty" className="text-gray-900 hover:bg-gray-100">Beauty & Personal Care</SelectItem>
+                        <SelectItem value="transport" className="text-gray-900 hover:bg-gray-100">Transport & Delivery</SelectItem>
+                        <SelectItem value="security" className="text-gray-900 hover:bg-gray-100">Security Services</SelectItem>
+                        <SelectItem value="tutoring" className="text-gray-900 hover:bg-gray-100">Tutoring & Education</SelectItem>
+                        <SelectItem value="garden" className="text-gray-900 hover:bg-gray-100">Gardening & Landscaping</SelectItem>
+                        <SelectItem value="handyman" className="text-gray-900 hover:bg-gray-100">General Handyman</SelectItem>
+                        <SelectItem value="appliance" className="text-gray-900 hover:bg-gray-100">Appliance Repair</SelectItem>
+                        <SelectItem value="catering" className="text-gray-900 hover:bg-gray-100">Catering & Events</SelectItem>
+                        <SelectItem value="fitness" className="text-gray-900 hover:bg-gray-100">Fitness & Personal Training</SelectItem>
                       </SelectContent>
                     </Select>
                     
@@ -183,26 +183,26 @@ export default function ServiceRequestModule({ onNavigate, onRequestSubmit }: Se
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="emergency">
+                  <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-lg">
+                    <SelectItem value="emergency" className="text-gray-900 hover:bg-gray-100">
                       <div className="flex items-center gap-2">
                         <Badge variant="destructive">Emergency</Badge>
                         <span>ASAP</span>
                       </div>
                     </SelectItem>
-                    <SelectItem value="urgent">
+                    <SelectItem value="urgent" className="text-gray-900 hover:bg-gray-100">
                       <div className="flex items-center gap-2">
                         <Badge className="bg-orange-500">Urgent</Badge>
                         <span>Within 2 hours</span>
                       </div>
                     </SelectItem>
-                    <SelectItem value="normal">
+                    <SelectItem value="normal" className="text-gray-900 hover:bg-gray-100">
                       <div className="flex items-center gap-2">
                         <Badge variant="secondary">Normal</Badge>
                         <span>Today</span>
                       </div>
                     </SelectItem>
-                    <SelectItem value="flexible">
+                    <SelectItem value="flexible" className="text-gray-900 hover:bg-gray-100">
                       <div className="flex items-center gap-2">
                         <Badge variant="outline">Flexible</Badge>
                         <span>This week</span>

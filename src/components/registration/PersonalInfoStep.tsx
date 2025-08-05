@@ -289,12 +289,12 @@ export const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
                 <SelectTrigger className="w-24 h-14 border-2 border-slate-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl transition-all duration-300">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-lg">
                   {/* Filter for SA or list relevant codes */}
                   {internationalCountryCodes
                     .filter((c) => c.code === '+27') // Example: Filter for SA only
                     .map((country) => (
-                      <SelectItem key={country.id} value={country.code}>
+                      <SelectItem key={country.id} value={country.code} className="text-gray-900 hover:bg-gray-100">
                         {country.flag} {country.code}
                       </SelectItem>
                     ))}

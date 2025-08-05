@@ -123,11 +123,11 @@ export const ProviderListView: React.FC<ProviderListViewProps> = ({
                   <SelectTrigger className="w-48 bg-white/20 border-white/30 text-white">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="rating">Rating</SelectItem>
-                    <SelectItem value="distance">Distance</SelectItem>
-                    <SelectItem value="price">Price</SelectItem>
-                    <SelectItem value="response">Response Time</SelectItem>
+                  <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-lg">
+                    <SelectItem value="rating" className="text-gray-900 hover:bg-gray-100">Rating</SelectItem>
+                    <SelectItem value="distance" className="text-gray-900 hover:bg-gray-100">Distance</SelectItem>
+                    <SelectItem value="price" className="text-gray-900 hover:bg-gray-100">Price</SelectItem>
+                    <SelectItem value="response" className="text-gray-900 hover:bg-gray-100">Response Time</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

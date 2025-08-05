@@ -580,13 +580,13 @@ export const ClientView: React.FC<ClientViewProps> = ({
                         <SelectTrigger className="w-48 bg-black/40 border-yellow-500/30 text-white">
                           <SelectValue placeholder="All Categories" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Categories</SelectItem>
-                          <SelectItem value="plumbing">Plumbing</SelectItem>
-                          <SelectItem value="electrical">Electrical</SelectItem>
-                          <SelectItem value="cleaning">Cleaning</SelectItem>
-                          <SelectItem value="gardening">Gardening</SelectItem>
-                          <SelectItem value="mechanic">Mechanic</SelectItem>
+                        <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-lg">
+                          <SelectItem value="all" className="text-gray-900 hover:bg-gray-100">All Categories</SelectItem>
+                          <SelectItem value="plumbing" className="text-gray-900 hover:bg-gray-100">Plumbing</SelectItem>
+                          <SelectItem value="electrical" className="text-gray-900 hover:bg-gray-100">Electrical</SelectItem>
+                          <SelectItem value="cleaning" className="text-gray-900 hover:bg-gray-100">Cleaning</SelectItem>
+                          <SelectItem value="gardening" className="text-gray-900 hover:bg-gray-100">Gardening</SelectItem>
+                          <SelectItem value="mechanic" className="text-gray-900 hover:bg-gray-100">Mechanic</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -820,12 +820,12 @@ export const ClientView: React.FC<ClientViewProps> = ({
                 <SelectTrigger className="mt-1 bg-black/40 border-yellow-500/30 text-white">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Plumbing">Plumbing</SelectItem>
-                  <SelectItem value="Electrical">Electrical</SelectItem>
-                  <SelectItem value="Cleaning">Cleaning</SelectItem>
-                  <SelectItem value="Gardening">Gardening</SelectItem>
-                  <SelectItem value="Carpentry">Carpentry</SelectItem>
+                <SelectContent className="bg-gray-800 border-yellow-500/30">
+                  <SelectItem value="Plumbing" className="text-white hover:bg-gray-700">Plumbing</SelectItem>
+                  <SelectItem value="Electrical" className="text-white hover:bg-gray-700">Electrical</SelectItem>
+                  <SelectItem value="Cleaning" className="text-white hover:bg-gray-700">Cleaning</SelectItem>
+                  <SelectItem value="Gardening" className="text-white hover:bg-gray-700">Gardening</SelectItem>
+                  <SelectItem value="Carpentry" className="text-white hover:bg-gray-700">Carpentry</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -93,9 +93,9 @@ export const ServiceInfoStep: React.FC<ServiceInfoStepProps> = ({
           <SelectTrigger>
             <SelectValue placeholder="Select your primary service" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-lg">
             {serviceCategories.map((category) => (
-              <SelectItem key={category} value={category}>
+              <SelectItem key={category} value={category} className="text-gray-900 hover:bg-gray-100">
                 {category}
               </SelectItem>
             ))}

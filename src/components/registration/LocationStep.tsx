@@ -96,9 +96,9 @@ export const LocationStep: React.FC<LocationStepProps> = ({
               <SelectTrigger>
                 <SelectValue placeholder="Select province" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-lg">
                 {provinces.map((province) => (
-                  <SelectItem key={province} value={province}>
+                  <SelectItem key={province} value={province} className="text-gray-900 hover:bg-gray-100">
                     {province}
                   </SelectItem>
                 ))}
@@ -120,9 +120,9 @@ export const LocationStep: React.FC<LocationStepProps> = ({
               <SelectTrigger>
                 <SelectValue placeholder="Select city" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-lg">
                 {formData.province && getCitiesForProvince(formData.province)?.map((city) => (
-                  <SelectItem key={city} value={city}>
+                  <SelectItem key={city} value={city} className="text-gray-900 hover:bg-gray-100">
                     {city}
                   </SelectItem>
                 ))}

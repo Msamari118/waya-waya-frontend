@@ -411,9 +411,9 @@ export const PaymentManagement: React.FC<PaymentManagementProps> = ({ onNavigate
                 <SelectTrigger>
                   <SelectValue placeholder="Choose a provider" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-lg">
                   {mockProviders.map((provider) => (
-                    <SelectItem key={provider.id} value={provider.id}>
+                    <SelectItem key={provider.id} value={provider.id} className="text-gray-900 hover:bg-gray-100">
                       {provider.name} - R{provider.commissionDue.toFixed(2)}
                     </SelectItem>
                   ))}

@@ -483,14 +483,14 @@ export default function MatchingEngine({ onNavigate, serviceRequest, onStartBook
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="recommended">Recommended</SelectItem>
-                      <SelectItem value="rating">Highest Rating</SelectItem>
-                      <SelectItem value="price-low">Lowest Price</SelectItem>
-                      <SelectItem value="price-high">Highest Price</SelectItem>
-                      <SelectItem value="distance">Nearest</SelectItem>
-                      <SelectItem value="response-time">Fastest Response</SelectItem>
-                      <SelectItem value="experience">Most Experienced</SelectItem>
+                    <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-lg">
+                      <SelectItem value="recommended" className="text-gray-900 hover:bg-gray-100">Recommended</SelectItem>
+                      <SelectItem value="rating" className="text-gray-900 hover:bg-gray-100">Highest Rating</SelectItem>
+                      <SelectItem value="price-low" className="text-gray-900 hover:bg-gray-100">Lowest Price</SelectItem>
+                      <SelectItem value="price-high" className="text-gray-900 hover:bg-gray-100">Highest Price</SelectItem>
+                      <SelectItem value="distance" className="text-gray-900 hover:bg-gray-100">Nearest</SelectItem>
+                      <SelectItem value="response-time" className="text-gray-900 hover:bg-gray-100">Fastest Response</SelectItem>
+                      <SelectItem value="experience" className="text-gray-900 hover:bg-gray-100">Most Experienced</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -500,12 +500,12 @@ export default function MatchingEngine({ onNavigate, serviceRequest, onStartBook
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Providers</SelectItem>
-                      <SelectItem value="available">Available Now</SelectItem>
-                      <SelectItem value="verified">Verified Only</SelectItem>
-                      <SelectItem value="premium">Premium Providers</SelectItem>
-                      <SelectItem value="recommended">Recommended</SelectItem>
+                    <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-lg">
+                      <SelectItem value="all" className="text-gray-900 hover:bg-gray-100">All Providers</SelectItem>
+                      <SelectItem value="available" className="text-gray-900 hover:bg-gray-100">Available Now</SelectItem>
+                      <SelectItem value="verified" className="text-gray-900 hover:bg-gray-100">Verified Only</SelectItem>
+                      <SelectItem value="premium" className="text-gray-900 hover:bg-gray-100">Premium Providers</SelectItem>
+                      <SelectItem value="recommended" className="text-gray-900 hover:bg-gray-100">Recommended</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -515,11 +515,11 @@ export default function MatchingEngine({ onNavigate, serviceRequest, onStartBook
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="0">Any Rating</SelectItem>
-                      <SelectItem value="4">4+ Stars</SelectItem>
-                      <SelectItem value="4.5">4.5+ Stars</SelectItem>
-                      <SelectItem value="4.8">4.8+ Stars</SelectItem>
+                    <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-lg">
+                      <SelectItem value="0" className="text-gray-900 hover:bg-gray-100">Any Rating</SelectItem>
+                      <SelectItem value="4" className="text-gray-900 hover:bg-gray-100">4+ Stars</SelectItem>
+                      <SelectItem value="4.5" className="text-gray-900 hover:bg-gray-100">4.5+ Stars</SelectItem>
+                      <SelectItem value="4.8" className="text-gray-900 hover:bg-gray-100">4.8+ Stars</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
