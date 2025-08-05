@@ -371,7 +371,7 @@ export const ClientView: React.FC<ClientViewProps> = ({
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-500 via-yellow-500 to-red-600">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
       {/* Header */}
       <div className="max-w-4xl mx-auto p-6">
         <div className="flex items-center justify-between mb-8">
@@ -379,43 +379,43 @@ export const ClientView: React.FC<ClientViewProps> = ({
             <Button 
               variant="ghost" 
               onClick={() => setCurrentView('landing')}
-              className="text-white hover:bg-white/20 rounded-xl p-3"
+              className="text-white hover:bg-yellow-500/20 rounded-xl p-3 transition-all duration-200"
             >
               ← Back
             </Button>
             <WayaWayaLogo size="sm" />
           </div>
           <div className="text-right text-white">
-            <div className="text-lg font-bold">Client Dashboard</div>
+            <div className="text-lg font-bold bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 bg-clip-text text-transparent">Client Dashboard</div>
             <div className="text-sm opacity-80">Manage your services</div>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="bg-gradient-to-br from-slate-400 via-blue-500 to-slate-600 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
+        <div className="bg-gradient-to-br from-black/40 via-gray-900/60 to-black/40 backdrop-blur-sm border border-yellow-500/30 shadow-2xl rounded-2xl overflow-hidden">
           <div className="p-8">
             <div className="max-w-6xl mx-auto">
               {/* Tabs */}
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-4 bg-white/20 backdrop-blur-sm">
-                  <TabsTrigger value="dashboard" className="text-white data-[state=active]:bg-white/30">
-                    Dashboard
-                  </TabsTrigger>
-                  <TabsTrigger value="search" className="text-white data-[state=active]:bg-white/30">
-                    Search Services
-                  </TabsTrigger>
-                  <TabsTrigger value="bookings" className="text-white data-[state=active]:bg-white/30">
-                    My Bookings
-                  </TabsTrigger>
-                  <TabsTrigger value="requests" className="text-white data-[state=active]:bg-white/30">
-                    Service Requests
-                  </TabsTrigger>
-                </TabsList>
+                              <TabsList className="grid w-full grid-cols-4 bg-black/40 backdrop-blur-sm border border-yellow-500/30">
+                <TabsTrigger value="dashboard" className="text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:via-green-400 data-[state=active]:to-blue-400 data-[state=active]:text-white hover:bg-yellow-500/20 transition-all duration-200">
+                  Dashboard
+                </TabsTrigger>
+                <TabsTrigger value="search" className="text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:via-green-400 data-[state=active]:to-blue-400 data-[state=active]:text-white hover:bg-yellow-500/20 transition-all duration-200">
+                  Search Services
+                </TabsTrigger>
+                <TabsTrigger value="bookings" className="text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:via-green-400 data-[state=active]:to-blue-400 data-[state=active]:text-white hover:bg-yellow-500/20 transition-all duration-200">
+                  My Bookings
+                </TabsTrigger>
+                <TabsTrigger value="requests" className="text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:via-green-400 data-[state=active]:to-blue-400 data-[state=active]:text-white hover:bg-yellow-500/20 transition-all duration-200">
+                  Service Requests
+                </TabsTrigger>
+              </TabsList>
 
                 {/* Dashboard Tab */}
                 <TabsContent value="dashboard" className="mt-6">
                   <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-white mb-2">Welcome back, {currentUser.name}!</h1>
+                    <h1 className="text-4xl font-bold bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 bg-clip-text text-transparent mb-2">Welcome back, {currentUser.name}!</h1>
                     <p className="text-white/80 text-lg">Manage your service requests and connect with providers</p>
                   </div>
 

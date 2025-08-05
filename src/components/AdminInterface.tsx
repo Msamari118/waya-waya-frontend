@@ -222,16 +222,16 @@ export const AdminInterface: React.FC<AdminInterfaceProps> = ({ onNavigate, apiC
 
   // --- Render Helpers ---
   const renderStatCard = (title: string, value: number | string, icon: React.ReactNode, isLoading?: boolean) => (
-    <Card>
+    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        {icon}
+        <CardTitle className="text-sm font-medium text-white">{title}</CardTitle>
+        <div className="text-yellow-400">{icon}</div>
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <Skeleton className="h-6 w-3/4" />
+          <Skeleton className="h-6 w-3/4 bg-gray-700" />
         ) : (
-          <div className="text-2xl font-bold">
+          <div className="text-2xl font-bold text-white">
             {typeof value === 'number' ? (value % 1 !== 0 ? `R${value.toFixed(2)}` : value) : value}
           </div>
         )}
@@ -240,24 +240,24 @@ export const AdminInterface: React.FC<AdminInterfaceProps> = ({ onNavigate, apiC
   );
 
   const renderDataTable = (title: string, data: any[], columns: { key: string; label: string; render?: (item: any) => React.ReactNode }[], isLoading: boolean) => (
-    <Card>
+    <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle className="text-white">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (
           <div className="space-y-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-5/6" />
-            <Skeleton className="h-4 w-4/5" />
+            <Skeleton className="h-4 w-full bg-gray-700" />
+            <Skeleton className="h-4 w-5/6 bg-gray-700" />
+            <Skeleton className="h-4 w-4/5 bg-gray-700" />
           </div>
         ) : data.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b">
+                <tr className="border-b border-yellow-500/30">
                   {columns.map(col => (
-                    <th key={col.key} className="pb-2 font-semibold">
+                    <th key={col.key} className="pb-2 font-semibold text-white">
                       {col.label}
                     </th>
                   ))}
@@ -265,9 +265,9 @@ export const AdminInterface: React.FC<AdminInterfaceProps> = ({ onNavigate, apiC
               </thead>
               <tbody>
                 {data.map((item, index) => (
-                  <tr key={index} className="border-b hover:bg-muted/50">
+                  <tr key={index} className="border-b border-yellow-500/20 hover:bg-yellow-500/10 transition-all duration-200">
                     {columns.map(col => (
-                      <td key={col.key} className="py-2">
+                      <td key={col.key} className="py-2 text-gray-200">
                         {col.render ? col.render(item) : item[col.key]}
                       </td>
                     ))}
@@ -277,7 +277,7 @@ export const AdminInterface: React.FC<AdminInterfaceProps> = ({ onNavigate, apiC
             </table>
           </div>
         ) : (
-          <p className="text-muted-foreground text-center py-4">No data available.</p>
+          <p className="text-gray-300 text-center py-4">No data available.</p>
         )}
       </CardContent>
     </Card>
@@ -285,22 +285,22 @@ export const AdminInterface: React.FC<AdminInterfaceProps> = ({ onNavigate, apiC
 
   // --- Main Render ---
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
       <div className="max-w-7xl mx-auto p-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" onClick={() => onNavigate('home')}>
+            <Button variant="ghost" size="sm" onClick={() => onNavigate('home')} className="text-white hover:bg-yellow-500/20 transition-all duration-200">
               ← Back to App
             </Button>
             <WayaWayaLogo size="sm" />
             <div>
-              <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-              <p className="text-sm text-muted-foreground">Manage users, providers, and platform operations</p>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 bg-clip-text text-transparent">Admin Dashboard</h1>
+              <p className="text-sm text-gray-300">Manage users, providers, and platform operations</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loading.overview || loading.users || loading.providers || loading.payments || loading.trials}>
+            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loading.overview || loading.users || loading.providers || loading.payments || loading.trials} className="text-white border-yellow-500/30 hover:bg-yellow-500/20">
               {loading.overview || loading.users || loading.providers || loading.payments || loading.trials ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
               ) : (
@@ -308,7 +308,7 @@ export const AdminInterface: React.FC<AdminInterfaceProps> = ({ onNavigate, apiC
               )}
               Refresh
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="text-white border-yellow-500/30 hover:bg-yellow-500/20">
               <Bell className="h-4 w-4" />
             </Button>
           </div>
@@ -316,32 +316,32 @@ export const AdminInterface: React.FC<AdminInterfaceProps> = ({ onNavigate, apiC
 
         {/* Global Error Alert */}
         {error && (
-          <Alert className="mb-6 bg-red-50 border-red-200">
+          <Alert className="mb-6 bg-red-950/40 border-red-500/30 text-red-200">
             <AlertTriangle className="h-4 w-4" />
-            <AlertDescription className="text-red-800">{error}</AlertDescription>
+            <AlertDescription className="text-red-200">{error}</AlertDescription>
           </Alert>
         )}
 
         {/* Main Content - Tabs */}
         <Tabs value={currentTab} onValueChange={setCurrentTab}>
-          <TabsList className="grid w-full grid-cols-5 lg:grid-cols-6 mb-6">
-            <TabsTrigger value="overview" className="flex items-center justify-center">
+          <TabsList className="grid w-full grid-cols-5 lg:grid-cols-6 mb-6 bg-black/40 backdrop-blur-sm border border-yellow-500/30">
+            <TabsTrigger value="overview" className="flex items-center justify-center text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:via-green-400 data-[state=active]:to-blue-400 data-[state=active]:text-white hover:bg-yellow-500/20 transition-all duration-200">
               <Settings className="h-4 w-4 mr-2" />
               Overview
             </TabsTrigger>
-            <TabsTrigger value="users" className="flex items-center justify-center">
+            <TabsTrigger value="users" className="flex items-center justify-center text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:via-green-400 data-[state=active]:to-blue-400 data-[state=active]:text-white hover:bg-yellow-500/20 transition-all duration-200">
               <Users className="h-4 w-4 mr-2" />
               Clients
             </TabsTrigger>
-            <TabsTrigger value="providers" className="flex items-center justify-center">
+            <TabsTrigger value="providers" className="flex items-center justify-center text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:via-green-400 data-[state=active]:to-blue-400 data-[state=active]:text-white hover:bg-yellow-500/20 transition-all duration-200">
               <UserCheck className="h-4 w-4 mr-2" />
               Providers
             </TabsTrigger>
-            <TabsTrigger value="payments" className="flex items-center justify-center">
+            <TabsTrigger value="payments" className="flex items-center justify-center text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:via-green-400 data-[state=active]:to-blue-400 data-[state=active]:text-white hover:bg-yellow-500/20 transition-all duration-200">
               <CreditCard className="h-4 w-4 mr-2" />
               Payments
             </TabsTrigger>
-            <TabsTrigger value="trials" className="flex items-center justify-center">
+            <TabsTrigger value="trials" className="flex items-center justify-center text-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:via-green-400 data-[state=active]:to-blue-400 data-[state=active]:text-white hover:bg-yellow-500/20 transition-all duration-200">
               <Calendar className="h-4 w-4 mr-2" />
               Trials
             </TabsTrigger>

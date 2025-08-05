@@ -485,10 +485,10 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent side="right" className="w-full sm:w-96 p-0 bg-gradient-to-br from-green-50 to-blue-50">
+      <SheetContent side="right" className="w-full sm:w-96 p-0 bg-gradient-to-br from-black/40 via-gray-900/60 to-black/40 backdrop-blur-sm">
         <div className="flex flex-col h-full">
           {/* Header */}
-          <SheetHeader className="p-4 border-b bg-gradient-to-r from-green-600 to-yellow-500 text-white">
+          <SheetHeader className="p-4 border-b border-yellow-500/30 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 text-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <WayaWayaLogo size="sm" />
@@ -506,11 +506,11 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
                 <div className={`w-2 h-2 rounded-full ${
                   isConnected ? 'bg-green-400' : 'bg-red-400'
                 }`} />
-                <Button variant="ghost" size="sm" className="text-white hover:bg-white/20" onClick={() => setShowSearch(!showSearch)}>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-yellow-500/20 transition-all duration-200" onClick={() => setShowSearch(!showSearch)}>
                   <Search className="h-4 w-4" />
                 </Button>
                 {activeChat && (
-                  <Button variant="ghost" size="sm" className="text-white hover:bg-white/20" onClick={() => setShowChatInfo(true)}>
+                  <Button variant="ghost" size="sm" className="text-white hover:bg-yellow-500/20 transition-all duration-200" onClick={() => setShowChatInfo(true)}>
                     <Info className="h-4 w-4" />
                   </Button>
                 )}
@@ -519,9 +519,9 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
             
             {/* Connection Status */}
             {!isConnected && (
-              <Alert className="mt-2 bg-red-50 border-red-200">
-                <WifiOff className="h-4 w-4 text-red-500" />
-                <AlertDescription className="text-red-700">
+              <Alert className="mt-2 bg-red-950/40 border-red-500/30 text-red-200">
+                <WifiOff className="h-4 w-4 text-red-400" />
+                <AlertDescription className="text-red-200">
                   {error || 'Connecting to chat service...'}
                 </AlertDescription>
               </Alert>
@@ -537,7 +537,7 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
                     setSearchQuery(e.target.value);
                     searchMessages(e.target.value);
                   }}
-                  className="bg-white/90 border-white/30"
+                  className="bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20"
                 />
               </div>
             )}
@@ -570,10 +570,10 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
               </ScrollArea>
 
               {/* Message Input */}
-              <div className="p-4 border-t bg-white/50 backdrop-blur-sm">
+              <div className="p-4 border-t border-yellow-500/30 bg-black/40 backdrop-blur-sm">
                 {uploading && (
                   <div className="mb-2">
-                    <Progress value={uploadProgress} className="h-2 bg-gray-200" />
+                    <Progress value={uploadProgress} className="h-2 bg-gray-700" />
                   </div>
                 )}
                 
@@ -581,7 +581,7 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-gray-600 hover:text-green-600 hover:bg-green-50"
+                    className="text-gray-300 hover:text-yellow-400 hover:bg-yellow-500/20 transition-all duration-200"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploading}
                   >
@@ -605,7 +605,7 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
                       onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                       placeholder="Type a message..."
                       disabled={!isConnected || uploading}
-                      className="bg-white border-gray-300 focus:border-green-500 focus:ring-green-500"
+                      className="bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20"
                     />
                   </div>
                   
@@ -613,7 +613,7 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
                     <Button 
                       onClick={sendMessage} 
                       disabled={!isConnected || uploading}
-                      className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white"
+                      className="bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white"
                     >
                       <Send className="h-4 w-4" />
                     </Button>
@@ -621,13 +621,13 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-gray-600 hover:text-red-600 hover:bg-red-50"
+                      className="text-gray-300 hover:text-red-400 hover:bg-red-500/20 transition-all duration-200"
                       onClick={recording ? stopVoiceRecording : startVoiceRecording}
                       disabled={!isConnected || uploading}
                     >
                       {recording ? (
                         <div className="flex items-center space-x-1">
-                          <MicOff className="h-4 w-4 text-red-500" />
+                          <MicOff className="h-4 w-4 text-red-400" />
                           <span className="text-xs">{recordingTime}s</span>
                         </div>
                       ) : (
@@ -641,9 +641,9 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
           ) : (
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
-                <MessageCircle className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-lg font-semibold mb-2">Select a chat to start messaging</h3>
-                <p className="text-muted-foreground">
+                <MessageCircle className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                <h3 className="text-lg font-semibold mb-2 text-white">Select a chat to start messaging</h3>
+                <p className="text-gray-300">
                   Choose from your existing conversations or start a new one
                 </p>
               </div>

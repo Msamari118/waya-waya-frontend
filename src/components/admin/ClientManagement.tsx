@@ -207,80 +207,80 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" onClick={() => onNavigate('admin-overview')}>
+        <Button variant="ghost" onClick={() => onNavigate('admin-overview')} className="text-white hover:bg-yellow-500/20 transition-all duration-200">
           ← Back
         </Button>
         <WayaWayaLogo size="sm" />
-        <h1>Client Management</h1>
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 bg-clip-text text-transparent">Client Management</h1>
       </div>
 
       {showSuccess && (
-        <Alert className="bg-green-50 border-green-200">
-          <CheckCircle className="h-4 w-4 text-green-600" />
-          <AlertDescription className="text-green-800">
+        <Alert className="bg-green-950/40 border-green-500/30 text-green-200">
+          <CheckCircle className="h-4 w-4 text-green-400" />
+          <AlertDescription className="text-green-200">
             {showSuccess}
           </AlertDescription>
         </Alert>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
+        <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-blue-600" />
+            <CardTitle className="flex items-center gap-2 text-white">
+              <Users className="h-5 w-5 text-yellow-400" />
               Active Clients
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{activeClients}</div>
-            <p className="text-sm text-muted-foreground">Currently active</p>
+            <div className="text-2xl font-bold text-white">{activeClients}</div>
+            <p className="text-sm text-gray-300">Currently active</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Ban className="h-5 w-5 text-red-600" />
+            <CardTitle className="flex items-center gap-2 text-white">
+              <Ban className="h-5 w-5 text-red-400" />
               Blocked Clients
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{blockedClients}</div>
-            <p className="text-sm text-muted-foreground">Due to issues</p>
+            <div className="text-2xl font-bold text-white">{blockedClients}</div>
+            <p className="text-sm text-gray-300">Due to issues</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-orange-600" />
+            <CardTitle className="flex items-center gap-2 text-white">
+              <AlertTriangle className="h-5 w-5 text-orange-400" />
               Total Amount Due
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">R{totalDue.toFixed(2)}</div>
-            <p className="text-sm text-muted-foreground">Outstanding payments</p>
+            <div className="text-2xl font-bold text-white">R{totalDue.toFixed(2)}</div>
+            <p className="text-sm text-gray-300">Outstanding payments</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Search and Filter */}
-      <Card>
+      <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
         <CardContent className="p-4">
           <div className="flex gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 placeholder="Search clients by name or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20"
               />
             </div>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border rounded-md"
+              className="px-3 py-2 border border-yellow-500/30 rounded-md bg-black/40 text-white focus:border-green-500 focus:ring-green-500/20"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -290,14 +290,14 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
         <CardHeader>
-          <CardTitle>Client Blocking System</CardTitle>
+          <CardTitle className="text-white">Client Blocking System</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="bg-red-50 p-4 rounded-lg">
-              <h4 className="font-semibold mb-2 text-red-800">Automatic Blocking Rules</h4>
+            <div className="bg-red-950/40 border border-red-500/30 p-4 rounded-lg">
+              <h4 className="font-semibold mb-2 text-red-200">Automatic Blocking Rules</h4>
               <ul className="text-sm text-red-700 space-y-1">
                 <li>• Payment overdue by 7 days: Warning sent</li>
                 <li>• Payment overdue by 14 days: Account suspended</li>
@@ -308,7 +308,7 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Button 
-                className="h-12"
+                className="h-12 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
                 onClick={handleSendReminders}
                 disabled={processingAction}
               >
@@ -317,7 +317,7 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
               </Button>
               <Button 
                 variant="outline" 
-                className="h-12"
+                className="h-12 text-white border-yellow-500/30 hover:bg-yellow-500/20"
                 onClick={handleExportReport}
               >
                 <Download className="h-4 w-4 mr-2" />
@@ -325,7 +325,7 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
               </Button>
               <Button 
                 variant="outline" 
-                className="h-12"
+                className="h-12 text-white border-yellow-500/30 hover:bg-yellow-500/20"
                 onClick={() => {
                   setSearchTerm('');
                   setStatusFilter('all');
@@ -339,35 +339,35 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-gradient-to-br from-black/40 to-black-60 border border-yellow-500/30 backdrop-blur-sm shadow-2xl">
         <CardHeader>
-          <CardTitle>All Clients ({filteredClients.length})</CardTitle>
+          <CardTitle className="text-white">All Clients ({filteredClients.length})</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             {filteredClients.map((client) => (
-              <div key={client.id} className="flex items-center justify-between p-4 border rounded-lg">
+              <div key={client.id} className="flex items-center justify-between p-4 border border-yellow-500/30 rounded-lg bg-black/20 hover:bg-yellow-500/10 transition-all duration-200">
                 <div className="flex-1">
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10">
                       <AvatarFallback>{client.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-medium">{client.name}</p>
-                      <p className="text-sm text-muted-foreground">{client.email}</p>
-                      <p className="text-xs text-muted-foreground">{client.phone}</p>
+                      <p className="font-medium text-white">{client.name}</p>
+                      <p className="text-sm text-gray-300">{client.email}</p>
+                      <p className="text-xs text-gray-400">{client.phone}</p>
                     </div>
                   </div>
                   <div className="mt-2 text-sm">
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 text-gray-300">
                       <span>Joined: {client.joinDate}</span>
                       <span>Total Spent: R{client.totalSpent.toFixed(2)}</span>
                       <span>Bookings: {client.bookings}</span>
                     </div>
                     {client.status === 'blocked' && (
                       <div className="mt-1">
-                        <p className="text-red-600">Reason: {client.reason}</p>
-                        <p className="text-muted-foreground">Blocked: {client.blockedDate}</p>
+                        <p className="text-red-400">Reason: {client.reason}</p>
+                        <p className="text-gray-400">Blocked: {client.blockedDate}</p>
                       </div>
                     )}
                   </div>
@@ -391,6 +391,7 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
                           size="sm"
                           onClick={() => handleUnblockClient(client)}
                           disabled={processingAction}
+                          className="text-white border-yellow-500/30 hover:bg-yellow-500/20"
                         >
                           <Unlock className="h-4 w-4 mr-1" />
                           Unblock
@@ -400,6 +401,7 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
                           size="sm"
                           onClick={() => handleSendIndividualReminder(client)}
                           disabled={processingAction}
+                          className="text-white border-yellow-500/30 hover:bg-yellow-500/20"
                         >
                           <Send className="h-4 w-4 mr-1" />
                           Remind
@@ -411,6 +413,7 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
                         size="sm"
                         onClick={() => handleBlockClient(client)}
                         disabled={processingAction}
+                        className="text-white border-yellow-500/30 hover:bg-yellow-500/20"
                       >
                         <Ban className="h-4 w-4 mr-1" />
                         Block
@@ -426,22 +429,23 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
 
       {/* Block Client Dialog */}
       <Dialog open={showBlockDialog} onOpenChange={setShowBlockDialog}>
-        <DialogContent>
+        <DialogContent className="bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80 backdrop-blur-md border border-yellow-500/30 shadow-2xl">
           <DialogHeader>
-            <DialogTitle>Block Client: {selectedClient?.name}</DialogTitle>
+            <DialogTitle className="text-white">Block Client: {selectedClient?.name}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Reason for blocking</label>
+              <label className="block text-sm font-medium mb-1 text-white">Reason for blocking</label>
               <Textarea
                 placeholder="Enter the reason for blocking this client..."
                 value={blockReason}
                 onChange={(e) => setBlockReason(e.target.value)}
                 rows={3}
+                className="bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20"
               />
             </div>
-            <div className="bg-yellow-50 p-3 rounded-lg">
-              <p className="text-sm text-yellow-800">
+            <div className="bg-yellow-950/40 border border-yellow-500/30 p-3 rounded-lg">
+              <p className="text-sm text-yellow-200">
                 ⚠️ This action will prevent the client from making new bookings until unblocked.
               </p>
             </div>
@@ -449,8 +453,7 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
               <Button 
                 onClick={confirmBlockClient} 
                 disabled={processingAction || !blockReason.trim()}
-                className="flex-1"
-                variant="destructive"
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white"
               >
                 {processingAction ? 'Blocking...' : 'Block Client'}
               </Button>
@@ -458,6 +461,7 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
                 variant="outline" 
                 onClick={() => setShowBlockDialog(false)}
                 disabled={processingAction}
+                className="text-white border-yellow-500/30 hover:bg-yellow-500/20"
               >
                 Cancel
               </Button>
@@ -468,27 +472,28 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
 
       {/* Send Reminders Dialog */}
       <Dialog open={showReminderDialog} onOpenChange={setShowReminderDialog}>
-        <DialogContent>
+        <DialogContent className="bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80 backdrop-blur-md border border-yellow-500/30 shadow-2xl">
           <DialogHeader>
-            <DialogTitle>Send Payment Reminders</DialogTitle>
+            <DialogTitle className="text-white">Send Payment Reminders</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <p className="text-sm text-muted-foreground mb-2">
+              <p className="text-sm text-gray-300 mb-2">
                 Sending reminders to {clients.filter(c => c.status === 'blocked').length} clients with overdue payments
               </p>
-              <label className="block text-sm font-medium mb-1">Message</label>
+              <label className="block text-sm font-medium mb-1 text-white">Message</label>
               <Textarea
                 value={reminderMessage}
                 onChange={(e) => setReminderMessage(e.target.value)}
                 rows={4}
+                className="bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20"
               />
             </div>
             <div className="flex gap-2">
               <Button 
                 onClick={confirmSendReminders} 
                 disabled={processingAction}
-                className="flex-1"
+                className="flex-1 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white border-0"
               >
                 {processingAction ? 'Sending...' : 'Send Reminders'}
               </Button>
@@ -496,6 +501,7 @@ export const ClientManagement: React.FC<ClientManagementProps> = ({ onNavigate }
                 variant="outline" 
                 onClick={() => setShowReminderDialog(false)}
                 disabled={processingAction}
+                className="text-white border-yellow-500/30 hover:bg-yellow-500/20"
               >
                 Cancel
               </Button>
