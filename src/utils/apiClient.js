@@ -88,6 +88,18 @@ export const apiClient = {
 
   // OTP Flow - User's exact script
   auth: {
+    // ✅ Login function
+    login: async (credentials) => {
+      const response = await silentFetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials)
+      });
+      return response;
+    },
+
     // ✅ 1. Request OTP
     requestOtp: async (email, phone) => {
       const response = await silentFetch(`${API_BASE_URL}/auth/request-otp`, {
