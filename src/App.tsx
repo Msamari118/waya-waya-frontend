@@ -147,6 +147,30 @@ export default function App() {
     }
   }, []);
 
+  // Check for admin session on app load
+  useEffect(() => {
+    const checkAdminSession = async () => {
+      try {
+        // Import verifyAdminSession from adminAuth.ts
+        const { verifyAdminSession } = await import('./utils/adminAuth');
+        const isValid = await verifyAdminSession();
+        
+        if (isValid) {
+          setIsAdminAuthenticated(true);
+          console.log('Admin session verified successfully');
+        } else {
+          setIsAdminAuthenticated(false);
+          console.log('No valid admin session found');
+        }
+      } catch (error) {
+        console.error('Error verifying admin session:', error);
+        setIsAdminAuthenticated(false);
+      }
+    };
+    
+    checkAdminSession();
+  }, []);
+
   // Event handlers
   const handleAuthSuccess = (token: string, user: any, rememberMe: boolean = false) => {
     setAuthToken(token);
@@ -494,7 +518,13 @@ export default function App() {
     return null;
   }
 
-  // Fallback for other user types
+  // If admin is authenticated but currentView is not set properly, redirect to admin
+  if (isAdminAuthenticated) {
+    setCurrentView('admin');
+    return null;
+  }
+
+  // Fallback for other user types - only show HomeView for non-admin users
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-md mx-auto p-4">
