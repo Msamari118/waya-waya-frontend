@@ -98,12 +98,17 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // Only check for backend-driven authentication on app load
+  // Check for stored authentication on app load (but don't auto-login)
   useEffect(() => {
     const storedToken = localStorage.getItem('authToken');
     const storedUser = localStorage.getItem('currentUser');
-    if (storedToken && storedUser) {
+    
+    // Only attempt auto-login if user explicitly chose "Remember Me" or similar
+    const rememberMe = localStorage.getItem('rememberMe');
+    
+    if (storedToken && storedUser && rememberMe === 'true') {
       try {
+        // Verify token is still valid before auto-login
         apiClient.auth.verifyToken(storedToken!)
           .then((response: any) => {
             if (response.ok) {
@@ -112,20 +117,38 @@ export default function App() {
               setCurrentUser(user);
               setUserType(user.userType);
               setIsAuthenticated(true);
-              setCurrentView('home');
+              
+              // Redirect based on user type
+              if (user.userType === 'provider') {
+                setCurrentView('provider');
+              } else if (user.userType === 'client') {
+                setCurrentView('client');
+              } else {
+                setCurrentView('home');
+              }
             } else {
+              // Token invalid, clear stored data
               handleLogout();
             }
           })
-          .catch(() => handleLogout());
+          .catch(() => {
+            // Network error or token invalid, clear stored data
+            handleLogout();
+          });
       } catch (error) {
+        // Parsing error or other issue, clear stored data
         handleLogout();
       }
+    } else if (storedToken || storedUser) {
+      // Clear any partial/invalid stored data
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('rememberMe');
     }
   }, []);
 
   // Event handlers
-  const handleAuthSuccess = (token: string, user: any) => {
+  const handleAuthSuccess = (token: string, user: any, rememberMe: boolean = false) => {
     setAuthToken(token);
     setCurrentUser(user);
     setUserType(user.userType);
@@ -140,8 +163,21 @@ export default function App() {
       setCurrentView('home');
     }
     
-    localStorage.setItem('authToken', token);
-    localStorage.setItem('currentUser', JSON.stringify(user));
+    // Only store credentials if user explicitly chose to remember
+    if (rememberMe) {
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      localStorage.setItem('rememberMe', 'true');
+    } else {
+      // Use sessionStorage for temporary storage (cleared when browser closes)
+      sessionStorage.setItem('authToken', token);
+      sessionStorage.setItem('currentUser', JSON.stringify(user));
+      
+      // Ensure localStorage is clean
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('rememberMe');
+    }
   };
   
   const [isAdminMode, setIsAdminMode] = useState(false);
@@ -152,8 +188,11 @@ export default function App() {
     setAuthToken(null);
     setCurrentUser(null);
     setCurrentView('landing');
+    
+    // Clear all authentication-related localStorage items
     localStorage.removeItem('authToken');
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('rememberMe');
     localStorage.removeItem('adminAccess');
     localStorage.removeItem('pendingRegistration');
   };

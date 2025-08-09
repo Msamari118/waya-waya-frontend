@@ -74,6 +74,9 @@ export default function AuthScreen({
   const [resetToken, setResetToken] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  
+  // Remember Me state for login persistence
+  const [rememberMe, setRememberMe] = useState(false);
 
   // OTP Timer Effect
   useEffect(() => {
@@ -119,7 +122,8 @@ export default function AuthScreen({
       const data = await response.json();
       
       if (response.ok) {
-        onAuthSuccess(data.token, data.user);
+        // Pass rememberMe preference to parent component
+        onAuthSuccess(data.token, data.user, rememberMe);
       } else {
         setError(data.error || 'Login failed');
       }
@@ -528,7 +532,7 @@ export default function AuthScreen({
                   {view === 'login' ? 'Sign in to your account' : 'Start your journey with us'}
                 </p>
               </div>
-              <form onSubmit={handleLogin} className="space-y-6">
+              <form onSubmit={handleLogin} className="space-y-6" autoComplete="off">
                 {error && (
                   <Alert variant="destructive" className="border-red-400/40 bg-red-950/40 text-red-200 backdrop-blur-sm">
                     <AlertCircle className="h-4 w-4" />
@@ -552,6 +556,10 @@ export default function AuthScreen({
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
                       className="h-12 border border-yellow-500/30 bg-black/40 text-gray-100 placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-lg transition-all duration-200 backdrop-blur-sm"
+                      autoComplete="off"
+                      autoCorrect="off"
+                      autoCapitalize="off"
+                      spellCheck="false"
                       required
                     />
                   </div>
@@ -566,6 +574,10 @@ export default function AuthScreen({
                         value={formData.password}
                         onChange={(e) => handleInputChange('password', e.target.value)}
                         className="h-12 border border-yellow-500/30 bg-black/40 text-gray-100 placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20 rounded-lg transition-all duration-200 pr-12 backdrop-blur-sm"
+                        autoComplete="new-password"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck="false"
                         required
                       />
                       <Button
@@ -583,6 +595,20 @@ export default function AuthScreen({
                       </Button>
                     </div>
                   </div>
+                </div>
+                
+                {/* Remember Me Checkbox */}
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="rememberMe"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="w-4 h-4 text-yellow-400 bg-black/40 border-yellow-500/30 rounded focus:ring-yellow-500/20 focus:ring-2"
+                  />
+                  <Label htmlFor="rememberMe" className="text-gray-300 text-sm cursor-pointer">
+                    Remember me on this device
+                  </Label>
                 </div>
                 
                 <Button 
