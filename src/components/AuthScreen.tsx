@@ -13,7 +13,7 @@ import { Textarea } from './ui/textarea';
 interface AuthScreenProps {
   view: string;
   onNavigate: (view: string) => void;
-  onAuthSuccess: (token: string, user: any) => void;
+  onAuthSuccess: (token: string, user: any, rememberMe?: boolean) => void;
   apiClient: any;
   internationalCountryCodes: any[];
   validatePassword: (password: string) => any;
