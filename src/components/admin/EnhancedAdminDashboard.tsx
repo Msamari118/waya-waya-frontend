@@ -297,7 +297,7 @@ export const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
-              <WayaWayaLogo className="h-8 w-auto" />
+              <WayaWayaLogo />
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
                 <p className="text-sm text-gray-500">System oversight and management</p>
@@ -455,7 +455,7 @@ export const EnhancedAdminDashboard: React.FC<EnhancedAdminDashboardProps> = ({
                         </div>
                       ))}
                     </div>
-                  ) : stats?.recentActivity?.length > 0 ? (
+                  ) : stats?.recentActivity && stats.recentActivity.length > 0 ? (
                     stats.recentActivity.map((activity) => (
                       <div key={activity.id} className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50">
                         <div className={`p-2 rounded-full ${getStatusColor(activity.status)}`}>
