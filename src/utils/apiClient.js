@@ -194,12 +194,11 @@ export const apiClient = {
 
     verifyToken: async (token) => {
       const response = await silentFetch(`${API_BASE_URL}/auth/verify-token`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ token }),
       });
       return response;
     },
