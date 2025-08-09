@@ -6,6 +6,7 @@ import ServiceRequestModule from './components/ServiceRequestModule';
 import MatchingEngine from './components/MatchingEngine';
 import RatingsReviews from './components/RatingsReviews';
 import { AdminInterface } from './components/AdminInterface';
+import { EnhancedAdminDashboard } from './components/admin/EnhancedAdminDashboard';
 import { ProviderRegistration } from './components/ProviderRegistration';
 import { PaymentManagement } from './components/admin/PaymentManagement';
 import { ClientManagement } from './components/admin/ClientManagement';
@@ -318,7 +319,19 @@ export default function App() {
       setShowAdminLogin(true);
       return null;
     }
-    return <AdminInterface onNavigate={handleNavigation} apiClient={apiClient} authToken={authToken} />;
+    return (
+      <EnhancedAdminDashboard 
+        authToken={authToken!}
+        onLogout={() => {
+          setCurrentView('landing');
+          setIsAuthenticated(false);
+          setIsAdminAuthenticated(false);
+          setAuthToken(null);
+          setCurrentUser(null);
+          setUserType(null);
+        }}
+      />
+    );
   }
 
   if (currentView === 'registration') {
