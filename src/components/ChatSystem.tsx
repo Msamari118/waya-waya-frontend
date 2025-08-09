@@ -639,15 +639,86 @@ export const ChatSystem: React.FC<ChatSystemProps> = ({
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center">
-                <MessageCircle className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                <h3 className="text-lg font-semibold mb-2 text-white">Select a chat to start messaging</h3>
-                <p className="text-gray-300">
-                  Choose from your existing conversations or start a new one
-                </p>
+            <>
+              <div className="flex-1 flex items-center justify-center">
+                <div className="text-center">
+                  <MessageCircle className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                  <h3 className="text-lg font-semibold mb-2 text-white">Start a new conversation</h3>
+                  <p className="text-gray-300">
+                    Type a message below to begin chatting
+                  </p>
+                </div>
               </div>
-            </div>
+              
+              {/* Message Input - Always visible */}
+              <div className="p-4 border-t border-yellow-500/30 bg-black/40 backdrop-blur-sm">
+                {uploading && (
+                  <div className="mb-2">
+                    <Progress value={uploadProgress} className="h-2 bg-gray-700" />
+                  </div>
+                )}
+                
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-gray-300 hover:text-yellow-400 hover:bg-yellow-500/20 transition-all duration-200"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                  >
+                    <Paperclip className="h-4 w-4" />
+                  </Button>
+                  
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => handleFileUpload(Array.from(e.target.files || []))}
+                    accept="image/*,application/pdf,.doc,.docx,.txt"
+                  />
+                  
+                  <div className="flex-1 relative">
+                    <Input
+                      ref={messageInputRef}
+                      value={newMessage}
+                      onChange={handleTyping}
+                      onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                      placeholder={selectedProvider ? `Message ${selectedProvider.name}...` : "Type a message..."}
+                      disabled={!isConnected || uploading}
+                      className="bg-black/40 border-yellow-500/30 text-white placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500/20"
+                    />
+                  </div>
+                  
+                  {newMessage.trim() ? (
+                    <Button 
+                      onClick={sendMessage} 
+                      disabled={!isConnected || uploading}
+                      className="bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 hover:from-yellow-500 hover:via-green-500 hover:to-blue-500 text-white"
+                    >
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-gray-300 hover:text-red-400 hover:bg-red-500/20 transition-all duration-200"
+                      onClick={recording ? stopVoiceRecording : startVoiceRecording}
+                      disabled={!isConnected || uploading}
+                    >
+                      {recording ? (
+                        <div className="flex items-center space-x-1">
+                          <MicOff className="h-4 w-4 text-red-400" />
+                          <span className="text-xs">{recordingTime}s</span>
+                        </div>
+                      ) : (
+                        <Mic className="h-4 w-4" />
+                      )}
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </>
           )}
         </div>
       </SheetContent>
