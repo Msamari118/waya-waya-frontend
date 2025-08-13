@@ -645,131 +645,131 @@ export const apiClient = {
   },
 
   admin: {
-    getStats: async (authToken) => {
-      const response = await silentFetch(`${API_BASE_URL}/admin/stats`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`,
-        },
-      });
-      return response;
-    },
+      getStats: async (authToken) => {
+        const response = await silentFetch(`${API_BASE_URL}/admin/stats`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
+          },
+        });
+        return response;
+      },
 
-    getProviders: async () => {
-      const response = await silentFetch(`${API_BASE_URL}/admin/providers`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      return response;
-    },
+      getProviders: async () => {
+        const response = await silentFetch(`${API_BASE_URL}/admin/providers`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        return response;
+      },
 
-    approveProvider: async (providerId) => {
-      const response = await silentFetch(`${API_BASE_URL}/admin/providers/${providerId}/approve`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      return response;
-    },
+      approveProvider: async (providerId) => {
+        const response = await silentFetch(`${API_BASE_URL}/admin/providers/${providerId}/approve`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        return response;
+      },
 
-    rejectProvider: async (providerId) => {
-      const response = await silentFetch(`${API_BASE_URL}/admin/providers/${providerId}/reject`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      return response;
-    },
+      rejectProvider: async (providerId) => {
+        const response = await silentFetch(`${API_BASE_URL}/admin/providers/${providerId}/reject`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        return response;
+      },
 
-    blockClient: async (clientId) => {
-      const response = await silentFetch(`${API_BASE_URL}/admin/clients/${clientId}/block`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      return response;
-    },
+      blockClient: async (clientId) => {
+        const response = await silentFetch(`${API_BASE_URL}/admin/clients/${clientId}/block`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        return response;
+      },
 
-    unblockClient: async (clientId) => {
-      const response = await silentFetch(`${API_BASE_URL}/admin/clients/${clientId}/unblock`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      return response;
-    },
+      unblockClient: async (clientId) => {
+        const response = await silentFetch(`${API_BASE_URL}/admin/clients/${clientId}/unblock`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        return response;
+      },
 
-    authenticate: async (credentials) => {
-      const response = await silentFetch(`${API_BASE_URL}/admin/auth`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
-      return response;
-    },
+      authenticate: async (credentials) => {
+        const response = await silentFetch(`${API_BASE_URL}/admin/auth`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(credentials),
+        });
+        return response;
+      },
 
-    verifySession: async (sessionToken) => {
-      const response = await silentFetch(`${API_BASE_URL}/admin/verify-session`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${sessionToken}`
-        },
-      });
-      return response;
-    },
+      verifySession: async (sessionToken) => {
+        const response = await silentFetch(`${API_BASE_URL}/admin/verify-session`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${sessionToken}`
+          },
+        });
+        return response;
+      },
 
-    refreshSession: async (refreshToken) => {
-      const response = await silentFetch(`${API_BASE_URL}/admin/refresh-session`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ refreshToken }),
-      });
-      return response;
-    },
+      refreshSession: async (refreshToken) => {
+        const response = await silentFetch(`${API_BASE_URL}/admin/refresh-session`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ refreshToken }),
+        });
+        return response;
+      },
 
-    getUsers: async (authToken, type, page = 1, limit = 10) => {
-      const response = await silentFetch(`${API_BASE_URL}/admin/users?type=${type}&page=${page}&limit=${limit}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`,
-        },
-      });
-      return response;
-    },
+      getUsers: async (authToken, type, page = 1, limit = 10) => {
+        const response = await silentFetch(`${API_BASE_URL}/admin/users?type=${type}&page=${page}&limit=${limit}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
+          },
+        });
+        return response;
+      },
 
-    getPayments: async (authToken, page = 1, limit = 10) => {
-      const response = await silentFetch(`${API_BASE_URL}/admin/payments?page=${page}&limit=${limit}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`,
-        },
-      });
-      return response;
-    },
+      getPayments: async (authToken, page = 1, limit = 10) => {
+        const response = await silentFetch(`${API_BASE_URL}/admin/payments?page=${page}&limit=${limit}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
+          },
+        });
+        return response;
+      },
 
-    getTrials: async (authToken, page = 1, limit = 10) => {
-      const response = await silentFetch(`${API_BASE_URL}/admin/trials?page=${page}&limit=${limit}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`,
-        },
-      });
-      return response;
-    },
+      getTrials: async (authToken, page = 1, limit = 10) => {
+        const response = await silentFetch(`${API_BASE_URL}/admin/trials?page=${page}&limit=${limit}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
+          },
+        });
+        return response;
+      },
   },
 };
